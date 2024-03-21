@@ -25,9 +25,9 @@ const navLinks = [
   },
 ];
 
-const Navbar = () => {
+const Navbar = ({ isAuth, setIsAuth }) => {
   const path = usePathname();
-  const [isAuth, setIsAuth] = useState(true);
+
   return (
     <section className="w-full h-[10vh] flex justify-center items-center">
       <Container className="min-w-[1220px] h-full flex justify-between items-center">
@@ -59,7 +59,9 @@ const Navbar = () => {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           ) : (
-            <Button>Login</Button>
+            <Button>
+              <Link href="/login">Login</Link>
+            </Button>
           )}
         </div>
       </Container>
