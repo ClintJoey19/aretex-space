@@ -59,17 +59,17 @@ export function TableDemo({ selected, setSelected }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {drives.map((drive, i) => (
-          <TableRow key={i}>
+        {drives.map((drive) => (
+          <TableRow key={drive.id}>
             <TableCell>
-              <Checkbox />
+              <Checkbox onChecked />
             </TableCell>
             <TableCell className="font-medium">{drive.id}</TableCell>
             <TableCell>{drive.name}</TableCell>
             <TableCell>
               {drive.members} {drive.members < 2 ? "member" : "members"}
             </TableCell>
-            <TableCell className="text-right">
+            <TableCell className="text-center">
               <Button variant="outline" size="icon">
                 <DropdownMenuDemo />
               </Button>
