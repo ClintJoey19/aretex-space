@@ -6,9 +6,73 @@ import { Button } from "@/components/ui/button";
 import { DataTableDemo } from "@/components/dashboard/shared-drive/DataTable";
 import { DropdownMenuDemo } from "@/components/global/DropDown";
 
+const files = [
+  {
+    id: "m5gr84i9",
+    amount: 316,
+    status: "success",
+    email: "ken99@yahoo.com",
+  },
+  {
+    id: "3u1reuv4",
+    amount: 242,
+    status: "success",
+    email: "Abe45@gmail.com",
+  },
+  {
+    id: "derv1ws0",
+    amount: 837,
+    status: "processing",
+    email: "Monserrat44@gmail.com",
+  },
+  {
+    id: "5kma53ae",
+    amount: 874,
+    status: "success",
+    email: "Silas22@gmail.com",
+  },
+  {
+    id: "bhqecj4p",
+    amount: 721,
+    status: "failed",
+    email: "carmella@hotmail.com",
+  },
+  {
+    id: "m5gr84i9",
+    amount: 316,
+    status: "success",
+    email: "hejajej@yahoo.com",
+  },
+  {
+    id: "3u1reuv4",
+    amount: 242,
+    status: "success",
+    email: "yeah11@gmail.com",
+  },
+  {
+    id: "derv1ws0",
+    amount: 837,
+    status: "processing",
+    email: "roboto@gmail.com",
+  },
+  {
+    id: "5kma53ae",
+    amount: 874,
+    status: "success",
+    email: "arial@gmail.com",
+  },
+  {
+    id: "bhqecj4p",
+    amount: 721,
+    status: "failed",
+    email: "neoz@hotmail.com",
+  },
+];
+
 const PersonalDrive = () => {
   const [display, setDisplay] = useState(0);
   const [selected, setSelected] = useState([]);
+  const [data, setData] = useState(files);
 
   return (
     <main className="m-2 bg-white rounded-sm border">
@@ -33,7 +97,12 @@ const PersonalDrive = () => {
           <DisplayType display={display} setDisplay={setDisplay} />
         </div>
         <div>
-          <DataTableDemo selected={selected} setSelected={setSelected} />
+          <DataTableDemo
+            selected={selected}
+            setSelected={setSelected}
+            data={data}
+            setData={setData}
+          />
         </div>
       </div>
     </main>
