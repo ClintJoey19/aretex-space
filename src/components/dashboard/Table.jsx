@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
-import { DropdownMenuDemo } from "../global/DropDown";
+import { DropdownMenuTableActions } from "../global/DropDownTableActions";
 import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 
@@ -62,7 +62,7 @@ export function TableDemo({ selected, setSelected }) {
         {drives.map((drive) => (
           <TableRow key={drive.id}>
             <TableCell>
-              <Checkbox onChecked />
+              <Checkbox />
             </TableCell>
             <TableCell className="font-medium">{drive.id}</TableCell>
             <TableCell>{drive.name}</TableCell>
@@ -71,7 +71,7 @@ export function TableDemo({ selected, setSelected }) {
             </TableCell>
             <TableCell className="text-center">
               <Button variant="outline" size="icon">
-                <DropdownMenuDemo />
+                <DropdownMenuTableActions />
               </Button>
             </TableCell>
           </TableRow>

@@ -1,10 +1,18 @@
 "use client";
 import React, { useState } from "react";
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import DisplayType from "@/components/global/DisplayType";
 import { AiOutlineClose } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
-import { DataTableDemo } from "@/components/dashboard/shared-drive/DataTable";
-import { DropdownMenuDemo } from "@/components/global/DropDown";
+import { DataTableDemo } from "@/components/dashboard/DataTable";
+import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
+import { columns } from "./columns";
 
 const files = [
   {
@@ -71,38 +79,57 @@ const files = [
 
 const PersonalDrive = () => {
   const [display, setDisplay] = useState(0);
-  const [selected, setSelected] = useState([]);
   const [data, setData] = useState(files);
+  const [sorting, setSorting] = useState([]);
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
 
   return (
     <main className="m-2 bg-white rounded-sm border">
       <div className="p-4 flex flex-col gap-4">
         <h2 className="text-2xl">Personal Drive</h2>
         <div className="flex justify-end items-center gap-2">
-          {selected.length > 0 ? (
+          {table.getFilteredSelectedRowModel().rows.length > 0 ? (
             <div className="flex gap-2 items-center rounded-sm">
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setSelected([])}
+                onClick={() =>
+                  console.log(table.getFilteredSelectedRowModel().rows)
+                }
               >
                 <AiOutlineClose />
               </Button>
-              <p>{selected.length} selected</p>
+              <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
               <Button variant="outline" size="icon">
-                <DropdownMenuDemo />
+                <DropdownMenuTableActions />
               </Button>
             </div>
           ) : null}
           <DisplayType display={display} setDisplay={setDisplay} />
         </div>
         <div>
-          <DataTableDemo
-            selected={selected}
-            setSelected={setSelected}
-            data={data}
-            setData={setData}
-          />
+          <DataTableDemo table={table} />
         </div>
       </div>
     </main>

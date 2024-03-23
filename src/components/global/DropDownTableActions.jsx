@@ -33,7 +33,7 @@ const actions = [
   },
 ];
 
-export function DropdownMenuDemo() {
+export function DropdownMenuTableActions() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

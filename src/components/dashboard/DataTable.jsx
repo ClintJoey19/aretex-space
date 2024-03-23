@@ -1,15 +1,6 @@
 "use client";
-
-import { useState } from "react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,31 +19,7 @@ import {
 } from "@/components/ui/table";
 import { columns } from "@/app/dashboard/personal-drive/columns";
 
-export function DataTableDemo({ selected, setSelected, data, setData }) {
-  const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [rowSelection, setRowSelection] = useState({});
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
+export function DataTableDemo({ table }) {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
