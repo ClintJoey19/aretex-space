@@ -17,18 +17,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { columns } from "@/app/dashboard/personal-drive/columns";
 
-export function DataTableDemo({ table }) {
+export function DataTableDemo({ table, columns }) {
+  let cols = [];
+  cols = [...cols, columns];
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={table.getColumn("email")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
+          placeholder="Filter name..."
+          value={table.getColumn("name")?.getFilterValue() ?? ""}
+          onChange={(event) => {
+            table.getColumn("name")?.setFilterValue(event.target.value);
+            console.log(table.getColumn("name"));
+          }}
           className="max-w-sm"
         />
         <DropdownMenu>
@@ -84,6 +86,7 @@ export function DataTableDemo({ table }) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onDoubleClick={() => console.log(row.id)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -97,10 +100,7 @@ export function DataTableDemo({ table }) {
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={10} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { DataTableDemo } from "@/components/dashboard/DataTable";
 import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
 import { columns } from "./columns";
+import { rows } from "@/app/dashboard/personal-drive/rows";
 import { actions } from "@/components/dashboard/shared-drive/DriveActions";
 
 const files = [
@@ -80,7 +81,7 @@ const files = [
 
 const PersonalDrive = () => {
   const [display, setDisplay] = useState(0);
-  const [data, setData] = useState(files);
+  const [data, setData] = useState(rows);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
