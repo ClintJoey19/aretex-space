@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { DataTableDemo } from "@/components/dashboard/DataTable";
 import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
 import { columns } from "./columns";
+import { actions } from "@/components/dashboard/shared-drive/DriveActions";
 
 const files = [
   {
@@ -105,24 +106,18 @@ const PersonalDrive = () => {
   });
 
   return (
-    <main className="m-2 bg-white rounded-sm border">
+    <main className="m-2 bg-white rounded-md border">
       <div className="p-4 flex flex-col gap-4">
         <h2 className="text-2xl">Personal Drive</h2>
         <div className="flex justify-end items-center gap-2">
           {table.getFilteredSelectedRowModel().rows.length > 0 ? (
             <div className="flex gap-2 items-center rounded-sm">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() =>
-                  console.log(table.getFilteredSelectedRowModel().rows)
-                }
-              >
+              <Button variant="ghost" size="icon">
                 <AiOutlineClose />
               </Button>
               <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
               <Button variant="outline" size="icon">
-                <DropdownMenuTableActions />
+                <DropdownMenuTableActions actions={actions} />
               </Button>
             </div>
           ) : null}

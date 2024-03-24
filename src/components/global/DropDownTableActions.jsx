@@ -9,37 +9,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CiMenuKebab } from "react-icons/ci";
-import { MdOutlineGroup } from "react-icons/md";
-import { MdOutlineEdit } from "react-icons/md";
-import { MdOutlineStarOutline } from "react-icons/md";
-import { FaRegTrashCan } from "react-icons/fa6";
 
-const actions = [
-  {
-    text: "Manage Members",
-    icon: MdOutlineGroup,
-  },
-  {
-    text: "Rename",
-    icon: MdOutlineEdit,
-  },
-  {
-    text: "Star",
-    icon: MdOutlineStarOutline,
-  },
-  {
-    text: "Move to Trash",
-    icon: FaRegTrashCan,
-  },
-];
-
-export function DropdownMenuTableActions() {
+export function DropdownMenuTableActions({ actions, rowSelected }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <CiMenuKebab className="h-4 w-4" />
-        </Button>
+        {rowSelected > 1 ? (
+          <Button variant="outline" size="icon" disabled>
+            <CiMenuKebab className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button variant="outline" size="icon">
+            <CiMenuKebab className="h-4 w-4" />
+          </Button>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>

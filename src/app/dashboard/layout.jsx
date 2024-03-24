@@ -6,7 +6,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <main className="bg-primary/15">
       <Navbar />
-      <div className="h-[90vh] grid grid-cols-[300px_1fr]">
+      <div className="h-[92vh] grid grid-cols-[300px_1fr]">
         <Sidebar />
         {children}
       </div>

@@ -1,18 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MdOutlineGroup } from "react-icons/md";
-import { MdOutlineEdit } from "react-icons/md";
-import { MdOutlineStarOutline } from "react-icons/md";
-import { FaRegTrashCan } from "react-icons/fa6";
+import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
+import { actions } from "@/components/dashboard/shared-drive/DriveActions";
 
 export const columns = [
   {
@@ -77,51 +67,12 @@ export const columns = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const payment = row.original;
+      const rowSelected = table.getFilteredSelectedRowModel().rows.length;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                console.log(row.original.email);
-              }}
-            >
-              Manage Group
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                console.log(row.original.email);
-              }}
-            >
-              Edit Email
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => console.log(row.original.id + " move to trash")}
-            >
-              Move to Trash
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => console.log(row.original.id + " move to trash")}
-            >
-              Details
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <DropdownMenuTableActions actions={actions} rowSelected={rowSelected} />
       );
     },
   },

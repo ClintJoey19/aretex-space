@@ -1,6 +1,7 @@
+"use client";
 import React from "react";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import AvatarDropDown from "../global/AvatarDropDown";
 
 const Navbar = () => {
   const isAuth = true;
@@ -12,12 +13,9 @@ const Navbar = () => {
             <h2 className="font-bold">Space</h2>
           </Link>
         </div>
-        <div>
+        <div className="h-full flex items-center">
           {isAuth ? (
-            <Avatar className="cursor-pointer">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <AvatarDropDown />
           ) : (
             <Button>
               <Link href="/login">Login</Link>

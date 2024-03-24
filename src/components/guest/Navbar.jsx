@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Container from "../global/Container";
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePathname } from "next/navigation";
+import AvatarDropDown from "../global/AvatarDropDown";
 
 const navLinks = [
   {
@@ -54,10 +54,7 @@ const Navbar = ({ isAuth, setIsAuth }) => {
         </div>
         <div className="flex gap-5">
           {isAuth ? (
-            <Avatar className="cursor-pointer">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <AvatarDropDown isAuth={isAuth} setIsAuth={setIsAuth} />
           ) : (
             <Button>
               <Link href="/login">Login</Link>
