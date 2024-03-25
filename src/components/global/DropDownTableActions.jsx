@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CiMenuKebab } from "react-icons/ci";
 
-export function DropdownMenuTableActions({ actions, rowSelected }) {
+export function DropdownMenuTableActions({ path, row, actions, rowSelected }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,7 +29,11 @@ export function DropdownMenuTableActions({ actions, rowSelected }) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {actions.map((item, i) => (
-            <DropdownMenuItem key={i} className={`cursor-pointer`}>
+            <DropdownMenuItem
+              key={i}
+              className={`cursor-pointer`}
+              onClick={() => item.fn({ path, id: row.id })}
+            >
               <item.icon className="mr-4" /> {item.text}
             </DropdownMenuItem>
           ))}

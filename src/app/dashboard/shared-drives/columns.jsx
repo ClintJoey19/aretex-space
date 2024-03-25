@@ -62,7 +62,12 @@ export const columns = [
       const rowSelected = table.getFilteredSelectedRowModel().rows.length;
 
       return (
-        <DropdownMenuTableActions actions={actions} rowSelected={rowSelected} />
+        <DropdownMenuTableActions
+          path="shared-drives"
+          row={row.original}
+          actions={actions}
+          rowSelected={rowSelected}
+        />
       );
     },
   },
