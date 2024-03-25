@@ -20,7 +20,7 @@ const CreateDialog = ({ file }) => {
           <MdCloudUpload className="text-xl mr-4" />
         ) : (
           <Button>
-            <MdCloudUpload className="text-xl mr-4" /> Upload
+            <MdCloudUpload className="text-xl mr-4" /> New
           </Button>
         )}
       </DialogTrigger>

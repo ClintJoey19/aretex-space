@@ -66,7 +66,7 @@ const Sidebar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button>
-                  <MdCloudUpload className="text-xl mr-4" /> Upload
+                  <MdCloudUpload className="text-xl mr-4" /> New
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="start">
