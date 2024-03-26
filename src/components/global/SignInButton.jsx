@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 const SignInButton = ({ onClick }) => {
   return (
     <Button variant="outline" onClick={() => signIn("google")}>
-      <FcGoogle className="mr-4" /> Sign in with Google
+      <FcGoogle className="mr-4" /> Sign in
     </Button>
   );
 };

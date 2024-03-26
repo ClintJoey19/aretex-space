@@ -2,11 +2,13 @@ import { User } from "@/lib/models";
 import { connect } from "@/lib/connection";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
+import { authConfig } from "@/lib/auth.config";
 
 const GOOGLE_ID = process.env.CLIENT_ID;
 const GOOGLE_SECRET = process.env.CLIENT_SECRET;
 
 const authOptions = {
+  ...authConfig,
   session: {
     strategy: "jwt",
   },
@@ -60,6 +62,7 @@ const authOptions = {
       return session;
     },
   },
+  ...authConfig.callbacks,
 };
 
 export const handler = NextAuth(authOptions);

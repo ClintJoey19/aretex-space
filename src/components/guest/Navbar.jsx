@@ -34,9 +34,11 @@ const Navbar = ({ isAuth, setIsAuth }) => {
   return (
     <section className="w-full h-[10vh] flex justify-center items-center">
       <Container className="min-w-[1220px] h-full flex justify-between items-center">
-        <div className="cursor-pointer">
+        <div className="cursor-pointer overflow-hidden">
           <Link href="/">
-            <h2 className="font-bold">Space</h2>
+            <h2 className="font-bold text-lg">
+              Space<span className="text-primary">.</span>
+            </h2>
           </Link>
         </div>
         <div className="">
