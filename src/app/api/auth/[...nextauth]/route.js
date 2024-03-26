@@ -8,7 +8,7 @@ const GOOGLE_ID = process.env.CLIENT_ID;
 const GOOGLE_SECRET = process.env.CLIENT_SECRET;
 
 const authOptions = {
-  ...authConfig,
+  // ...authConfig,
   session: {
     strategy: "jwt",
   },
@@ -26,7 +26,7 @@ const authOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log(user, account, profile);
+      // console.log(user, account, profile);
 
       if (account.provider === "google") {
         connect();
@@ -49,6 +49,10 @@ const authOptions = {
       }
       return true;
     },
+    authorized({user, request}) {
+      const auth = user
+      console.log(auth)
+    },
     async jwt({ token, account }) {
       if (account) {
         token.accessToken = account.access_token;
@@ -62,7 +66,8 @@ const authOptions = {
       return session;
     },
   },
-  ...authConfig.callbacks,
+
+  // ...authConfig.callbacks,
 };
 
 export const handler = NextAuth(authOptions);
