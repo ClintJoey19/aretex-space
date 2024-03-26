@@ -5,6 +5,8 @@ import Container from "../global/Container";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import AvatarDropDown from "../global/AvatarDropDown";
+import { useSession } from "next-auth/react";
+import SignInButton from "../global/SignInButton";
 
 const navLinks = [
   {
@@ -27,6 +29,7 @@ const navLinks = [
 
 const Navbar = ({ isAuth, setIsAuth }) => {
   const path = usePathname();
+  const session = useSession();
 
   return (
     <section className="w-full h-[10vh] flex justify-center items-center">
@@ -44,6 +47,10 @@ const Navbar = ({ isAuth, setIsAuth }) => {
                   key={i}
                   className={`${
                     path === item.href ? "text-primary font-semibold" : ""
+                  } ${
+                    i === 1 && session.status !== "authenticated"
+                      ? "hidden"
+                      : ""
                   } hover:text-primary`}
                 >
                   <Link href={item.href}>{item.text}</Link>
@@ -52,13 +59,11 @@ const Navbar = ({ isAuth, setIsAuth }) => {
             </ul>
           </nav>
         </div>
-        <div className="flex gap-5">
-          {isAuth ? (
+        <div className="flex gap-5 cursor-pointer">
+          {session.status === "authenticated" ? (
             <AvatarDropDown isAuth={isAuth} setIsAuth={setIsAuth} />
           ) : (
-            <Button>
-              <Link href="/login">Login</Link>
-            </Button>
+            <SignInButton />
           )}
         </div>
       </Container>
