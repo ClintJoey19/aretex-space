@@ -1,5 +1,3 @@
-// import NextAuth from "next-auth/next";
-// import { authConfig } from "@/lib/auth.config";
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
@@ -25,8 +23,6 @@ export const middleware = async (req, res) => {
 
   return NextResponse.next()
 }
-
-// export default NextAuth(authConfig).auth;
 
 export const config = {
   matcher: ["/((?!api|static|.*\\..*|_next).*)"],

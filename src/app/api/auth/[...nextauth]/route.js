@@ -2,16 +2,11 @@ import { User } from "@/lib/models";
 import { connect } from "@/lib/connection";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
-import { authConfig } from "@/lib/auth.config";
 
 const GOOGLE_ID = process.env.CLIENT_ID;
 const GOOGLE_SECRET = process.env.CLIENT_SECRET;
 
 const authOptions = {
-  // ...authConfig,
-  session: {
-    strategy: "jwt",
-  },
   providers: [
     GoogleProvider({
       clientId: GOOGLE_ID,
@@ -26,8 +21,6 @@ const authOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      // console.log(user, account, profile);
-
       if (account.provider === "google") {
         connect();
         try {
@@ -49,25 +42,7 @@ const authOptions = {
       }
       return true;
     },
-    authorized({user, request}) {
-      const auth = user
-      console.log(auth)
-    },
-    async jwt({ token, account }) {
-      if (account) {
-        token.accessToken = account.access_token;
-        token.refreshToken = account.refresh_token;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
-      return session;
-    },
   },
-
-  // ...authConfig.callbacks,
 };
 
 export const handler = NextAuth(authOptions);
