@@ -13,7 +13,7 @@ const Navbar = () => {
             <h2 className="font-bold">Space</h2>
           </Link>
         </div>
-        <div className="h-full flex items-center">
+        <div className="h-full flex items-center cursor-pointer">
           {isAuth ? (
             <AvatarDropDown />
           ) : (

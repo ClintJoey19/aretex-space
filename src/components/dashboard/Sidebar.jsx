@@ -7,19 +7,13 @@ import { TfiHarddrive } from "react-icons/tfi";
 import { TfiHarddrives } from "react-icons/tfi";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { AiOutlineFolderAdd } from "react-icons/ai";
 import { RiFileUploadLine } from "react-icons/ri";
 import { MdDriveFolderUpload } from "react-icons/md";
 import CreateDialog from "../global/CreateDialog";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { FilePond, registerPlugin } from "react-filepond";
+import "filepond/dist/filepond.min.css";
 
 const actions = [
   {
@@ -56,6 +50,7 @@ const navLinks = [
 
 const Sidebar = () => {
   const path = usePathname();
+
   return (
     <section className="h-full flex justify-center bg-white border">
       <div className="w-[80%] h-full flex flex-col gap-2">
@@ -63,24 +58,29 @@ const Sidebar = () => {
           {path === "/dashboard/shared-drives" ? (
             <CreateDialog file="Drive" />
           ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            <Popover className="p-2">
+              <PopoverTrigger>
                 <Button>
                   <MdCloudUpload className="text-xl mr-4" /> New
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="start">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-60 flex flex-col gap-4"
+                align="start"
+              >
+                <div className="flex flex-col gap-2">
                   {actions.map((item, i) => (
-                    <DropdownMenuItem key={i} className={`cursor-pointer`}>
+                    <Button
+                      key={i}
+                      variant="ghost"
+                      className="w-full flex justify-start mr-4"
+                    >
                       <item.icon className="mr-4" /> {item.text}
-                    </DropdownMenuItem>
+                    </Button>
                   ))}
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </div>
+              </PopoverContent>
+            </Popover>
           )}
         </div>
         <nav className="w-full">
@@ -89,7 +89,7 @@ const Sidebar = () => {
               <li key={i} className="w-full">
                 <Link
                   href={item.href}
-                  className={`w-full flex items-center gap-5 py-2 px-4 ${
+                  className={`w-full flex items-center gap-5 py-1 px-4 ${
                     path === item.href
                       ? "bg-primary hover:bg-primary text-white"
                       : "hover:bg-primary/15"
@@ -102,6 +102,9 @@ const Sidebar = () => {
             ))}
           </ul>
         </nav>
+        <div>
+          <FilePond allowMultiple={true} maxFiles={3} server="/api" />
+        </div>
       </div>
     </section>
   );

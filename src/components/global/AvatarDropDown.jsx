@@ -14,14 +14,14 @@ const AvatarDropDown = () => {
 
   if (session.status === "authenticated")
     return (
-      <Popover className="cursor-pointer">
+      <Popover className="cursor-pointer p-4">
         <PopoverTrigger asChild>
           <Avatar>
             <AvatarImage src={session.data.user?.image} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
-        <PopoverContent className="w-80 flex flex-col gap-4" align="end">
+        <PopoverContent className="w-80 flex flex-col gap-4 p-4" align="end">
           <div className="">
             <h2 className="font-bold text-lg">
               <span className="text-primary">Hi</span> there,
