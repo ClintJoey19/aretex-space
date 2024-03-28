@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -7,54 +7,35 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { DataTableDemo } from "@/components/dashboard/DataTable";
-import { User } from "@/lib/models";
-
-const getUsers = async () => {
-  try {
-    const res = await fetch("http://localhost:3000/api/dashboard/users");
-
-    if (!res.ok) {
-      throw new Error("Something went wrong");
-    }
-
-    return res.json();
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+// import { DataTableDemo } from "@/components/dashboard/DataTable";
+// import { columns } from "@/app/dashboard/columns";
 
 const DashboardPage = () => {
-  const [display, setDisplay] = useState(0);
-  const [data, setData] = useState([]);
-  const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [rowSelection, setRowSelection] = useState({});
+  // const [display, setDisplay] = useState(0);
+  // const [data, setData] = useState([]);
+  // const [sorting, setSorting] = useState([]);
+  // const [columnFilters, setColumnFilters] = useState([]);
+  // const [columnVisibility, setColumnVisibility] = useState({});
+  // const [rowSelection, setRowSelection] = useState({});
 
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
-  useEffect(async () => {
-    const users = await getUsers();
-    setData((prev) => [...prev, users]);
-  }, [data]);
+  // const table = useReactTable({
+  //   data,
+  //   columns,
+  //   onSortingChange: setSorting,
+  //   onColumnFiltersChange: setColumnFilters,
+  //   getCoreRowModel: getCoreRowModel(),
+  //   getPaginationRowModel: getPaginationRowModel(),
+  //   getSortedRowModel: getSortedRowModel(),
+  //   getFilteredRowModel: getFilteredRowModel(),
+  //   onColumnVisibilityChange: setColumnVisibility,
+  //   onRowSelectionChange: setRowSelection,
+  //   state: {
+  //     sorting,
+  //     columnFilters,
+  //     columnVisibility,
+  //     rowSelection,
+  //   },
+  // });
 
   return (
     <main className="m-2">
