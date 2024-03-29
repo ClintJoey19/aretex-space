@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Container from "../global/Container";
-import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import AvatarDropDown from "../global/AvatarDropDown";
 import { useSession } from "next-auth/react";
@@ -27,7 +26,7 @@ const navLinks = [
   },
 ];
 
-const Navbar = ({ isAuth, setIsAuth }) => {
+const Navbar = () => {
   const path = usePathname();
   const session = useSession();
 
@@ -63,7 +62,7 @@ const Navbar = ({ isAuth, setIsAuth }) => {
         </div>
         <div className="flex gap-5 cursor-pointer">
           {session.status === "authenticated" ? (
-            <AvatarDropDown isAuth={isAuth} setIsAuth={setIsAuth} />
+            <AvatarDropDown session={session} />
           ) : (
             <SignInButton />
           )}

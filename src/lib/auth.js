@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 const GOOGLE_ID = process.env.CLIENT_ID;
 const GOOGLE_SECRET = process.env.CLIENT_SECRET;
 
-const authOptions = {
+export const authOptions = {
   session: {
     jwt: true,
   },
@@ -39,9 +39,11 @@ const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
-      // cookies().set("next-auth.jwt", JSON.stringify(session));
+      if (session) {
+        session.accessToken = token.accessToken;
+        session.refreshToken = token.refreshToken;
+        // cookies().set("next-auth.jwt-session", JSON.stringify(session));
+      }
       return session;
     },
     async signIn({ user, account, profile }) {
