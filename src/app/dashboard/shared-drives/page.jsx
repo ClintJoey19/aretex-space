@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -16,13 +16,32 @@ import { columns } from "@/app/dashboard/shared-drives/columns";
 import { rows } from "@/app/dashboard/shared-drives/rows";
 import { actions } from "@/components/dashboard/shared-drive/DriveActions";
 
+const getDrives = async () => {
+  const res = await fetch("http://localhost:3000/api/dashboard/shared-drive");
+
+  if (!res.ok) {
+    console.log("Something went wrong");
+  }
+
+  return res.json();
+};
+
 const SharedDrives = () => {
   const [display, setDisplay] = useState(0);
-  const [data, setData] = useState(rows);
+  const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
+
+  useEffect(() => {
+    const fetched = async () => {
+      const res = await getDrives();
+      setData(res.result);
+    };
+
+    fetched();
+  }, []);
 
   const table = useReactTable({
     data,

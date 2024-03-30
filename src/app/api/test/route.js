@@ -1,7 +1,4 @@
 import { google } from "googleapis";
-// import { getSession } from "next-auth/react"; // trying next-auth/client
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { getToken } from "next-auth/jwt";
 
 async function handler(req, res) {
@@ -42,14 +39,22 @@ async function handleGet(req, res) {
       auth: auth,
     });
 
-    let files = [];
-    const response = await drive.files.list({
-      fields: "files(id, name)",
-    });
+    let sharedDrives = [];
+    let nextPageToken = null;
 
-    files = response.data.files;
-    console.log(files);
-    return files;
+    do {
+      const response = await drive.drives.list({
+        pageToken: nextPageToken,
+        pageSize: 10,
+      });
+      const fetched = response.data.drives;
+      sharedDrives = sharedDrives.concat(fetched);
+      nextPageToken = response.data.nextPageToken;
+    } while (nextPageToken);
+    {
+      console.log({ drives: sharedDrives.length });
+      return sharedDrives;
+    }
   } catch (err) {
     console.log(err.message);
     return { message: err.message };

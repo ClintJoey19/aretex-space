@@ -2,9 +2,11 @@
 import React from "react";
 import Link from "next/link";
 import AvatarDropDown from "../global/AvatarDropDown";
+import { Button } from "../ui/button";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
-  const isAuth = true;
+  const session = useSession();
   return (
     <section className="h-[8vh] w-full flex justify-center items-center border bg-white">
       <div className="w-[95%] h-full px-2 flex items-center justify-between">
@@ -14,8 +16,8 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="h-full flex items-center cursor-pointer">
-          {isAuth ? (
-            <AvatarDropDown />
+          {session.status === "authenticated" ? (
+            <AvatarDropDown session={session} />
           ) : (
             <Button>
               <Link href="/login">Login</Link>

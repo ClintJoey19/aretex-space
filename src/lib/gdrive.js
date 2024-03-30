@@ -1,54 +1,57 @@
-import { google } from "googleapis";
-import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
+import { google } from "googleapis";
 
-export const gdriveConfig = async (req, res) => {
+export async function getDriveAccess(req, res) {
   try {
-    const session = await getServerSession(req, res, authOptions);
-    const token = await getToken({ req });
-    console.log(token);
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!token) {
+      res.status(404);
+    }
 
     const CLIENT_ID = process.env.CLIENT_ID;
     const CLIENT_SECRET = process.env.CLIENT_SECRET;
-    const REDIRECT_URI = "http://localhost:3000/api/auth/callback/google";
+    const accesToken = token.accessToken;
+    const refreshToken = token.refreshToken;
 
-    const oAuth2Client = new google.auth.OAuth2(
-      CLIENT_ID,
-      CLIENT_SECRET,
-      REDIRECT_URI
-    );
+    const auth = new google.auth.OAuth2({
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
 
-    if (!session) {
-      res.status(401).json({ error: "No Session Active" });
-    }
-
-    const accessToken = session?.accessToken;
-    const refreshToken = session?.refreshToken;
-
-    if (!accessToken) {
-      res.status(401).json({ error: "No access token" });
-    }
-
-    oAuth2Client.setCredentials({
-      access_token: accessToken,
+    auth.setCredentials({
+      access_token: accesToken,
       refresh_token: refreshToken,
     });
 
-    if (oAuth2Client.isTokenExpiring()) {
-      const { tokens } = await oAuth2Client.refreshAccessToken();
-      const newAccessToken = tokens.access_token;
-
-      session.user.accessToken = newAccessToken;
-    }
-
     const drive = google.drive({
       version: "v3",
-      auth: oAuth2Client,
+      auth: auth,
     });
 
     return drive;
   } catch (err) {
     console.log(err.message);
-    throw new Error(err.message);
+    return { message: err.message };
+  }
+}
+
+export const getMembers = async (drive, fileId) => {
+  try {
+    const response = await drive.permissions.list({
+      fileId: fileId,
+      fields: "permissions(id, emailAddress, role)",
+      supportsAllDrives: true,
+    });
+
+    const members = response.data.permissions.map((permission) => ({
+      id: permission.id,
+      emailAddress: permission.emailAddress,
+      role: permission.role,
+    }));
+
+    return members;
+  } catch (err) {
+    console.log(err.message);
   }
 };
