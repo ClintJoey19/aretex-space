@@ -86,7 +86,7 @@ export function DataTableDemo({ table, columns }) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onDoubleClick={() => console.log(row.id)}
+                  onDoubleClick={() => console.log(row.original.id)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

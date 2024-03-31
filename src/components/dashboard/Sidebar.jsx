@@ -9,7 +9,8 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AiOutlineFolderAdd } from "react-icons/ai";
 import { RiFileUploadLine } from "react-icons/ri";
-import { MdDriveFolderUpload } from "react-icons/md";
+import { MdDriveFolderUpload, MdOutlineGroup } from "react-icons/md";
+import { LiaProjectDiagramSolid } from "react-icons/lia";
 import CreateDialog from "../global/CreateDialog";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { FilePond, registerPlugin } from "react-filepond";
@@ -45,6 +46,16 @@ const navLinks = [
     text: "Shared Drives",
     href: "/dashboard/shared-drives",
     icon: TfiHarddrives,
+  },
+  {
+    text: "Users",
+    href: "/dashboard/users",
+    icon: MdOutlineGroup,
+  },
+  {
+    text: "Templates",
+    href: "/dashboard/templates",
+    icon: LiaProjectDiagramSolid,
   },
 ];
 
@@ -89,7 +100,7 @@ const Sidebar = () => {
               <li key={i} className="w-full">
                 <Link
                   href={item.href}
-                  className={`w-full flex items-center gap-5 py-1 px-4 ${
+                  className={`w-full flex items-center gap-5 py-2 px-4 ${
                     path === item.href
                       ? "bg-primary hover:bg-primary text-white"
                       : "hover:bg-primary/15"
