@@ -113,9 +113,9 @@ const Sidebar = () => {
             ))}
           </ul>
         </nav>
-        <div>
+        {/* <div>
           <FilePond allowMultiple={true} maxFiles={3} server="/api" />
-        </div>
+        </div> */}
       </div>
     </section>
   );

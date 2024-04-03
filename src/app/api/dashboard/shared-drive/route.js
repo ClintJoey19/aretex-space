@@ -19,7 +19,7 @@ const getSharedDrives = async (drive) => {
     do {
       const response = await drive.drives.list({
         pageToken: nextPageToken,
-        pageSize: 10,
+        pageSize: 20,
         fields: "drives(id, name, capabilities, createdTime), nextPageToken",
       });
       const fetched = response.data.drives.map(async (item) => {
