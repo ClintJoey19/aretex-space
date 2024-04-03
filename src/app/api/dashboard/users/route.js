@@ -1,13 +1,14 @@
-import { User } from "@/lib/models";
-import { connect } from "@/lib/connection";
-import { NextResponse } from "next/server";
+import { getUsers } from "@/lib/data";
 
-export async function GET(req) {
+export async function GET(req, res) {
     try {
-        connect()
-
-        const users = await User.find()
-        return NextResponse.json(users)
+        const result = await getUsers()
+        
+        if (result) {
+            return Response.json(result)
+        }
+        
+        return "Something went wrong"
     } catch (err) {
         console.log(err.message);
         throw new Error("Failed to fetch users")

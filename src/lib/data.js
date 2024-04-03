@@ -4,8 +4,8 @@ import { User } from "./models";
 export const getUsers = async () => {
   try {
     connect();
-    const users = await User.find();
-    return users;
+    const result = await User.find();
+    return result;
   } catch (err) {
     console.log(err);
   }

@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { DataTableDemo } from "@/components/dashboard/DataTable";
 import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
 import { columns } from "@/app/dashboard/shared-drives/columns";
-import { rows } from "@/app/dashboard/shared-drives/rows";
 import { actions } from "@/components/dashboard/shared-drive/DriveActions";
 
 const getDrives = async () => {
@@ -37,6 +36,7 @@ const SharedDrives = () => {
   useEffect(() => {
     const fetched = async () => {
       const res = await getDrives();
+      console.log(res);
       setData(res.result);
     };
 
