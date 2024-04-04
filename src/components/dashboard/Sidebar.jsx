@@ -1,20 +1,20 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { MdCloudUpload } from "react-icons/md";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { TfiHarddrive } from "react-icons/tfi";
-import { TfiHarddrives } from "react-icons/tfi";
+import { TfiHarddrive, TfiHarddrives } from "react-icons/tfi";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AiOutlineFolderAdd } from "react-icons/ai";
 import { RiFileUploadLine } from "react-icons/ri";
-import { MdDriveFolderUpload, MdOutlineGroup } from "react-icons/md";
+import {
+  MdCloudUpload,
+  MdDriveFolderUpload,
+  MdOutlineGroup,
+} from "react-icons/md";
 import { LiaProjectDiagramSolid } from "react-icons/lia";
 import CreateDialog from "../global/CreateDialog";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { FilePond, registerPlugin } from "react-filepond";
-import "filepond/dist/filepond.min.css";
 
 const actions = [
   {
@@ -36,11 +36,6 @@ const navLinks = [
     text: "Dashboard",
     href: "/dashboard",
     icon: LuLayoutDashboard,
-  },
-  {
-    text: "Personal Drive",
-    href: "/dashboard/personal-drive",
-    icon: TfiHarddrive,
   },
   {
     text: "Shared Drives",
@@ -113,9 +108,6 @@ const Sidebar = () => {
             ))}
           </ul>
         </nav>
-        {/* <div>
-          <FilePond allowMultiple={true} maxFiles={3} server="/api" />
-        </div> */}
       </div>
     </section>
   );

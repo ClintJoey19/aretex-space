@@ -42,19 +42,17 @@ async function handleGet(req, res) {
     let sharedDrives = [];
     let nextPageToken = null;
 
-    do {
-      const response = await drive.drives.list({
-        pageToken: nextPageToken,
-        pageSize: 10,
-      });
-      const fetched = response.data.drives;
-      sharedDrives = sharedDrives.concat(fetched);
-      nextPageToken = response.data.nextPageToken;
-    } while (nextPageToken);
-    {
-      console.log({ drives: sharedDrives.length });
-      return sharedDrives;
-    }
+    // do {
+    const response = await drive.drives.list({
+      pageToken: nextPageToken,
+      pageSize: 10,
+    });
+    const fetched = response.data.drives;
+    sharedDrives = sharedDrives.concat(fetched);
+    nextPageToken = response.data.nextPageToken;
+    // } while (nextPageToken);
+    console.log({ drives: sharedDrives.length });
+    return { nextPageToken, sharedDrives };
   } catch (err) {
     console.log(err.message);
     return { message: err.message };

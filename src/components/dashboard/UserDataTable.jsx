@@ -63,8 +63,8 @@ export function UserDataTable({ table, columns }) {
       <div className="rounded-md border h-[52vh] overflow-y-auto">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup._id}>
+            {table.getHeaderGroups().map((headerGroup, i) => (
+              <TableRow key={i}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header._id}>

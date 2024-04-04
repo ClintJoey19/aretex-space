@@ -7,14 +7,14 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "../ui/button";
 import { IoLogOutOutline } from "react-icons/io5";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 const AvatarDropDown = ({ session }) => {
   return (
     <Popover className="cursor-pointer p-4">
       <PopoverTrigger asChild>
         <Avatar>
-          <AvatarImage src={session.data.user?.image} />
+          <AvatarImage src={session.data.user?.image} alt="profile-image" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
