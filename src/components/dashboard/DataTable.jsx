@@ -241,10 +241,8 @@ export function DataTableDemo() {
       </div>
       <div className="flex gap-2 justify-center">
         <Button onClick={loadMoreDrives}>Load more</Button>
-        <p>{table.getFilteredRowModel().rows.length}</p>
-        <p>page size {pagination.pageSize}</p>
-        <p>{isFetching ? "fetching..." : "fetched"}</p>
-        <p>{entry?.isIntersecting ? "Seen" : "Not"}</p>
+        <p>{isFetching ? "Loading" : ""}</p>
+
         {/* <p>{token.substring(0, 40) + "..."}</p> */}
       </div>
     </div>

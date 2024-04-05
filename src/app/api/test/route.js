@@ -46,6 +46,7 @@ async function handleGet(req, res) {
     const response = await drive.drives.list({
       pageToken: nextPageToken,
       pageSize: 10,
+      fields: "drives(id, name, kind, capabilities, createdTime), nextPageToken",
     });
     const fetched = response.data.drives;
     sharedDrives = sharedDrives.concat(fetched);

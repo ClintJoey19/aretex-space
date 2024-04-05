@@ -1,0 +1,33 @@
+Template Schema
+
+useState({
+    name: String,
+    kind: drive,
+    children: [
+        {
+            name: FolderName,
+            mimeType: folder,
+            children: [
+                ...{
+                    name: FolderName,
+                    mimeType: folder,
+                    children: [
+                        ...{
+                            
+                        }
+                    ]
+                }
+            ]
+        },
+        ...child
+    ]
+})
+
+design:
+    root(drive)
+        - folder
+            - subfolder lvl 1
+        - folder
+            - subfolder lvl 1
+                - subfolder lvl 2
+        - folder

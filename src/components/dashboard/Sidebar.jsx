@@ -2,34 +2,12 @@
 import React from "react";
 import Link from "next/link";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { TfiHarddrive, TfiHarddrives } from "react-icons/tfi";
+import { TfiHarddrives } from "react-icons/tfi";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { AiOutlineFolderAdd } from "react-icons/ai";
-import { RiFileUploadLine } from "react-icons/ri";
-import {
-  MdCloudUpload,
-  MdDriveFolderUpload,
-  MdOutlineGroup,
-} from "react-icons/md";
+import { MdCloudUpload, MdOutlineGroup } from "react-icons/md";
 import { LiaProjectDiagramSolid } from "react-icons/lia";
 import CreateDialog from "../global/CreateDialog";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-
-const actions = [
-  {
-    text: "New Folder",
-    icon: AiOutlineFolderAdd,
-  },
-  {
-    text: "Upload File",
-    icon: RiFileUploadLine,
-  },
-  {
-    text: "Upload Folder",
-    icon: MdDriveFolderUpload,
-  },
-];
 
 const navLinks = [
   {
@@ -57,38 +35,30 @@ const navLinks = [
 const Sidebar = () => {
   const path = usePathname();
 
+  let actionBtn = (
+    <Button>
+      <MdCloudUpload className="text-xl mr-4" /> New
+    </Button>
+  );
+
+  if (path === "/dashboard/shared-drives") {
+    actionBtn = <CreateDialog file="Drive" />;
+  }
+
+  if (path === "/dashboard/templates") {
+    actionBtn = (
+      <Button>
+        <Link href="/dashboard/templates/create-template" className="flex">
+          <MdCloudUpload className="text-xl mr-4" /> New
+        </Link>
+      </Button>
+    );
+  }
+
   return (
     <section className="h-full flex justify-center bg-white border">
       <div className="w-[80%] h-full flex flex-col gap-2">
-        <div className="w-full mt-4">
-          {path === "/dashboard/shared-drives" ? (
-            <CreateDialog file="Drive" />
-          ) : (
-            <Popover className="p-2">
-              <PopoverTrigger>
-                <Button>
-                  <MdCloudUpload className="text-xl mr-4" /> New
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-60 flex flex-col gap-4"
-                align="start"
-              >
-                <div className="flex flex-col gap-2">
-                  {actions.map((item, i) => (
-                    <Button
-                      key={i}
-                      variant="ghost"
-                      className="w-full flex justify-start mr-4"
-                    >
-                      <item.icon className="mr-4" /> {item.text}
-                    </Button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
+        <div className="w-full mt-4">{actionBtn}</div>
         <nav className="w-full">
           <ul className="w-full flex flex-col gap-2 py-2">
             {navLinks.map((item, i) => (

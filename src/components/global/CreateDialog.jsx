@@ -1,42 +1,60 @@
 "use client";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { MdCloudUpload } from "react-icons/md";
+import { useState } from "react";
+import { CreateDrive } from "./CreateDrive";
+
+const lists = [
+  {
+    id: 1,
+    name: "Template 1",
+  },
+  {
+    id: 2,
+    name: "Template 2",
+  },
+  {
+    id: 3,
+    name: "Template 3",
+  },
+  {
+    id: 4,
+    name: "Template 4",
+  },
+];
 
 const CreateDialog = ({ file }) => {
   const title = `New ${file}`;
+  const [templates, setTemplates] = useState(lists);
+  const [drive, setDrive] = useState({
+    name: "Drive",
+    template: 1,
+  });
+
+  // fetch here the templates from the db
+
+  const handleSubmitDrive = (e) => {
+    e.preventDefault();
+    console.log(drive);
+    // pending
+  };
+
+  let content = (
+    <CreateDrive
+      handleSubmitDrive={handleSubmitDrive}
+      title={title}
+      templates={templates}
+    />
+  );
   return (
     <Dialog>
       <DialogTrigger>
-        {file === "Folder" ? (
-          <MdCloudUpload className="text-xl mr-4" />
-        ) : (
-          <Button>
-            <MdCloudUpload className="text-xl mr-4" /> New
-          </Button>
-        )}
+        <Button>
+          <MdCloudUpload className="text-xl mr-4" /> New
+        </Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Input id="name" className="col-span-3" placeholder={title} />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit">Create</Button>
-          </DialogFooter>
-        </DialogHeader>
-      </DialogContent>
+      {content}
     </Dialog>
   );
 };
