@@ -14,7 +14,7 @@ const AvatarDropDown = ({ session }) => {
     <Popover className="cursor-pointer p-4">
       <PopoverTrigger asChild>
         <Avatar>
-          <AvatarImage src={session.data.user?.image} alt="profile-image" />
+          <AvatarImage src={session.image} alt="profile-image" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
@@ -23,8 +23,8 @@ const AvatarDropDown = ({ session }) => {
           <h2 className="font-bold text-lg">
             <span className="text-primary">Hi</span> there,
           </h2>
-          <p className="text-sm font-semibold">{session.data.user.name}</p>
-          <p className="text-sm">{session.data.user.email}</p>
+          <p className="text-sm font-semibold">{session.name}</p>
+          <p className="text-sm">{session.email}</p>
         </div>
         <div className="flex justify-end">
           <Button variant="outline" onClick={() => signOut()}>

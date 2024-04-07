@@ -10,7 +10,7 @@ export const GET = async (req, res) => {
     if (result) {
       return Response.json({ result });
     } else {
-      return Response.json({ error: "Failed to fetch shared drives" });
+      throw new Error("Something went wrong");
     }
   } catch (err) {
     console.error(err.message);
@@ -27,6 +27,7 @@ const getSharedDrives = async (drive, nextPageToken) => {
       pageSize: 10,
       fields: "drives(id, name, capabilities, createdTime), nextPageToken",
     });
+
     const fetched = response.data.drives.map(async (item) => {
       const members = await getMembers(drive, item.id);
       return {

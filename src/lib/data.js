@@ -5,7 +5,7 @@ export const getUsers = async () => {
   try {
     connect();
     const result = await User.find();
-    return result;
+    return Response.json(result);
   } catch (err) {
     console.log(err);
   }

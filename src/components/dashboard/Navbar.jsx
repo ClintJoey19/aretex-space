@@ -1,27 +1,21 @@
-"use client";
-import React from "react";
-import Link from "next/link";
 import AvatarDropDown from "../global/AvatarDropDown";
-import { Button } from "../ui/button";
-import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import SignInButton from "../global/SignInButton";
 
-const Navbar = () => {
-  const session = useSession();
+const Navbar = async () => {
+  const session = await getServerSession();
+  console.log(session.user);
   return (
     <section className="h-[8vh] w-full flex justify-center items-center border bg-white">
       <div className="w-[95%] h-full px-2 flex items-center justify-between">
         <div className="cursor-pointer">
-          <Link href="/dashboard">
-            <h2 className="font-bold">Space</h2>
-          </Link>
+          <h2 className="font-bold">Space</h2>
         </div>
         <div className="h-full flex items-center cursor-pointer">
-          {session.status === "authenticated" ? (
-            <AvatarDropDown session={session} />
+          {session.user ? (
+            <AvatarDropDown session={session.user} />
           ) : (
-            <Button>
-              <Link href="/login">Login</Link>
-            </Button>
+            <SignInButton />
           )}
         </div>
       </div>

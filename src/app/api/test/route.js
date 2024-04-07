@@ -5,7 +5,7 @@ async function handler(req, res) {
   const result = await handleGet(req, res);
 
   if (result) {
-    return Response.json(JSON.stringify(result));
+    return Response.json(result);
   }
 
   return Response.json("Failed");
@@ -46,7 +46,8 @@ async function handleGet(req, res) {
     const response = await drive.drives.list({
       pageToken: nextPageToken,
       pageSize: 10,
-      fields: "drives(id, name, kind, capabilities, createdTime), nextPageToken",
+      fields:
+        "drives(id, name, kind, capabilities, createdTime), nextPageToken",
     });
     const fetched = response.data.drives;
     sharedDrives = sharedDrives.concat(fetched);
@@ -56,7 +57,7 @@ async function handleGet(req, res) {
     return { nextPageToken, sharedDrives };
   } catch (err) {
     console.log(err.message);
-    return { message: err.message };
+    throw new Error(err.message);
   }
 }
 

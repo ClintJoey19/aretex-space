@@ -2,7 +2,6 @@ import { User } from "@/lib/models";
 import { connect } from "@/lib/connection";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
-import { cookies } from "next/headers";
 
 const GOOGLE_ID = process.env.CLIENT_ID;
 const GOOGLE_SECRET = process.env.CLIENT_SECRET;
@@ -42,7 +41,6 @@ export const authOptions = {
       if (session) {
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
-        // cookies().set("next-auth.jwt-session", JSON.stringify(session));
       }
       return session;
     },

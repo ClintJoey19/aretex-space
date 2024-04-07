@@ -31,8 +31,7 @@ export async function getDriveAccess(req, res) {
 
     return drive;
   } catch (err) {
-    console.log(err.message);
-    return { message: err.message };
+    console.log(err);
   }
 }
 

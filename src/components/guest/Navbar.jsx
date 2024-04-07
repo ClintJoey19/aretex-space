@@ -1,10 +1,7 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
+import { getServerSession } from "next-auth";
+import Navlinks from "./Navlinks";
 import Container from "../global/Container";
-import { usePathname } from "next/navigation";
 import AvatarDropDown from "../global/AvatarDropDown";
-import { useSession } from "next-auth/react";
 import SignInButton from "../global/SignInButton";
 
 const navLinks = [
@@ -26,43 +23,23 @@ const navLinks = [
   },
 ];
 
-const Navbar = () => {
-  const path = usePathname();
-  const session = useSession();
+const Navbar = async () => {
+  const session = await getServerSession();
 
   return (
-    <section className="w-full h-[10vh] flex justify-center items-center">
+    <section className="w-full h-[8vh] flex justify-center items-center">
       <Container className="min-w-[1220px] h-full flex justify-between items-center">
         <div className="cursor-pointer overflow-hidden">
-          <Link href="/">
-            <h2 className="font-bold text-lg">
-              Space<span className="text-primary">.</span>
-            </h2>
-          </Link>
+          <h2 className="font-bold text-lg">
+            Space<span className="text-primary">.</span>
+          </h2>
         </div>
         <div className="">
-          <nav>
-            <ul className="flex gap-10">
-              {navLinks.map((item, i) => (
-                <li
-                  key={i}
-                  className={`${
-                    path === item.href ? "text-primary font-semibold" : ""
-                  } ${
-                    i === 1 && session.status !== "authenticated"
-                      ? "hidden"
-                      : ""
-                  } hover:text-primary`}
-                >
-                  <Link href={item.href}>{item.text}</Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <Navlinks navLinks={navLinks} session={session?.user} />
         </div>
         <div className="flex gap-5 cursor-pointer">
-          {session.status === "authenticated" ? (
-            <AvatarDropDown session={session} />
+          {session?.user ? (
+            <AvatarDropDown session={session?.user} />
           ) : (
             <SignInButton />
           )}

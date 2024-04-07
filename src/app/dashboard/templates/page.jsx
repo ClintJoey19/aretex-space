@@ -1,6 +1,4 @@
-import React from "react";
-
-const Templates = () => {
+const Templates = async () => {
   return (
     <main className="m-2 bg-white rounded-md border">
       <div className="p-4 flex flex-col gap-4">

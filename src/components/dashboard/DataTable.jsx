@@ -39,9 +39,7 @@ const getDrives = async (nextPageToken = null) => {
     URL += `?nextPageToken=${nextPageToken}`;
   }
 
-  const res = await fetch(URL, {
-    cache: "no-store",
-  });
+  const res = await fetch(URL);
 
   if (!res.ok) {
     console.log("Something went wrong");
@@ -62,11 +60,10 @@ export function DataTableDemo() {
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
     const fetched = async () => {
-      setIsFetching(true);
       const res = await getDrives();
       setData(res.result.sharedDrives);
       setToken(res.result.newToken);
@@ -119,7 +116,9 @@ export function DataTableDemo() {
   };
 
   useEffect(() => {
-    if (entry?.isIntersecting) loadMoreDrives(token);
+    if (entry?.isIntersecting) {
+      alert("Intersecting");
+    }
   }, [entry]);
 
   return (
@@ -144,7 +143,6 @@ export function DataTableDemo() {
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) => {
             table.getColumn("name")?.setFilterValue(event.target.value);
-            console.log(table.getColumn("name"));
           }}
           className="max-w-sm"
         />
@@ -196,43 +194,26 @@ export function DataTableDemo() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length || isFetching ? (
-              table.getRowModel().rows.map((row, i) =>
-                i === data.length ? (
-                  <TableRow
-                    ref={ref}
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ) : (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                )
-              )
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row, i) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             ) : (
               <TableRow>
                 <TableCell colSpan={10} className="h-24 text-center">
-                  No results.
+                  {isFetching ? "Loading..." : "No results."}
                 </TableCell>
               </TableRow>
             )}
@@ -242,8 +223,6 @@ export function DataTableDemo() {
       <div className="flex gap-2 justify-center">
         <Button onClick={loadMoreDrives}>Load more</Button>
         <p>{isFetching ? "Loading" : ""}</p>
-
-        {/* <p>{token.substring(0, 40) + "..."}</p> */}
       </div>
     </div>
   );

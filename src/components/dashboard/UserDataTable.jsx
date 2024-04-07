@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { flexRender } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -17,10 +18,41 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { columns } from "@/app/dashboard/users/columns";
 
-export function UserDataTable({ table, columns }) {
-  let cols = [];
-  cols = [...cols, columns];
+export function UserDataTable({ rows }) {
+  const [data, setData] = useState(rows);
+  const [sorting, setSorting] = useState([]);
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -43,10 +75,10 @@ export function UserDataTable({ table, columns }) {
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
+              .map((column, i) => {
                 return (
                   <DropdownMenuCheckboxItem
-                    key={column._id}
+                    key={i}
                     className="capitalize"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) => {
@@ -65,9 +97,9 @@ export function UserDataTable({ table, columns }) {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup, i) => (
               <TableRow key={i}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map((header, i) => {
                   return (
-                    <TableHead key={header._id}>
+                    <TableHead key={i}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -82,14 +114,14 @@ export function UserDataTable({ table, columns }) {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, i) => (
                 <TableRow
-                  key={row._id}
+                  key={i}
                   data-state={row.getIsSelected() && "selected"}
                   onDoubleClick={() => console.log(row.original._id)}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell._id}>
+                  {row.getVisibleCells().map((cell, i) => (
+                    <TableCell key={i}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

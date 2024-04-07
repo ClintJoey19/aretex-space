@@ -14,15 +14,13 @@ export function DropdownMenuTableActions({ path, row, actions, rowSelected }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {rowSelected > 1 ? (
-          <Button variant="outline" size="icon" disabled>
-            <CiMenuKebab className="h-4 w-4" />
-          </Button>
-        ) : (
-          <Button variant="outline" size="icon">
-            <CiMenuKebab className="h-4 w-4" />
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="icon"
+          disabled={rowSelected > 1 ? true : false}
+        >
+          <CiMenuKebab className="h-4 w-4" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
