@@ -5,7 +5,7 @@ import { MdCloudUpload } from "react-icons/md";
 import { useState } from "react";
 import { CreateDrive } from "./CreateDrive";
 
-const lists = [
+const templates = [
   {
     id: 1,
     name: "Template 1",
@@ -26,11 +26,6 @@ const lists = [
 
 const CreateDialog = ({ file }) => {
   const title = `New ${file}`;
-  const [templates, setTemplates] = useState(lists);
-  const [drive, setDrive] = useState({
-    name: "Drive",
-    template: 1,
-  });
 
   // fetch here the templates from the db
 

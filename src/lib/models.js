@@ -26,4 +26,24 @@ export const userModel = new Schema(
   { timestamps: true }
 );
 
+export const folderModel = new Schema(
+  {
+    name: String,
+    mimeType: String,
+    children: [folderModel]
+  }
+)
+
+export const driveModel = new Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    template: folderModel
+  }
+);
+
 export const User = mongoose.models?.User || mongoose.model("User", userModel);
+export const FolderTemplate = mongoose.models?.FolderTemplate || mongoose.model("FolderTemplate", folderModel)
+export const DriveTemplate = mongoose.models?.DriveTemplate || mongoose.model("DriveTemplate", driveModel)
