@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
+
+import { Schema, models, model } from "mongoose";
 
 export const userModel = new Schema(
   {
@@ -30,7 +30,10 @@ export const folderModel = new Schema(
   {
     name: String,
     mimeType: String,
-    children: [folderModel]
+    children: [{
+      type: Schema.Types.ObjectId,
+      ref: "FolderTemplate"
+    }]
   }
 )
 
@@ -40,10 +43,13 @@ export const driveModel = new Schema(
       type: String,
       required: true
     },
-    template: folderModel
+    template: {
+      type: Schema.Types.ObjectId,
+      ref: "FolderTemplate"
+    }
   }
 );
 
-export const User = mongoose.models?.User || mongoose.model("User", userModel);
-export const FolderTemplate = mongoose.models?.FolderTemplate || mongoose.model("FolderTemplate", folderModel)
-export const DriveTemplate = mongoose.models?.DriveTemplate || mongoose.model("DriveTemplate", driveModel)
+export const User = models?.User || model("User", userModel);
+export const FolderTemplate = models?.FolderTemplate || model("FolderTemplate", folderModel)
+export const DriveTemplate = models?.DriveTemplate || model("DriveTemplate", driveModel)
