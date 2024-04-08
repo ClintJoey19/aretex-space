@@ -10,6 +10,7 @@ export const middleware = async (req, res) => {
   const isOnSharedDrive = req.nextUrl?.pathname.startsWith("/shared-drive")
   const isOnUsers = req.nextUrl?.pathname.startsWith("/users")
   const isOnTemplates = req.nextUrl?.pathname.startsWith("/templates")
+  const isOnCreateTemplates = req.nextUrl?.pathname.startsWith("/create-template")
 
   if (isOnDashboard && !token) {
     return Response.redirect(new URL("/", req.nextUrl))
@@ -28,6 +29,10 @@ export const middleware = async (req, res) => {
   }
 
   if (isOnTemplates && !token) {
+    return Response.redirect(new URL("/", req.nextUrl))
+  }
+
+  if (isOnCreateTemplates && !token) {
     return Response.redirect(new URL("/", req.nextUrl))
   }
 

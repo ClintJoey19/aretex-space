@@ -4,7 +4,6 @@ import SignInButton from "../global/SignInButton";
 
 const Navbar = async () => {
   const session = await getServerSession();
-  console.log(session.user);
   return (
     <section className="h-[8vh] w-full flex justify-center items-center border bg-white">
       <div className="w-[95%] h-full px-2 flex items-center justify-between">
