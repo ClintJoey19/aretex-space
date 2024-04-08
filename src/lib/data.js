@@ -1,5 +1,5 @@
 import { connect } from "./connection";
-import { User } from "./models";
+import { User, FolderTemplate, DriveTemplate } from "./models";
 
 export const getUsers = async () => {
   try {
@@ -20,3 +20,23 @@ export const getUser = async (id) => {
     console.log(err);
   }
 };
+
+export const getDriveTemplates = async () => {
+  try {
+    connect()
+    const templates = await DriveTemplate.find()
+    return Response.json(templates)
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+export const getDriveTemplate = async (id) => {
+  try {
+    connect()
+    const template = await DriveTemplate.findById(id)
+    return template
+  } catch (err) {
+    console.log(err.message);
+  }
+}
