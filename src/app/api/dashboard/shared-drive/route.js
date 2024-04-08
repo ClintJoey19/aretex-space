@@ -49,3 +49,10 @@ const getSharedDrives = async (drive, nextPageToken) => {
     throw new Error("Failed to fetch shared drives");
   }
 };
+
+export const POST = async (req, res) => {
+  const drive = await getDriveAccess(req, res);
+  console.log();
+
+  const newDrive = await Request.json();
+};
