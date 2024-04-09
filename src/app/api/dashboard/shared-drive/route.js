@@ -51,17 +51,18 @@ const getSharedDrives = async (drive, nextPageToken) => {
   }
 };
 
+const folders = [
+  "Desktop Procedure",
+  "Onboarding & Communication",
+  "Financial",
+  "AP",
+  "DMS ADMIN SUPP",
+  "DMS FIN SUPPORT"
+]
+
 export const POST = async (req, res) => {
   const drive = await getDriveAccess(req, res);
   const {newDrive} = await req.json()
-  const folders = [
-    "Desktop Procedure",
-    "Onboarding & Communication",
-    "Financial",
-    "AP",
-    "DMS ADMIN SUPP",
-    "DMS FIN SUPPORT"
-  ]
   
   try {
     const res = await drive.drives.create({
@@ -70,6 +71,30 @@ export const POST = async (req, res) => {
       },
       requestId: uuid(),
       fields: 'id'
+    })
+
+    const destinationId = res.data.id
+    console.log(`${destinationId} drive is created`);
+
+    folders.forEach(async (folder, i) => {
+      const metadata = {
+        name: `${i + 1}. ${folder}`,
+        mimeType: 'application/vnd.google-apps.folder',
+        parents: [destinationId]
+      }
+      
+      try {
+        await drive.files.create({
+          requestBody: metadata,
+          requestId: uuid(),
+          fields: 'id',
+          supportsAllDrives: true
+        })
+
+        console.log(`${folder} is added to ${destinationId}`);
+      } catch (err) {
+        console.error(err.message);
+      }
     })
 
     return Response.json(res)

@@ -47,16 +47,16 @@ const CreateDialog = ({ file }) => {
   const session = useSession();
   const [driveName, setDriveName] = useState("");
   const [template, setTemplate] = useState("");
+
   // fetch here the templates from the db
+  // pending
 
   const handleSubmitDrive = async (e) => {
     e.preventDefault();
 
-    let names = removeSpaces(driveName);
-    names = names.split(",");
+    const names = driveName.split(", ");
 
     for (const name of names) {
-      console.log(name);
       const newDrive = {
         driveName: name,
         template,
@@ -77,11 +77,10 @@ const CreateDialog = ({ file }) => {
             },
           }
         );
-        console.log(res);
+
         if (res.ok) {
           const data = await res.json();
-          console.log(data);
-          console.log("Yeah");
+          console.log(data.data.id);
         } else {
           console.log("error");
         }
@@ -89,6 +88,9 @@ const CreateDialog = ({ file }) => {
         console.error(err.message);
       }
     }
+
+    setDriveName("");
+    setTemplate("");
   };
 
   return (
@@ -109,7 +111,7 @@ const CreateDialog = ({ file }) => {
                   value={driveName}
                   onChange={(e) => setDriveName(e.target.value)}
                   className="col-span-3"
-                  placeholder={title}
+                  placeholder="Drive 1, Drive 2, ..."
                 />
                 <Select
                   value={template}
