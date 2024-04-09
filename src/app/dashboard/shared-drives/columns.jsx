@@ -59,14 +59,12 @@ export const columns = [
     id: "actions",
     enableHiding: false,
     cell: ({ row, table }) => {
-      const rowSelected = table.getFilteredSelectedRowModel().rows.length;
-
       return (
         <DropdownMenuTableActions
           path="shared-drives"
           row={row.original}
           actions={actions}
-          rowSelected={rowSelected}
+          table={table}
         />
       );
     },

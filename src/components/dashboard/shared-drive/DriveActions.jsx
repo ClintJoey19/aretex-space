@@ -46,3 +46,11 @@ export const actions = [
     fn: ({ id }) => console.log(id),
   },
 ];
+
+export const multiActions = [
+  {
+    text: "Manage Members",
+    icon: MdOutlineGroup,
+    fn: ({ id }) => console.log(id),
+  },
+];

@@ -30,7 +30,10 @@ import {
 } from "@/components/ui/table";
 import { useIntersection } from "@mantine/hooks";
 import { columns } from "@/app/dashboard/shared-drives/columns";
-import { actions } from "@/components/dashboard/shared-drive/DriveActions";
+import {
+  actions,
+  multiActions,
+} from "@/components/dashboard/shared-drive/DriveActions";
 
 const getDrives = async (nextPageToken = null) => {
   let URL = "http://localhost:3000/api/dashboard/shared-drive";
@@ -131,7 +134,15 @@ export function DataTableDemo() {
             </Button>
             <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
             <Button variant="outline" size="icon">
-              <DropdownMenuTableActions actions={actions} />
+              <DropdownMenuTableActions
+                type="multiple"
+                actions={
+                  table.getFilteredSelectedRowModel().rows.length > 2
+                    ? multiActions
+                    : actions
+                }
+                table={table}
+              />
             </Button>
           </div>
         ) : null}
