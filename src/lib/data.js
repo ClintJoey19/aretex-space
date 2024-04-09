@@ -1,5 +1,6 @@
+"use server"
 import { connect } from "./connection";
-import { User, FolderTemplate, DriveTemplate } from "./models";
+import { User} from "./models";
 
 export const getUsers = async () => {
   try {
@@ -21,22 +22,32 @@ export const getUser = async (id) => {
   }
 };
 
-export const getDriveTemplates = async () => {
-  try {
-    connect()
-    const templates = await DriveTemplate.find()
-    return Response.json(templates)
-  } catch (err) {
-    console.log(err.message);
-  }
-}
+// export const getDriveTemplates = async () => {
+//   try {
+//     connect()
+//     const templates = await DriveTemplate.find()
+//     return Response.json(templates)
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// }
 
-export const getDriveTemplate = async (id) => {
-  try {
-    connect()
-    const template = await DriveTemplate.findById(id)
-    return template
-  } catch (err) {
-    console.log(err.message);
-  }
-}
+// export const getDriveTemplate = async (id) => {
+//   try {
+//     connect()
+//     const template = await DriveTemplate.findById(id)
+//     return template
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// }
+
+// export const addTemplate = async (template) => {
+//   try {
+//     connect()
+    
+
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// }

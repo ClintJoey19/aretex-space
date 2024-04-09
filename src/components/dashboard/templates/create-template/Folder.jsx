@@ -43,7 +43,7 @@ const Folder = ({ template, onAddFolder }) => {
                 done.
               </DialogDescription>
             </DialogHeader>
-            <form action="" onSubmit={handleSubmit}>
+            <main>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="">
@@ -71,11 +71,11 @@ const Folder = ({ template, onAddFolder }) => {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">
+                <Button onClick={handleSubmit}>
                   <RiAddLine className="mr-2" /> Add
                 </Button>
               </DialogFooter>
-            </form>
+            </main>
           </DialogContent>
         </Dialog>
       </div>

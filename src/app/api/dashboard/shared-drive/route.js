@@ -1,4 +1,5 @@
 import { getDriveAccess, getMembers } from "@/lib/gdrive";
+import {v4 as uuid} from "uuid"
 
 export const GET = async (req, res) => {
   let nextPageToken = req.nextUrl.searchParams.get("nextPageToken") || null;
@@ -52,7 +53,27 @@ const getSharedDrives = async (drive, nextPageToken) => {
 
 export const POST = async (req, res) => {
   const drive = await getDriveAccess(req, res);
-  console.log();
+  const {newDrive} = await req.json()
+  const folders = [
+    "Desktop Procedure",
+    "Onboarding & Communication",
+    "Financial",
+    "AP",
+    "DMS ADMIN SUPP",
+    "DMS FIN SUPPORT"
+  ]
+  
+  try {
+    const res = await drive.drives.create({
+      resource: {
+        name: newDrive.driveName
+      },
+      requestId: uuid(),
+      fields: 'id'
+    })
 
-  const newDrive = await Request.json();
+    return Response.json(res)
+  } catch (err) {
+    console.error(err.message);
+  }
 };

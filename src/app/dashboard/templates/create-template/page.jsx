@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FolderStructure from "@/components/dashboard/templates/create-template/FolderStructure";
+import { useSession } from "next-auth/react";
 
 const CreateTemplate = () => {
   const [templateName, setTemplateName] = useState("");
@@ -12,6 +13,40 @@ const CreateTemplate = () => {
     mimeType: "drive",
     children: [],
   });
+  const session = useSession();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newTemplate = { name: templateName, template };
+    console.log(newTemplate);
+    console.log(session.data.accessToken);
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/dashboard/templates",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: templateName,
+            template,
+            accessToken: session.data.accessToken,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message);
+        return;
+      }
+
+      console.error(`Error saving template: ${response.statusText}`);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
   const handleAddFolder = (parentName, newFolderName) => {
     const updatedTemplate = { ...template };
@@ -31,7 +66,10 @@ const CreateTemplate = () => {
     setTemplate(updatedTemplate);
   };
   return (
-    <main className="m-2 bg-white rounded-md border flex flex-col gap-4">
+    <form
+      className="m-2 bg-white rounded-md border flex flex-col gap-4"
+      onSubmit={handleSubmit}
+    >
       <div className="p-4 flex flex-col gap-4">
         <h2 className="text-2xl">Create Template</h2>
         <div className="grid grid-cols-4 w-[500px] items-center">
@@ -41,6 +79,7 @@ const CreateTemplate = () => {
           <Input
             id="templateName"
             placeholder="Template Name"
+            name="templateName"
             className="col-span-2"
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}
@@ -52,12 +91,10 @@ const CreateTemplate = () => {
           <FolderStructure template={template} onAddFolder={handleAddFolder} />
         </div>
         <div className="w-full flex justify-end gap-4">
-          <Button onClick={() => console.log({ name: templateName, template })}>
-            Create
-          </Button>
+          <Button>Create</Button>
         </div>
       </div>
-    </main>
+    </form>
   );
 };
 

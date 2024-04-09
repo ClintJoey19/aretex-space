@@ -36,7 +36,7 @@ const Sidebar = () => {
   const path = usePathname();
 
   let actionBtn = (
-    <Button>
+    <Button disabled>
       <MdCloudUpload className="text-xl mr-4" /> New
     </Button>
   );

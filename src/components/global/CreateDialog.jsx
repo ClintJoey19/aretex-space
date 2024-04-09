@@ -20,6 +20,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { MdCloudUpload } from "react-icons/md";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { removeSpaces } from "@/lib/utils";
 
 const templates = [
   {
@@ -42,17 +44,51 @@ const templates = [
 
 const CreateDialog = ({ file }) => {
   const title = `New ${file}`;
+  const session = useSession();
   const [driveName, setDriveName] = useState("");
   const [template, setTemplate] = useState("");
   // fetch here the templates from the db
 
-  const handleSubmitDrive = (e) => {
+  const handleSubmitDrive = async (e) => {
     e.preventDefault();
-    const newDrive = {
-      driveName,
-      template,
-    };
-    console.log(newDrive);
+
+    let names = removeSpaces(driveName);
+    names = names.split(",");
+
+    for (const name of names) {
+      console.log(name);
+      const newDrive = {
+        driveName: name,
+        template,
+      };
+
+      try {
+        const res = await fetch(
+          "http://localhost:3000/api/dashboard/shared-drive",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              newDrive,
+              accessToken: session.data.accessToken,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.data.accessToken}`,
+            },
+          }
+        );
+        console.log(res);
+        if (res.ok) {
+          const data = await res.json();
+          console.log(data);
+          console.log("Yeah");
+        } else {
+          console.log("error");
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
   };
 
   return (

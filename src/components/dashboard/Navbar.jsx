@@ -8,7 +8,9 @@ const Navbar = async () => {
     <section className="h-[8vh] w-full flex justify-center items-center border bg-white">
       <div className="w-[95%] h-full px-2 flex items-center justify-between">
         <div className="cursor-pointer">
-          <h2 className="font-bold">Space</h2>
+          <h2 className="font-bold">
+            Space<span className="text-primary">.</span>
+          </h2>
         </div>
         <div className="h-full flex items-center cursor-pointer">
           {session.user ? (
