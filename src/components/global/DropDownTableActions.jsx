@@ -29,11 +29,6 @@ export function DropdownMenuTableActions({
   actions,
   table,
 }) {
-  let selected = [];
-  for (const row of table.getFilteredSelectedRowModel().rows) {
-    selected = [...selected, row.original.id];
-  }
-  console.log(selected);
   return (
     <Dialog>
       <DropdownMenu>
