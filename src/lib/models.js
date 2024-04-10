@@ -1,4 +1,3 @@
-
 import { Schema, models, model } from "mongoose";
 
 export const userModel = new Schema(
@@ -40,24 +39,27 @@ export const userModel = new Schema(
 
 // driveModel.add({ children: [driveModel] });
 
-// // Define the driveTemplate schema using driveModel
-// export const driveTemplateSchema = new Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//   },
-//   template: {
-//     name: {
-//       type: String,
-//       required: true,
-//     },
-//     mimeType: {
-//       type: String,
-//       required: true,
-//     },
-//     children: [driveModel], // Use driveModel here
-//   },
-// });
+// Define the driveTemplate schema using driveModel
+export const driveTemplateSchema = new Schema();
+driveTemplateSchema.add({
+  name: {
+    type: String,
+    required: true,
+  },
+  template: {
+    name: {
+      type: String,
+      required: true,
+    },
+    mimeType: {
+      type: String,
+      required: true,
+    },
+    children: [driveTemplateSchema], // Use driveModel here
+  },
+});
 
 export const User = models?.User || model("User", userModel);
-// export const DriveTemplateSchema = models?.DriveTemplateSchema || model("DriveTemplateSchema", driveTemplateSchema)
+export const DriveTemplateSchema =
+  models?.DriveTemplateSchema ||
+  model("DriveTemplateSchema", driveTemplateSchema);
