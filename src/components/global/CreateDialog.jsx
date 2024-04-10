@@ -21,7 +21,7 @@ import { Button } from "../ui/button";
 import { MdCloudUpload } from "react-icons/md";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { removeSpaces } from "@/lib/utils";
+import { useToast } from "../ui/use-toast";
 
 const templates = [
   {
@@ -47,6 +47,7 @@ const CreateDialog = ({ file }) => {
   const session = useSession();
   const [driveName, setDriveName] = useState("");
   const [template, setTemplate] = useState("");
+  const { toast } = useToast();
 
   // fetch here the templates from the db
   // pending
@@ -80,9 +81,17 @@ const CreateDialog = ({ file }) => {
 
         if (res.ok) {
           const data = await res.json();
-          console.log(data.data.id);
+          toast({
+            title: "Success",
+            description: `${name} drive is created.`,
+          });
         } else {
-          console.log("error");
+          const data = await res.json();
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: data.error,
+          });
         }
       } catch (err) {
         console.error(err.message);

@@ -102,3 +102,15 @@ export const POST = async (req, res) => {
     console.error(err.message);
   }
 };
+
+export const PATCH = async (req, res) => {
+  const drive = await getDriveAccess(req, res)
+
+  // get the id and newName from the client
+}
+
+export const DELETE = async (req, res) => {
+  const drive = await getDriveAccess(req, res)
+  
+  // get the id to be deleted
+}

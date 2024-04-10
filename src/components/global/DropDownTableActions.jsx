@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,10 +18,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "../ui/textarea";
 import { CiMenuKebab } from "react-icons/ci";
 import { MdOutlineGroup } from "react-icons/md";
+import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export function DropdownMenuTableActions({
   type = "single",
@@ -29,6 +41,56 @@ export function DropdownMenuTableActions({
   actions,
   table,
 }) {
+  const [emails, setEmails] = useState("");
+  const [role, setRole] = useState("");
+  const session = useSession();
+  const { toast } = useToast();
+  let rowsSelected = table.getFilteredSelectedRowModel().rows;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const peoples = emails.split(", ");
+
+    for (const row of rowsSelected) {
+      let driveId = row.original.id;
+
+      peoples.forEach(async (people) => {
+        try {
+          const res = await fetch(
+            "http://localhost:3000/api/dashboard/shared-drive/manage-members",
+            {
+              method: "POST",
+              body: JSON.stringify({ driveId, email: people, role: role }),
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.data.accessToken}`,
+              },
+            }
+          );
+
+          if (res.ok) {
+            const data = await res.json();
+            console.log(data);
+            toast({
+              title: "Success",
+              description: `${people} is added to drive`,
+            });
+          } else {
+            const data = await res.json();
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: data.error,
+            });
+          }
+        } catch (err) {
+          console.error(err.message);
+        }
+      });
+    }
+    setEmails("");
+    setRole("");
+  };
   return (
     <Dialog>
       <DropdownMenu>
@@ -37,10 +99,7 @@ export function DropdownMenuTableActions({
             variant="outline"
             size="icon"
             disabled={
-              table.getFilteredSelectedRowModel().rows.length > 1 &&
-              type === "single"
-                ? true
-                : false
+              rowsSelected.length > 1 && type === "single" ? true : false
             }
           >
             <CiMenuKebab className="h-4 w-4" />
@@ -59,38 +118,43 @@ export function DropdownMenuTableActions({
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Manage Members</DialogTitle>
           <DialogDescription>
-            {table.getFilteredSelectedRowModel().rows.length}
+            {rowsSelected.length === 0 ? 1 : rowsSelected.length}{" "}
+            {rowsSelected.length === 0 ? "drive" : "drives"} selected
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              id="name"
-              defaultValue="Pedro Duarte"
-              className="col-span-3"
+        <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
+          <div className="grid grid-cols-6 gap-2">
+            <Textarea
+              id="email"
+              placeholder="Add Emails"
+              className="col-span-4"
+              value={emails}
+              onChange={(e) => setEmails(e.target.value)}
             />
+            <Select value={role} onValueChange={(value) => setRole(value)}>
+              <SelectTrigger className="col-span-2">
+                <SelectValue placeholder="Select Role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Roles</SelectLabel>
+                  <SelectItem value="reader">Viewer</SelectItem>
+                  <SelectItem value="commenter">Commenter</SelectItem>
+                  <SelectItem value="writer">Contributor</SelectItem>
+                  <SelectItem value="fileOrganizer">Content Manager</SelectItem>
+                  <SelectItem value="organizer">Manager</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input
-              id="username"
-              defaultValue="@peduarte"
-              className="col-span-3"
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button type="submit">Add Member</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
