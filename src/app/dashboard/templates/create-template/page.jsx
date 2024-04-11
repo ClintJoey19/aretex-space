@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import FolderStructure from "@/components/dashboard/templates/create-template/FolderStructure";
-import { useSession } from "next-auth/react";
+import Folder from "@/components/dashboard/templates/create-template/Folder";
 
 const CreateTemplate = () => {
   const [templateName, setTemplateName] = useState("");
@@ -13,39 +12,37 @@ const CreateTemplate = () => {
     mimeType: "drive",
     children: [],
   });
-  const session = useSession();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTemplate = { name: templateName, template };
     console.log(newTemplate);
-    console.log(session.data.accessToken);
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/dashboard/templates",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: templateName,
-            template,
-            accessToken: session.data.accessToken,
-          }),
-        }
-      );
+    // console.log(session.data.accessToken);
+    // try {
+    //   const response = await fetch(
+    //     "http://localhost:3000/api/dashboard/templates",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         name: templateName,
+    //         template,
+    //       }),
+    //     }
+    //   );
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message);
-        return;
-      }
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     console.log(data.message);
+    //     return;
+    //   }
 
-      console.error(`Error saving template: ${response.statusText}`);
-    } catch (err) {
-      console.error(err.message);
-    }
+    //   console.error(`Error saving template: ${response.statusText}`);
+    // } catch (err) {
+    //   console.error(err.message);
+    // }
   };
 
   const handleAddFolder = (parentName, newFolderName) => {
@@ -64,6 +61,16 @@ const CreateTemplate = () => {
     };
     findAndAddFolder(updatedTemplate);
     setTemplate(updatedTemplate);
+  };
+
+  const handleEditFolder = (parentName, newFolderName) => {
+    // pending
+    console.log(parentName, newFolderName);
+  };
+
+  const handleDeleteFolder = (parentName) => {
+    // pending
+    console.log(parentName);
   };
   return (
     <form
@@ -88,7 +95,14 @@ const CreateTemplate = () => {
         </div>
 
         <div className="h-[56vh] border border-primary/50 w-full p-2 rounded-md overflow-auto">
-          <FolderStructure template={template} onAddFolder={handleAddFolder} />
+          <div>
+            <Folder
+              template={template}
+              onAddFolder={handleAddFolder}
+              onEditFolder={handleEditFolder}
+              onDeleteFolder={handleDeleteFolder}
+            />
+          </div>
         </div>
         <div className="w-full flex justify-end gap-4">
           <Button>Create</Button>

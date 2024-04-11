@@ -134,6 +134,7 @@ export function DropdownMenuTableActions({
               className="col-span-4"
               value={emails}
               onChange={(e) => setEmails(e.target.value)}
+              required
             />
             <Select value={role} onValueChange={(value) => setRole(value)}>
               <SelectTrigger className="col-span-2">
