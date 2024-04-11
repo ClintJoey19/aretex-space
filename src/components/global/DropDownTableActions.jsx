@@ -57,17 +57,17 @@ export function DropdownMenuTableActions({
 
       peoples.forEach(async (people) => {
         try {
-          const res = await fetch(
-            `${DOMAIN}/api/dashboard/shared-drive/manage-members`,
-            {
-              method: "POST",
-              body: JSON.stringify({ driveId, email: people, role: role }),
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${session.data.accessToken}`,
-              },
-            }
-          );
+          const URL =
+            "https://aretex-space.vercel.app/api/dashboard/shared-drive/manage-members"; // production
+          // const URL = "http://localhost:3000/api/dashboard/shared-drive/manage-members"
+          const res = await fetch(URL, {
+            method: "POST",
+            body: JSON.stringify({ driveId, email: people, role: role }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.data.accessToken}`,
+            },
+          });
 
           if (res.ok) {
             const data = await res.json();
