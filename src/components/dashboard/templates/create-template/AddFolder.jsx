@@ -31,8 +31,8 @@ const AddFolder = ({ template, onAddFolder }) => {
         <DialogHeader>
           <DialogTitle>Add Folder</DialogTitle>
           <DialogDescription>
-            Make changes to your drive template here. Click save when you're
-            done.
+            Make changes to your drive template here. Click save when
+            you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <main>
