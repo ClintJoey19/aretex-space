@@ -41,6 +41,7 @@ export function DropdownMenuTableActions({
   actions,
   table,
 }) {
+  const DOMAIN = process.env.DOMAIN;
   const [emails, setEmails] = useState("");
   const [role, setRole] = useState("");
   const session = useSession();
@@ -57,7 +58,7 @@ export function DropdownMenuTableActions({
       peoples.forEach(async (people) => {
         try {
           const res = await fetch(
-            "http://localhost:3000/api/dashboard/shared-drive/manage-members",
+            `${DOMAIN}/api/dashboard/shared-drive/manage-members`,
             {
               method: "POST",
               body: JSON.stringify({ driveId, email: people, role: role }),

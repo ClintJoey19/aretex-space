@@ -44,6 +44,7 @@ const templates = [
 
 const CreateDialog = ({ file }) => {
   const title = `New ${file}`;
+  const DOMAIN = process.env.DOMAIN;
   const session = useSession();
   const [driveName, setDriveName] = useState("");
   const [template, setTemplate] = useState("");
@@ -64,20 +65,17 @@ const CreateDialog = ({ file }) => {
       };
 
       try {
-        const res = await fetch(
-          "http://localhost:3000/api/dashboard/shared-drive",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              newDrive,
-              accessToken: session.data.accessToken,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${session.data.accessToken}`,
-            },
-          }
-        );
+        const res = await fetch(`${DOMAIN}/api/dashboard/shared-drive`, {
+          method: "POST",
+          body: JSON.stringify({
+            newDrive,
+            accessToken: session.data.accessToken,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.data.accessToken}`,
+          },
+        });
 
         if (res.ok) {
           const data = await res.json();

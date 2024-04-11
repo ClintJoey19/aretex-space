@@ -36,7 +36,8 @@ import {
 } from "@/components/dashboard/shared-drive/DriveActions";
 
 const getDrives = async (nextPageToken = null) => {
-  let URL = "http://localhost:3000/api/dashboard/shared-drive";
+  const DOMAIN = process.env.DOMAIN;
+  let URL = `${DOMAIN}/api/dashboard/shared-drive`;
 
   if (nextPageToken) {
     URL += `?nextPageToken=${nextPageToken}`;
