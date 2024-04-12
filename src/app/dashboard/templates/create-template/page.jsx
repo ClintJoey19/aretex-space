@@ -18,31 +18,31 @@ const CreateTemplate = () => {
     const newTemplate = { name: templateName, template };
     console.log(newTemplate);
     // console.log(session.data.accessToken);
-    // try {
-    //   const response = await fetch(
-    //     "http://localhost:3000/api/dashboard/templates",
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({
-    //         name: templateName,
-    //         template,
-    //       }),
-    //     }
-    //   );
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/dashboard/templates",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: templateName,
+            template,
+          }),
+        }
+      );
 
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     console.log(data.message);
-    //     return;
-    //   }
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message);
+        return;
+      }
 
-    //   console.error(`Error saving template: ${response.statusText}`);
-    // } catch (err) {
-    //   console.error(err.message);
-    // }
+      console.error(`Error saving template: ${response.statusText}`);
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   const handleAddFolder = (parentName, newFolderName) => {
