@@ -47,9 +47,10 @@ const SingleDropDownActions = ({ row, table }) => {
 
     peoples.forEach(async (people) => {
       try {
-        // const URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive/manage-members"; // production
         const URL =
-          "http://localhost:3000/api/dashboard/shared-drive/manage-members";
+          "https://aretex-space.vercel.app/api/dashboard/shared-drive/manage-members"; // production
+        // const URL =
+        //   "http://localhost:3000/api/dashboard/shared-drive/manage-members";
         const res = await fetch(URL, {
           method: "POST",
           body: JSON.stringify({ driveId: row.id, email: people, role: role }),
