@@ -65,9 +65,8 @@ const CreateDialog = ({ file }) => {
       };
 
       try {
-        const URL =
-          "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
-        // const URL = "https://localhost:3000/api/dashboard/shared-drive"
+        // const URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
+        const URL = "http://localhost:3000/api/dashboard/shared-drive";
         const res = await fetch(URL, {
           method: "POST",
           body: JSON.stringify({

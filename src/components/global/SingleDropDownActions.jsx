@@ -34,13 +34,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 
-export function DropdownMenuTableActions({
-  type = "single",
-  path,
-  row,
-  actions,
-  table,
-}) {
+const SingleDropDownActions = ({ row, table }) => {
   const [emails, setEmails] = useState("");
   const [role, setRole] = useState("");
   const session = useSession();
@@ -51,43 +45,37 @@ export function DropdownMenuTableActions({
     e.preventDefault();
     const peoples = emails.split(", ");
 
-    for (const row of rowsSelected) {
-      let driveId = row.original.id;
+    peoples.forEach(async (people) => {
+      try {
+        // const URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive/manage-members"; // production
+        const URL =
+          "http://localhost:3000/api/dashboard/shared-drive/manage-members";
+        const res = await fetch(URL, {
+          method: "POST",
+          body: JSON.stringify({ driveId: row.id, email: people, role: role }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.data.accessToken}`,
+          },
+        });
+        const data = await res.json();
 
-      peoples.forEach(async (people) => {
-        try {
-          // const URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive/manage-members"; // production
-          const URL =
-            "http://localhost:3000/api/dashboard/shared-drive/manage-members";
-          const res = await fetch(URL, {
-            method: "POST",
-            body: JSON.stringify({ driveId, email: people, role: role }),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${session.data.accessToken}`,
-            },
+        if (res.ok) {
+          toast({
+            title: "Success",
+            description: `${people} is added to drive`,
           });
-
-          if (res.ok) {
-            const data = await res.json();
-            console.log(data);
-            toast({
-              title: "Success",
-              description: `${people} is added to drive`,
-            });
-          } else {
-            const data = await res.json();
-            toast({
-              variant: "destructive",
-              title: "Error",
-              description: data.error,
-            });
-          }
-        } catch (err) {
-          console.error(err.message);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: data.error,
+          });
         }
-      });
-    }
+      } catch (err) {
+        console.error(err.message);
+      }
+    });
     setEmails("");
     setRole("");
   };
@@ -98,9 +86,7 @@ export function DropdownMenuTableActions({
           <Button
             variant="outline"
             size="icon"
-            disabled={
-              rowsSelected.length > 1 && type === "single" ? true : false
-            }
+            disabled={rowsSelected.length > 1 ? true : false}
           >
             <CiMenuKebab className="h-4 w-4" />
           </Button>
@@ -121,10 +107,7 @@ export function DropdownMenuTableActions({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Manage Members</DialogTitle>
-          <DialogDescription>
-            {rowsSelected.length === 0 ? 1 : rowsSelected.length}{" "}
-            {rowsSelected.length === 0 ? "drive" : "drives"} selected
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-6 gap-2">
@@ -159,4 +142,6 @@ export function DropdownMenuTableActions({
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default SingleDropDownActions;

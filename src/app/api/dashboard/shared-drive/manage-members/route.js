@@ -34,12 +34,8 @@ export const POST = async (req, res) => {
     
         return Response.json(res)
     } catch (err) {
-        console.error(err.message);
-        if (err.response && err.response.status === 403) {
-            return Response.json({ error: "Cannot set the requested role for that user as they lack the necessary license." }, {status: 403});
-        } else {
-            return Response.json({ error: "Internal Server Error" }, {status: 500});
-        }
+        console.error(err.status);
+        return Response.json({ error: err.message }, {status: err.status});
     }
 }
 

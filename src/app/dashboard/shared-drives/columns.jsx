@@ -1,7 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
+
+import SingleDropDownActions from "@/components/global/SingleDropDownActions";
 import { actions } from "@/components/dashboard/shared-drive/DriveActions";
 
 export const columns = [
@@ -59,14 +60,7 @@ export const columns = [
     id: "actions",
     enableHiding: false,
     cell: ({ row, table }) => {
-      return (
-        <DropdownMenuTableActions
-          path="shared-drives"
-          row={row.original}
-          actions={actions}
-          table={table}
-        />
-      );
+      return <SingleDropDownActions row={row.original} table={table} />;
     },
   },
 ];

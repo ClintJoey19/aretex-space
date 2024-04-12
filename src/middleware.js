@@ -3,36 +3,24 @@ import { NextResponse } from "next/server";
 
 const secret = process.env.NEXTAUTH_SECRET
 
+const isProtectedRoute = (req) => {
+  const protectedRoutes = [
+    "/dashboard",
+    "/personal-drive",
+    "/shared-drive",
+    "/users",
+    "/templates",
+    "/create-template"
+  ]
+
+  return protectedRoutes.some((route) => req.nextUrl?.pathname.startsWith(route))
+}
+
 export const middleware = async (req, res) => {
   const token = await getToken({req, secret})
-  const isOnDashboard = req.nextUrl?.pathname.startsWith("/dashboard")
-  const isOnPersonalDrive = req.nextUrl?.pathname.startsWith("/personal-drive")
-  const isOnSharedDrive = req.nextUrl?.pathname.startsWith("/shared-drive")
-  const isOnUsers = req.nextUrl?.pathname.startsWith("/users")
-  const isOnTemplates = req.nextUrl?.pathname.startsWith("/templates")
-  const isOnCreateTemplates = req.nextUrl?.pathname.startsWith("/create-template")
+  const validate = isProtectedRoute(req)
 
-  if (isOnDashboard && !token) {
-    return Response.redirect(new URL("/", req.nextUrl))
-  }
-
-  if (isOnPersonalDrive && !token) {
-    return Response.redirect(new URL("/", req.nextUrl))
-  }
-
-  if (isOnSharedDrive && !token) {
-    return Response.redirect(new URL("/", req.nextUrl))
-  }
-
-  if (isOnUsers && !token) {
-    return Response.redirect(new URL("/", req.nextUrl))
-  }
-
-  if (isOnTemplates && !token) {
-    return Response.redirect(new URL("/", req.nextUrl))
-  }
-
-  if (isOnCreateTemplates && !token) {
+  if (validate && !token) {
     return Response.redirect(new URL("/", req.nextUrl))
   }
 
