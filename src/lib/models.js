@@ -25,47 +25,10 @@ export const userModel = new Schema(
   { timestamps: true }
 );
 
-const folderSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  mimeType: {
-    type: String,
-    required: true,
-  },
-  children: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Folder"
-    }
-  ]
-}, { timestamps: true })
-
-// Define the driveTemplate schema using driveModel
-export const driveTemplateSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  template: {
-    name: {
-      type: String,
-      required: true,
-    },
-    mimeType: {
-      type: String,
-      required: true,
-    },
-    children: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Folder"
-      }
-    ], // Use driveModel here
-  },
-}, { timestamps: true });
+export const DriveTemplate =
+  models?.DriveTemplate ||
+  model("DriveTemplate", new Schema({}, { strict: false }));
 
 export const User = models?.User || model("User", userModel);
-export const FolderTemplate = models?.FolderTemplate || model("FolderTemplate", folderSchema)
-export const DriveTemplate = models?.DriveTemplate || model("DriveTemplate", driveTemplateSchema);
+// export const FolderTemplate = models?.FolderTemplate || model("FolderTemplate", folderSchema)
+// export const DriveTemplate = models?.DriveTemplate || model("DriveTemplate", driveTemplateSchema);

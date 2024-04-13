@@ -4,7 +4,7 @@ import AddFolder from "./AddFolder";
 import EditFolder from "./EditFolder";
 import { Button } from "@/components/ui/button";
 
-const Folder = ({ template, onAddFolder, onEditFolder, onDeleteFolder }) => {
+const Folder = ({ template, onAddFolder }) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2 py-1 px-4 rounded-md">
@@ -16,9 +16,7 @@ const Folder = ({ template, onAddFolder, onEditFolder, onDeleteFolder }) => {
         </div>
         <div className="flex items-center gap-1">
           <AddFolder template={template} onAddFolder={onAddFolder} />
-          {template.mimeType !== "drive" && (
-            <EditFolder template={template} onEditFolder={onEditFolder} />
-          )}
+          {template.mimeType !== "drive" && <EditFolder template={template} />}
           {template.mimeType !== "drive" && (
             <Button
               variant="ghost"
@@ -33,10 +31,9 @@ const Folder = ({ template, onAddFolder, onEditFolder, onDeleteFolder }) => {
           )}
         </div>
       </div>
-
       <div className="ml-[40px]">
-        {template.children.map((temp) => (
-          <Folder key={temp.name} template={temp} onAddFolder={onAddFolder} />
+        {Object.keys(template.children).map((uuid) => (
+          <Folder key={uuid} template={template.children[uuid]} />
         ))}
       </div>
     </div>

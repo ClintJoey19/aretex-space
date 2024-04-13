@@ -1,67 +1,80 @@
 "use client";
 import React, { useState } from "react";
+import { v4 as uuid } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Folder from "@/components/dashboard/templates/create-template/Folder";
+import { addTemplate } from "@/lib/data";
+
+const findParent = (temp, parentId) => {
+  for (key in temp) {
+    if (key === parentId) {
+      return temp;
+    }
+  }
+  return null;
+};
 
 const CreateTemplate = () => {
   const [templateName, setTemplateName] = useState("");
   const [template, setTemplate] = useState({
     name: "Parent",
     mimeType: "drive",
-    children: [],
+    children: {
+      uuid1: {
+        name: "Folder 1",
+        mimeType: "folder",
+        children: {},
+      },
+      uuid2: {
+        name: "Folder 2",
+        mimeType: "folder",
+        children: {
+          uuid1: {
+            name: "Sub Folder 1",
+            mimeType: "folder",
+            children: {},
+          },
+          uuid2: {
+            name: "Sub Folder 2",
+            mimeType: "folder",
+            children: {},
+          },
+        },
+      },
+      uuid3: {
+        name: "Folder 3",
+        mimeType: "folder",
+        children: {},
+      },
+    },
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTemplate = { name: templateName, template };
     console.log(newTemplate);
-    // console.log(session.data.accessToken);
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/dashboard/templates",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: templateName,
-            template,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message);
-        return;
-      }
-
-      console.error(`Error saving template: ${response.statusText}`);
-    } catch (err) {
-      console.error(err.message);
-    }
+    const res = await addTemplate(newTemplate);
   };
 
-  const handleAddFolder = (parentName, newFolderName) => {
-    const updatedTemplate = { ...template };
+  function handleAddFolder(parentObj, newFolderName) {
+    console.log(parentObj);
+    // const parent = findParent(parentObj, parentObj);
+    // console.log(parent);
 
-    const findAndAddFolder = (folder) => {
-      if (folder.name === parentName) {
-        folder.children.push({
-          name: newFolderName,
-          mimeType: "application/vnd.google-apps.folder",
-          children: [],
-        });
-        return;
-      }
-      folder.children.forEach((child) => findAndAddFolder(child));
-    };
-    findAndAddFolder(updatedTemplate);
-    setTemplate(updatedTemplate);
-  };
+    // const newFolderUuid = uuid();
+    // console.log(newFolderUuid);
+    // if (parent) {
+    // parent.children[newFolderUuid] = {
+    //   id: newFolderUuid,
+    //   name: newFolderName,
+    //   mimeType: "folder",
+    //   children: {},
+    // };
+    // setData((prevData) => ({ ...prevData }));
+    // }
+  }
 
   const handleEditFolder = (parentName, newFolderName) => {
     // pending

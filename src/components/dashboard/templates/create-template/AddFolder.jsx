@@ -17,8 +17,10 @@ const AddFolder = ({ template, onAddFolder }) => {
   const [newFolder, setNewFolder] = useState("");
 
   const handleSubmit = () => {
-    onAddFolder(template.name, newFolder);
-    setNewFolder("");
+    // console.log(template);
+    console.log(onAddFolder);
+    // onAddFolder(template, newFolder);
+    // setNewFolder("");
   };
   return (
     <Dialog>
