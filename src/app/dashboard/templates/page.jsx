@@ -1,17 +1,15 @@
-import { getDriveTemplates } from "@/lib/data";
+import SingleDriveTemplates from "@/components/dashboard/templates/SingleDriveTemplates";
+import MultipleDriveTemplates from "@/components/dashboard/templates/MultipleDriveTemplates";
 
-const Templates = async () => {
-  const res = await getDriveTemplates();
-  const data = await res.json();
+const Templates = () => {
   return (
     <main className="m-2 bg-white rounded-md border">
-      <div className="p-4 flex flex-col gap-4">
+      <div className="h-full p-4 flex flex-col gap-4">
         <h2 className="text-2xl">Templates</h2>
-        {data.map((item, i) => (
-          <div key={i}>
-            <p>{item.name}</p>
-          </div>
-        ))}
+        <div className="h-full grid grid-cols-2 gap-4">
+          <SingleDriveTemplates />
+          <MultipleDriveTemplates />
+        </div>
       </div>
     </main>
   );

@@ -1,6 +1,8 @@
 "use server";
+import { redirect } from "next/navigation";
 import { connect } from "./connection";
 import { User, DriveTemplate } from "./models";
+import { revalidatePath } from "next/cache";
 
 export const getUsers = async () => {
   try {
@@ -62,51 +64,17 @@ const createFolders = async (folderData) => {
   return createdFolders;
 };
 
-export const addTemplate = async (template) => {
+export const addTemplate = async ({ name, template }) => {
   try {
     connect();
 
-    // const folderIds = await createFolders(folderStructure);
-
     const newTemplate = await DriveTemplate.create({
-      name: template.name,
-      template: {
-        name: "Parent",
-        mimeType: "drive",
-        children: {
-          uuid1: {
-            name: "Folder 1",
-            mimeType: "folder",
-            children: {},
-          },
-          uuid2: {
-            name: "Folder 2",
-            mimeType: "folder",
-            children: {
-              uuid1: {
-                name: "Sub Folder 1",
-                mimeType: "folder",
-                children: {},
-              },
-              uuid2: {
-                name: "Sub Folder 2",
-                mimeType: "folder",
-                children: {},
-              },
-            },
-          },
-          uuid3: {
-            name: "Folder 3",
-            mimeType: "folder",
-            children: {},
-          },
-        },
-      },
+      name,
+      template,
     });
 
-    console.log(newTemplate);
-    // const res = await DriveTemplate.create(template);
-    // console.log(res);
+    revalidatePath("/dashboard/templates");
+    return newTemplate;
   } catch (err) {
     console.error(err.message);
   }

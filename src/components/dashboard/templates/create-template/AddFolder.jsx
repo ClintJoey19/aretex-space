@@ -13,14 +13,13 @@ import { Button } from "@/components/ui/button";
 import { RiAddLine } from "react-icons/ri";
 import { useState } from "react";
 
-const AddFolder = ({ template, onAddFolder }) => {
+const AddFolder = ({ parentKey, template, onAddFolder }) => {
   const [newFolder, setNewFolder] = useState("");
 
   const handleSubmit = () => {
-    // console.log(template);
-    console.log(onAddFolder);
-    // onAddFolder(template, newFolder);
-    // setNewFolder("");
+    // pending
+    onAddFolder(parentKey, newFolder);
+    setNewFolder("");
   };
   return (
     <Dialog>

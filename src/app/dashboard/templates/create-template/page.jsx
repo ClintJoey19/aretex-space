@@ -1,80 +1,66 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Folder from "@/components/dashboard/templates/create-template/Folder";
 import { addTemplate } from "@/lib/data";
-
-const findParent = (temp, parentId) => {
-  for (key in temp) {
-    if (key === parentId) {
-      return temp;
-    }
-  }
-  return null;
-};
+import { useRouter } from "next/navigation";
 
 const CreateTemplate = () => {
   const [templateName, setTemplateName] = useState("");
   const [template, setTemplate] = useState({
-    name: "Parent",
-    mimeType: "drive",
-    children: {
-      uuid1: {
-        name: "Folder 1",
-        mimeType: "folder",
-        children: {},
-      },
-      uuid2: {
-        name: "Folder 2",
-        mimeType: "folder",
-        children: {
-          uuid1: {
-            name: "Sub Folder 1",
-            mimeType: "folder",
-            children: {},
-          },
-          uuid2: {
-            name: "Sub Folder 2",
-            mimeType: "folder",
-            children: {},
-          },
-        },
-      },
-      uuid3: {
-        name: "Folder 3",
-        mimeType: "folder",
-        children: {},
-      },
+    root: {
+      name: "Parent",
+      mimeType: "drive",
+      children: {},
     },
   });
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTemplate = { name: templateName, template };
     console.log(newTemplate);
     const res = await addTemplate(newTemplate);
+
+    if (res) {
+      router.push("/dashboard/templates");
+    }
   };
 
-  function handleAddFolder(parentObj, newFolderName) {
-    console.log(parentObj);
-    // const parent = findParent(parentObj, parentObj);
-    // console.log(parent);
+  const findParentByKey = (node, key) => {
+    if (key === "root") {
+      return node;
+    }
+    if (node.children[key]) {
+      return node.children[key];
+    } else {
+      for (const childKey in node.children) {
+        const found = findParentByKey(node.children[childKey], key);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
 
-    // const newFolderUuid = uuid();
-    // console.log(newFolderUuid);
-    // if (parent) {
-    // parent.children[newFolderUuid] = {
-    //   id: newFolderUuid,
-    //   name: newFolderName,
-    //   mimeType: "folder",
-    //   children: {},
-    // };
-    // setData((prevData) => ({ ...prevData }));
-    // }
-  }
+  const handleAddFolder = (parentKey, newFolderName) => {
+    const parent = findParentByKey(template.root, parentKey);
+    if (parent) {
+      const newFolderKey = uuid();
+      const newFolder = {
+        [newFolderKey]: {
+          name: newFolderName,
+          mimeType: "application/vnd.google-apps.folder",
+          children: {},
+        },
+      };
+      parent.children = { ...parent.children, ...newFolder };
+      setTemplate({ ...template });
+    }
+    console.log(template);
+  };
 
   const handleEditFolder = (parentName, newFolderName) => {
     // pending
@@ -110,7 +96,8 @@ const CreateTemplate = () => {
         <div className="h-[56vh] border border-primary/50 w-full p-2 rounded-md overflow-auto">
           <div>
             <Folder
-              template={template}
+              parentKey={Object.keys(template)[0]}
+              template={template.root}
               onAddFolder={handleAddFolder}
               onEditFolder={handleEditFolder}
               onDeleteFolder={handleDeleteFolder}
