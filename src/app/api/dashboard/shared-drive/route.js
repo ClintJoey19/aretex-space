@@ -1,5 +1,7 @@
+import { getDriveTemplate } from "@/lib/data";
 import { getDriveAccess, getMembers } from "@/lib/gdrive";
-import {v4 as uuid} from "uuid"
+import { revalidatePath } from "next/cache";
+import { v4 as uuid } from "uuid";
 
 export const GET = async (req, res) => {
   let nextPageToken = req.nextUrl.searchParams.get("nextPageToken") || null;
@@ -51,66 +53,79 @@ const getSharedDrives = async (drive, nextPageToken) => {
   }
 };
 
-const folders = [
-  "Desktop Procedure",
-  "Onboarding & Communication",
-  "Financial",
-  "AP",
-  "DMS ADMIN SUPP",
-  "DMS FIN SUPPORT"
-]
+async function createFolders(drive, data, destinationId) {
+  try {
+    for (const key in data) {
+      if (data[key].mimeType === "application/vnd.google-apps.folder") {
+        const folderName = data[key].name;
+        const newFolder = await addFolder(drive, folderName, destinationId);
+        console.log(
+          `Folder "${folderName}" created with ID: ${newFolder.data.id}`
+        );
+        if (data[key].hasOwnProperty("children")) {
+          await createFolders(drive, data[key].children, newFolder.data.id);
+        }
+      }
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+async function addFolder(drive, name, destinationId) {
+  try {
+    const metadata = {
+      name: name,
+      mimeType: "application/vnd.google-apps.folder",
+      parents: [destinationId],
+    };
+
+    const res = await drive.files.create({
+      requestBody: metadata,
+      requestId: uuid(),
+      fields: "id",
+      supportsAllDrives: true,
+    });
+
+    return res;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
 
 export const POST = async (req, res) => {
   const drive = await getDriveAccess(req, res);
-  const {newDrive} = await req.json()
-  
+  const { newDrive } = await req.json();
+
   try {
     const res = await drive.drives.create({
       resource: {
-        name: newDrive.driveName
+        name: newDrive.driveName,
       },
       requestId: uuid(),
-      fields: 'id'
-    })
+      fields: "id",
+    });
 
-    const destinationId = res.data.id
+    const destinationId = res.data.id;
+    const temp = await getDriveTemplate(newDrive.template);
+    createFolders(drive, temp.template.root.children, destinationId);
     console.log(`${destinationId} drive is created`);
 
-    folders.forEach(async (folder, i) => {
-      const metadata = {
-        name: `${i + 1}. ${folder}`,
-        mimeType: 'application/vnd.google-apps.folder',
-        parents: [destinationId]
-      }
-      
-      try {
-        await drive.files.create({
-          requestBody: metadata,
-          requestId: uuid(),
-          fields: 'id',
-          supportsAllDrives: true
-        })
-
-        console.log(`${folder} is added to ${destinationId}`);
-      } catch (err) {
-        console.error(err.message);
-      }
-    })
-
-    return Response.json(res)
+    revalidatePath("/dashboard/shared-drives");
+    return Response.json(res);
   } catch (err) {
     console.error(err.message);
   }
 };
 
 export const PATCH = async (req, res) => {
-  const drive = await getDriveAccess(req, res)
+  const drive = await getDriveAccess(req, res);
 
   // get the id and newName from the client
-}
+};
 
 export const DELETE = async (req, res) => {
-  const drive = await getDriveAccess(req, res)
-  
+  const drive = await getDriveAccess(req, res);
+
   // get the id to be deleted
-}
+};

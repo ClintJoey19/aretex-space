@@ -1,5 +1,5 @@
 import SingleDriveTemplates from "@/components/dashboard/templates/SingleDriveTemplates";
-import MultipleDriveTemplates from "@/components/dashboard/templates/MultipleDriveTemplates";
+import GroupDriveTemplates from "@/components/dashboard/templates/GroupDriveTemplates";
 
 const Templates = () => {
   return (
@@ -8,7 +8,7 @@ const Templates = () => {
         <h2 className="text-2xl">Templates</h2>
         <div className="h-full grid grid-cols-2 gap-4">
           <SingleDriveTemplates />
-          <MultipleDriveTemplates />
+          <GroupDriveTemplates />
         </div>
       </div>
     </main>

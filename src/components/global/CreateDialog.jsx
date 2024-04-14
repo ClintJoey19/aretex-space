@@ -19,39 +19,27 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { MdCloudUpload } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useToast } from "../ui/use-toast";
-
-const templates = [
-  {
-    id: 1,
-    name: "Template 1",
-  },
-  {
-    id: 2,
-    name: "Template 2",
-  },
-  {
-    id: 3,
-    name: "Template 3",
-  },
-  {
-    id: 4,
-    name: "Template 4",
-  },
-];
+import { getDriveTemplates } from "@/lib/data";
 
 const CreateDialog = ({ file }) => {
   const title = `New ${file}`;
-  const DOMAIN = process.env.DOMAIN;
   const session = useSession();
   const [driveName, setDriveName] = useState("");
+  const [templates, setTemplates] = useState([]);
   const [template, setTemplate] = useState("");
   const { toast } = useToast();
 
-  // fetch here the templates from the db
-  // pending
+  useEffect(() => {
+    const fetched = async () => {
+      const res = await getDriveTemplates();
+      console.log(res);
+      setTemplates(res);
+    };
+    fetched();
+  }, []);
 
   const handleSubmitDrive = async (e) => {
     e.preventDefault();
@@ -65,9 +53,9 @@ const CreateDialog = ({ file }) => {
       };
 
       try {
-        // const URL =
-        // "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
-        const URL = "http://localhost:3000/api/dashboard/shared-drive";
+        const URL =
+          "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
+        // const URL = "http://localhost:3000/api/dashboard/shared-drive";
         const res = await fetch(URL, {
           method: "POST",
           body: JSON.stringify({
@@ -125,7 +113,10 @@ const CreateDialog = ({ file }) => {
                 />
                 <Select
                   value={template}
-                  onValueChange={(value) => setTemplate(value)}
+                  onValueChange={(value) => {
+                    console.log(template);
+                    setTemplate(value);
+                  }}
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a Template" />
@@ -134,7 +125,7 @@ const CreateDialog = ({ file }) => {
                     <SelectGroup>
                       <SelectLabel>Templates</SelectLabel>
                       {templates.map((temp) => (
-                        <SelectItem key={temp.id} value={temp.name.toString()}>
+                        <SelectItem key={temp._id} value={temp._id}>
                           {temp.name}
                         </SelectItem>
                       ))}

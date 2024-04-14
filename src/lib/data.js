@@ -28,21 +28,21 @@ export const getDriveTemplates = async () => {
   try {
     connect();
     const templates = await DriveTemplate.find();
-    return Response.json(templates);
+    return templates;
   } catch (err) {
     console.log(err.message);
   }
 };
 
-// export const getDriveTemplate = async (id) => {
-//   try {
-//     connect()
-//     const template = await DriveTemplate.findById(id)
-//     return template
-//   } catch (err) {
-//     console.log(err.message);
-//   }
-// }
+export const getDriveTemplate = async (id) => {
+  try {
+    connect();
+    const template = await DriveTemplate.findById(id);
+    return template;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 const createFolders = async (folderData) => {
   const createdFolders = [];

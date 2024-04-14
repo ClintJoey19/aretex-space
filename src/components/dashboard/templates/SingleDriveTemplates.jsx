@@ -1,8 +1,7 @@
 import { getDriveTemplates } from "@/lib/data";
 
 const SingleDriveTemplates = async () => {
-  const res = await getDriveTemplates();
-  const data = await res.json();
+  const data = await getDriveTemplates();
   return (
     <div className="flex flex-col gap-4">
       <h3 className="text-lg">Single Drive Templates</h3>

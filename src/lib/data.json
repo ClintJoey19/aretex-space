@@ -1,0 +1,73 @@
+{
+  "_id": { "$oid": "661b2d6ebb93aa5163af0a8d" },
+  "name": "Financial",
+  "template": {
+    "root": {
+      "name": "Parent",
+      "mimeType": "drive",
+      "children": {
+        "cc23d824-c881-4001-a643-5c94a1a4237d": {
+          "name": "1. Desktop Procedure",
+          "mimeType": "application/vnd.google-apps.folder"
+        },
+        "244dacda-3e78-45c3-bef1-28e7ca820df2": {
+          "name": "2. Onboarding & Communication",
+          "mimeType": "application/vnd.google-apps.folder"
+        },
+        "64212eeb-e573-4403-807c-b298676fa641": {
+          "name": "3. Financial",
+          "mimeType": "application/vnd.google-apps.folder",
+          "children": {
+            "8cd91fc7-aab3-44bc-8e10-f5cac352f3f4": {
+              "name": "2024",
+              "mimeType": "application/vnd.google-apps.folder",
+              "children": {
+                "c8925c7e-fb63-4327-9cf6-4cda275c85fe": {
+                  "name": "1. BAS",
+                  "mimeType": "application/vnd.google-apps.folder"
+                },
+                "336d9725-870f-4c5a-883d-d30683981d61": {
+                  "name": "2. MGMT Report",
+                  "mimeType": "application/vnd.google-apps.folder"
+                },
+                "aa584e62-ff54-495d-9d5c-99cb041ea06b": {
+                  "name": "3. SUPER",
+                  "mimeType": "application/vnd.google-apps.folder"
+                },
+                "d8ee3969-1ca3-48a1-a88a-80214a61307d": {
+                  "name": "4. IAS",
+                  "mimeType": "application/vnd.google-apps.folder"
+                },
+                "15b97ced-731e-4fd6-801c-28fda5171c69": {
+                  "name": "5. Tracker",
+                  "mimeType": "application/vnd.google-apps.folder"
+                },
+                "97da863d-c617-4489-9f85-2c7ae8bb2304": {
+                  "name": "6. Time Details",
+                  "mimeType": "application/vnd.google-apps.folder"
+                },
+                "4a7e3f66-f7db-4c11-88eb-55f515d65c73": {
+                  "name": "7. ETC",
+                  "mimeType": "application/vnd.google-apps.folder"
+                }
+              }
+            }
+          }
+        },
+        "b8ca421a-160d-4239-9cb7-b0a0a3655217": {
+          "name": "4. AP",
+          "mimeType": "application/vnd.google-apps.folder"
+        },
+        "bced36ae-01e1-4f6f-a4f3-d69d21603bb7": {
+          "name": "5. DMS ADMIN SUPP",
+          "mimeType": "application/vnd.google-apps.folder"
+        },
+        "4f1a0e75-4cc3-4c21-9260-4f164d39fcc8": {
+          "name": "6. DMS FIN SUPP",
+          "mimeType": "application/vnd.google-apps.folder"
+        }
+      }
+    }
+  },
+  "__v": { "$numberInt": "0" }
+}

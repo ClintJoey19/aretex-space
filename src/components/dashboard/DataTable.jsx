@@ -36,14 +36,14 @@ import {
 } from "@/components/dashboard/shared-drive/DriveActions";
 
 const getDrives = async (nextPageToken = null) => {
-  // let URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
-  let URL = "http://localhost:3000/api/dashboard/shared-drive";
+  let URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
+  // let URL = "http://localhost:3000/api/dashboard/shared-drive";
 
   if (nextPageToken) {
     URL += `?nextPageToken=${nextPageToken}`;
   }
 
-  const res = await fetch(URL);
+  const res = await fetch(URL, { cache: "no-store" });
 
   if (!res.ok) {
     console.log("Something went wrong");
