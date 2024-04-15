@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-const GroupDriveTemplates = () => {
+const FolderTemplates = () => {
   return (
     <div className="flex flex-col gap-4">
-      <h3 className="text-lg">Group Drive Templates</h3>
+      <h3 className="text-lg">Folder Templates</h3>
       <div className="h-full flex flex-col items-center gap-2">
         <div className="h-full w-full relative">
           <Image src="/coming-soon.svg" alt="coming-soon" fill />
@@ -16,4 +16,4 @@ const GroupDriveTemplates = () => {
   );
 };
 
-export default GroupDriveTemplates;
+export default FolderTemplates;

@@ -79,3 +79,30 @@ export const addTemplate = async ({ name, template }) => {
     console.error(err.message);
   }
 };
+
+export const editTemplate = async (id, template) => {
+  try {
+    connect()
+
+    // pending
+
+    revalidatePath("/dashboard/templates")
+    return
+  } catch(err) {
+    console.error(err.message);
+  }
+}
+
+export const deleteTemplate = async (id) => {
+  try {
+    connect()
+
+    // pending
+    const res = await DriveTemplate.deleteOne()
+
+    revalidatePath("/dashboard/templates")
+    return
+  } catch(err) {
+    console.error(err.message);
+  }
+}

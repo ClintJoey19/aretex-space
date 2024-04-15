@@ -108,7 +108,7 @@ export const POST = async (req, res) => {
 
     const destinationId = res.data.id;
     const temp = await getDriveTemplate(newDrive.template);
-    createFolders(drive, temp.template.root.children, destinationId);
+    await createFolders(drive, temp.template.root.children, destinationId);
     console.log(`${destinationId} drive is created`);
 
     revalidatePath("/dashboard/shared-drives");

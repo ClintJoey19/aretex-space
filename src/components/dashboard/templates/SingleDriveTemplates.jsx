@@ -1,15 +1,16 @@
 import { getDriveTemplates } from "@/lib/data";
+import Template from "./Template";
 
 const SingleDriveTemplates = async () => {
-  const data = await getDriveTemplates();
+  const res = await getDriveTemplates();
+  const data = JSON.parse(JSON.stringify(res));
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 overflow-auto">
       <h3 className="text-lg">Single Drive Templates</h3>
-      <div>
+      <div className="flex flex-col gap-2">
         {data.map((item, i) => (
-          <div key={i}>
-            <p>{item.name}</p>
-          </div>
+          <Template key={i} template={item} />
         ))}
       </div>
     </div>

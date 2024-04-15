@@ -34,12 +34,13 @@ import {
   actions,
   multiActions,
 } from "@/components/dashboard/shared-drive/DriveActions";
+import Spinner from "../global/Spinner";
 
 const getDrives = async (nextPageToken = null) => {
-  let URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // vercel
+  // let URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // vercel
   // let URL =
   //   "https://cheerful-cat-3fcb8b.netlify.app/api/dashboard/shared-drive"; // netlify
-  // let URL = "http://localhost:3000/api/dashboard/shared-drive";
+  let URL = "http://localhost:3000/api/dashboard/shared-drive";
 
   if (nextPageToken) {
     URL += `?nextPageToken=${nextPageToken}`;
@@ -227,7 +228,7 @@ export function DataTableDemo() {
             ) : (
               <TableRow>
                 <TableCell colSpan={10} className="h-24 text-center">
-                  {isFetching ? "Loading..." : "No results."}
+                  {isFetching ? <Spinner /> : "No results."}
                 </TableCell>
               </TableRow>
             )}
@@ -236,7 +237,7 @@ export function DataTableDemo() {
       </div>
       <div className="flex gap-2 justify-center">
         <Button onClick={loadMoreDrives}>Load more</Button>
-        <p>{isFetching ? "Loading" : ""}</p>
+        <p>{isFetching ? <Spinner /> : ""}</p>
       </div>
     </div>
   );

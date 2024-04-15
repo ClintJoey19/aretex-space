@@ -35,8 +35,8 @@ const CreateDialog = ({ file }) => {
   useEffect(() => {
     const fetched = async () => {
       const res = await getDriveTemplates();
-      console.log(res);
-      setTemplates(res);
+      const data = JSON.parse(JSON.stringify(res));
+      setTemplates(data);
     };
     fetched();
   }, []);
@@ -53,10 +53,10 @@ const CreateDialog = ({ file }) => {
       };
 
       try {
-        const URL =
-          "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
+        // const URL =
+        //   "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
         // const URL = "https://cheerful-cat-3fcb8b.netlify.app/shared-drive"; // production
-        // const URL = "http://localhost:3000/api/dashboard/shared-drive";
+        const URL = "http://localhost:3000/api/dashboard/shared-drive";
         const res = await fetch(URL, {
           method: "POST",
           body: JSON.stringify({
