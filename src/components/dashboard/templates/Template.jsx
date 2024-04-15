@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const Template = ({ template }) => {
+  const id = template._id.toString();
   return (
     <div className="flex justify-between items-center rounded-md overflow-hidden border border-primary/15 hover:shadow-md transition-all">
       <div className="h-full flex gap-2 items-center">
@@ -29,7 +30,7 @@ const Template = ({ template }) => {
       </div>
       <div className="flex gap-2 items-center py-1 px-2">
         <Button variant="outline" size="icon">
-          <Link href="#">
+          <Link href={`/dashboard/templates/edit-template/${id}`}>
             <FiEdit />
           </Link>
         </Button>
@@ -49,9 +50,7 @@ const Template = ({ template }) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => console.log(template._id.toString())}
-              >
+              <AlertDialogAction onClick={() => console.log(id)}>
                 Continue
               </AlertDialogAction>
             </AlertDialogFooter>
