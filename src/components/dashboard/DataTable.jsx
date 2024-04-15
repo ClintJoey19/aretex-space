@@ -36,9 +36,9 @@ import {
 } from "@/components/dashboard/shared-drive/DriveActions";
 
 const getDrives = async (nextPageToken = null) => {
-  // let URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // vercel
-  let URL =
-    "https://cheerful-cat-3fcb8b.netlify.app/api/dashboard/shared-drive"; // netlify
+  let URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // vercel
+  // let URL =
+  //   "https://cheerful-cat-3fcb8b.netlify.app/api/dashboard/shared-drive"; // netlify
   // let URL = "http://localhost:3000/api/dashboard/shared-drive";
 
   if (nextPageToken) {

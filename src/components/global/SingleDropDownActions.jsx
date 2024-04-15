@@ -47,10 +47,10 @@ const SingleDropDownActions = ({ row, table }) => {
 
     peoples.forEach(async (people) => {
       try {
-        // const URL =
-        //   "https://aretex-space.vercel.app/api/dashboard/shared-drive/manage-members"; // production
         const URL =
-          "https://cheerful-cat-3fcb8b.netlify.app/api/dashboard/shared-drive/manage-members"; // production
+          "https://aretex-space.vercel.app/api/dashboard/shared-drive/manage-members"; // production
+        // const URL =
+        //   "https://cheerful-cat-3fcb8b.netlify.app/api/dashboard/shared-drive/manage-members"; // production
         // const URL =
         //   "http://localhost:3000/api/dashboard/shared-drive/manage-members";
         const res = await fetch(URL, {
