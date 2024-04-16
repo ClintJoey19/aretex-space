@@ -30,33 +30,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useIntersection } from "@mantine/hooks";
-import { columns } from "@/app/dashboard/shared-drives/columns";
+import { columns } from "@/app/dashboard/shared-drives/[id]/columns";
 import {
   actions,
   multiActions,
 } from "@/components/dashboard/shared-drive/DriveActions";
 import Spinner from "../global/Spinner";
 
-const getDrives = async (nextPageToken = null) => {
-  // let URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // vercel
-  // let URL =
-  //   "https://cheerful-cat-3fcb8b.netlify.app/api/dashboard/shared-drive"; // netlify
-  let URL = "http://localhost:3000/api/dashboard/shared-drive";
+const getDrive = async (id, token = null) => {
+  let URL = "http://localhost:3000/api/dashboard/shared-drive/";
 
-  if (nextPageToken) {
-    URL += `?nextPageToken=${nextPageToken}`;
+  if (token) {
+    URL += `?token=${token}`;
   }
 
-  const res = await fetch(URL, { cache: "no-store" });
+  const res = await fetch(`${URL}/${id}`);
+  const data = await res.json();
 
-  if (!res.ok) {
-    console.log("Something went wrong");
-  }
-
-  return res.json();
+  return data;
 };
 
-export function DataTableDemo() {
+const ContentTable = ({ id }) => {
   const [display, setDisplay] = useState(0);
   const [data, setData] = useState([]);
   const [token, setToken] = useState(null);
@@ -73,12 +67,11 @@ export function DataTableDemo() {
 
   useEffect(() => {
     const fetched = async () => {
-      const res = await getDrives();
-      setData(res.result.sharedDrives);
-      setToken(res.result.newToken);
+      const res = await getDrive(id);
+      console.log(res);
+      setData(res);
       setIsFetching(false);
     };
-
     fetched();
   }, []);
 
@@ -103,32 +96,20 @@ export function DataTableDemo() {
     },
   });
 
-  const lastItemRef = useRef(null);
-  const { ref, entry } = useIntersection({
-    root: lastItemRef.current,
-    threshold: 1,
-  });
-
   const loadMoreDrives = async () => {
-    if (token) {
-      setIsFetching(true);
-      const res = await getDrives(token);
-      const drives = res.result.sharedDrives;
-      setData((prev) => [...prev, ...drives]);
-      setToken(res.result.newToken);
-      setPagination({
-        ...pagination,
-        pageSize: pagination.pageSize + drives.length,
-      });
-      setIsFetching(false);
-    }
+    // if (token) {
+    //   setIsFetching(true);
+    //   const res = await getDrives(token);
+    //   const drives = res.result.sharedDrives;
+    //   setData((prev) => [...prev, ...drives]);
+    //   setToken(res.result.newToken);
+    //   setPagination({
+    //     ...pagination,
+    //     pageSize: pagination.pageSize + drives.length,
+    //   });
+    //   setIsFetching(false);
+    // }
   };
-
-  useEffect(() => {
-    if (entry?.isIntersecting) {
-      alert("Intersecting");
-    }
-  }, [entry]);
 
   return (
     <div className="w-full">
@@ -246,4 +227,6 @@ export function DataTableDemo() {
       </div>
     </div>
   );
-}
+};
+
+export default ContentTable;
