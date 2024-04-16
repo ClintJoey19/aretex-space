@@ -70,7 +70,6 @@ const ContentTable = ({ driveId }) => {
   useEffect(() => {
     const fetched = async () => {
       const res = await getDrive(driveId);
-      console.log(res);
       setData(res);
       setIsFetching(false);
     };
