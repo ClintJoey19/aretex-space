@@ -12,16 +12,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const EditFolder = ({ template, onEditFolder }) => {
-  const [newName, setNewName] = useState(template.name);
+const EditFolder = ({ parentKey, name, onEditFolder }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [newName, setNewName] = useState(name);
 
   const handleSubmit = () => {
-    // console.log(template.name, { newName });
-    onEditFolder(template.name, newName);
+    onEditFolder(parentKey, newName);
+    setIsOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
           <MdEdit />

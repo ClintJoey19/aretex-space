@@ -4,7 +4,13 @@ import AddFolder from "./AddFolder";
 import EditFolder from "./EditFolder";
 import { Button } from "@/components/ui/button";
 
-const Folder = ({ parentKey, template, onAddFolder }) => {
+const Folder = ({
+  parentKey,
+  template,
+  onAddFolder,
+  onEditFolder,
+  onDeleteFolder,
+}) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2 py-1 px-4 rounded-md">
@@ -20,14 +26,20 @@ const Folder = ({ parentKey, template, onAddFolder }) => {
             template={template}
             onAddFolder={onAddFolder}
           />
-          {template.mimeType !== "drive" && <EditFolder template={template} />}
+          {template.mimeType !== "drive" && (
+            <EditFolder
+              parentKey={parentKey}
+              name={template.name}
+              onEditFolder={onEditFolder}
+            />
+          )}
           {template.mimeType !== "drive" && (
             <Button
               variant="ghost"
               size="icon"
               onClick={() => {
-                console.log(template.name);
-                // onDeleteFolder(template.name);
+                // console.log(template.name);
+                onDeleteFolder(parentKey);
               }}
             >
               <AiOutlineClose />
@@ -42,6 +54,8 @@ const Folder = ({ parentKey, template, onAddFolder }) => {
             parentKey={uuid}
             template={template.children[uuid]}
             onAddFolder={onAddFolder}
+            onEditFolder={onEditFolder}
+            onDeleteFolder={onDeleteFolder}
           />
         ))}
       </div>

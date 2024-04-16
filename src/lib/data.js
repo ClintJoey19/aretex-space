@@ -28,7 +28,7 @@ export const getDriveTemplates = async () => {
   try {
     connect();
     const templates = await DriveTemplate.find();
-    return templates;
+    return JSON.parse(JSON.stringify(templates));
   } catch (err) {
     console.log(err.message);
   }
@@ -38,7 +38,7 @@ export const getDriveTemplate = async (id) => {
   try {
     connect();
     const template = await DriveTemplate.findById(id);
-    return template;
+    return JSON.parse(JSON.stringify(template));
   } catch (err) {
     console.log(err.message);
   }
@@ -74,7 +74,7 @@ export const addTemplate = async ({ name, template }) => {
     });
 
     revalidatePath("/dashboard/templates");
-    return newTemplate;
+    return JSON.parse(JSON.stringify(newTemplate));
   } catch (err) {
     console.error(err.message);
   }
@@ -98,10 +98,15 @@ export const deleteTemplate = async (id) => {
     connect()
 
     // pending
-    const res = await DriveTemplate.deleteOne()
+    const res = await DriveTemplate.findByIdAndDelete(id)
+    console.log(res);
+    
+    if (!res) {
+      return {error: "Failed to delete the template"}
+    }
 
     revalidatePath("/dashboard/templates")
-    return
+    return {message: "Drive deleted"}
   } catch(err) {
     console.error(err.message);
   }
