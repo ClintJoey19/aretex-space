@@ -37,11 +37,13 @@ import {
 } from "@/components/dashboard/shared-drive/DriveActions";
 import Spinner from "../global/Spinner";
 
-const getDrive = async (id, token = null) => {
+const getDrive = async (driveId, fileId) => {
   let URL = "http://localhost:3000/api/dashboard/shared-drive/";
+  let id = driveId;
 
-  if (token) {
-    URL += `?token=${token}`;
+  if (fileId) {
+    URL = "http://localhost:3000/api/dashboard/file/";
+    id = fileId;
   }
 
   const res = await fetch(`${URL}/${id}`);
@@ -50,7 +52,7 @@ const getDrive = async (id, token = null) => {
   return data;
 };
 
-const ContentTable = ({ id }) => {
+const ContentTable = ({ driveId }) => {
   const [display, setDisplay] = useState(0);
   const [data, setData] = useState([]);
   const [token, setToken] = useState(null);
@@ -67,7 +69,7 @@ const ContentTable = ({ id }) => {
 
   useEffect(() => {
     const fetched = async () => {
-      const res = await getDrive(id);
+      const res = await getDrive(driveId);
       console.log(res);
       setData(res);
       setIsFetching(false);

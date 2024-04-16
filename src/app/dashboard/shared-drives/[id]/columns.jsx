@@ -39,12 +39,17 @@ export const columns = [
         </Button>
       );
     },
+    cell: ({ row }) => <div className="text-left">{row.original.name}</div>,
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row, table }) => {
-      return <SingleDropDownActions row={row} table={table} />;
+      return (
+        <div className="flex justify-end">
+          <SingleDropDownActions row={row} table={table} />
+        </div>
+      );
     },
   },
 ];
