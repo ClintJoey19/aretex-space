@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { HiFolder } from "react-icons/hi";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 const GroupFolderTab = ({ file, parentId, templates }) => {
   const title = `New ${file}s`;
@@ -22,6 +24,7 @@ const GroupFolderTab = ({ file, parentId, templates }) => {
   const [template, setTemplate] = useState("");
   const [folders, setFolders] = useState([]);
   const { toast } = useToast();
+  const router = useRouter();
 
   const addFolder = () => {
     if (name && template) {
@@ -32,7 +35,6 @@ const GroupFolderTab = ({ file, parentId, templates }) => {
 
       setFolders((prev) => [...prev, newFolder]);
       setName("");
-      setTemplate("");
     }
   };
 
@@ -58,6 +60,16 @@ const GroupFolderTab = ({ file, parentId, templates }) => {
         toast({
           title: "Success",
           description: `${folder.name} folder is created.`,
+          action: (
+            <ToastAction
+              altText="Open"
+              onClick={() =>
+                router.push(`/dashboard/shared-drives/${data.data.id}`)
+              }
+            >
+              Open
+            </ToastAction>
+          ),
         });
       } else {
         toast({

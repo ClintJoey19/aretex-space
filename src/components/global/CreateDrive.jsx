@@ -20,7 +20,9 @@ import { Button } from "../ui/button";
 import { MdCloudUpload } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { ToastAction } from "../ui/toast";
 import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 import { getDriveTemplates } from "@/lib/data";
 
 const CreateDrive = ({ file }) => {
@@ -30,6 +32,7 @@ const CreateDrive = ({ file }) => {
   const [templates, setTemplates] = useState([]);
   const [template, setTemplate] = useState("");
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     const fetched = async () => {
@@ -72,6 +75,16 @@ const CreateDrive = ({ file }) => {
           toast({
             title: "Success",
             description: `${name} drive is created.`,
+            action: (
+              <ToastAction
+                altText="Open"
+                onClick={() =>
+                  router.push(`/dashboard/shared-drives/${data.data.id}`)
+                }
+              >
+                Open
+              </ToastAction>
+            ),
           });
         } else {
           const data = await res.json();
