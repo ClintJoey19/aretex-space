@@ -17,38 +17,129 @@ import {
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { MdCloudUpload } from "react-icons/md";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useToast } from "../ui/use-toast";
+import { getDriveTemplates } from "@/lib/data";
 
-export const CreateDrive = ({ handleSubmitDrive, title, templates }) => {
+const CreateDrive = ({ file }) => {
+  const title = `New ${file}`;
+  const session = useSession();
+  const [driveName, setDriveName] = useState("");
+  const [templates, setTemplates] = useState([]);
+  const [template, setTemplate] = useState("");
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetched = async () => {
+      const res = await getDriveTemplates();
+      setTemplates(res);
+    };
+    fetched();
+  }, []);
+
+  const handleSubmitDrive = async (e) => {
+    e.preventDefault();
+
+    const names = driveName.split(", ");
+
+    for (const name of names) {
+      const newDrive = {
+        driveName: name,
+        template,
+      };
+
+      try {
+        // const URL =
+        //   "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
+        // const URL = "https://cheerful-cat-3fcb8b.netlify.app/shared-drive"; // production
+        const URL = "http://localhost:3000/api/dashboard/shared-drive";
+        const res = await fetch(URL, {
+          method: "POST",
+          body: JSON.stringify({
+            newDrive,
+            accessToken: session.data.accessToken,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.data.accessToken}`,
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          toast({
+            title: "Success",
+            description: `${name} drive is created.`,
+          });
+        } else {
+          const data = await res.json();
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: data.error,
+          });
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+
+    setDriveName("");
+    setTemplate("");
+  };
+
   return (
-    <DialogContent>
-      <DialogHeader>
-        <form action={(e) => handleSubmitDrive(e)}>
-          <DialogTitle>{title}</DialogTitle>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 items-center gap-4">
-              <Input id="name" className="col-span-3" placeholder={title} />
-              <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select a Template" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Templates</SelectLabel>
-                    {templates.map((temp) => (
-                      <SelectItem key={temp.id} value={temp.name}>
-                        {temp.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+    <Dialog>
+      <DialogTrigger>
+        <Button>
+          <MdCloudUpload className="text-xl mr-4" /> New
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <form onSubmit={handleSubmitDrive}>
+            <DialogTitle>{title}</DialogTitle>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 items-center gap-4">
+                <Input
+                  id="name"
+                  value={driveName}
+                  onChange={(e) => setDriveName(e.target.value)}
+                  className="col-span-3"
+                  placeholder="Drive 1, Drive 2, ..."
+                />
+                <Select
+                  value={template}
+                  onValueChange={(value) => {
+                    setTemplate(value);
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a Template" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Templates</SelectLabel>
+                      {templates.map((temp) => (
+                        <SelectItem key={temp._id} value={temp._id}>
+                          {temp.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit">Create</Button>
-          </DialogFooter>
-        </form>
-      </DialogHeader>
-    </DialogContent>
+            <DialogFooter>
+              <Button>Create</Button>
+            </DialogFooter>
+          </form>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 };
+
+export default CreateDrive;

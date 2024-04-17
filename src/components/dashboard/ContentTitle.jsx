@@ -9,7 +9,6 @@ const ContentTitle = ({ id }) => {
     const fetched = async () => {
       const res = await fetch(`${URL}/${id}`);
       const data = await res.json();
-      console.log(data);
       setName(data.name);
     };
     fetched();

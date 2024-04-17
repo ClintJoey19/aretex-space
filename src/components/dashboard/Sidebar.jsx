@@ -1,13 +1,14 @@
 "use client";
-import React from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { TfiHarddrives } from "react-icons/tfi";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { MdCloudUpload, MdOutlineGroup } from "react-icons/md";
 import { LiaProjectDiagramSolid } from "react-icons/lia";
-import CreateDialog from "../global/CreateDialog";
+import CreateDrive from "../global/CreateDrive";
+import CreateFolder from "../global/CreateFolder";
 
 const navLinks = [
   {
@@ -34,6 +35,7 @@ const navLinks = [
 
 const Sidebar = () => {
   const path = usePathname();
+  const { id } = useParams();
 
   let actionBtn = (
     <Button disabled>
@@ -42,7 +44,11 @@ const Sidebar = () => {
   );
 
   if (path === "/dashboard/shared-drives") {
-    actionBtn = <CreateDialog file="Drive" />;
+    actionBtn = <CreateDrive file="Drive" />;
+  }
+
+  if (path.includes(id)) {
+    actionBtn = <CreateFolder file="Folder" />;
   }
 
   if (path === "/dashboard/templates") {
