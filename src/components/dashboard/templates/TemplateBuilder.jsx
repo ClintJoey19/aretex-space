@@ -47,6 +47,24 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
     return null;
   };
 
+  const findParentIdById = (structure, targetFolderId) => {
+    const traverse = (node, parentId) => {
+      for (const childId in node) {
+        const child = node[childId];
+        if (childId === targetFolderId) {
+          return parentId;
+        }
+        if (child.children && typeof child.children === "object") {
+          const result = traverse(child.children, childId);
+          if (result) return result;
+        }
+      }
+      return null;
+    };
+
+    return traverse(structure, "root");
+  };
+
   const handleAddFolder = (parentKey, newFolderName) => {
     const parent = findParentByKey(template.root, parentKey);
     if (parent) {
@@ -72,14 +90,48 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
     }
   };
 
-  const handleDeleteFolder = (parentKey) => {
-    const parent = findParentByKey(template.root, parentKey);
+  console.log(template);
 
-    if (parent) {
-      console.log(parentKey, parent);
-      //   const { [parentKey], ...template } = template
-      //   setTemplate();
-    }
+  const handleDeleteFolder = (folderId) => {
+    const parentId = findParentIdById(template, folderId);
+    console.log(parentId);
+
+    setTemplate((prevStructure) => {
+      const updatedStructure = { ...prevStructure };
+
+      // Function to recursively search for and remove the folder
+      const removeFolder = (parent, idToRemove) => {
+        if (parent.children[idToRemove]) {
+          delete parent.children[idToRemove]; // Remove the folder if found
+          return true; // Indicate that the folder was found and removed
+        } else {
+          // If the folder is not found in the current level, recursively search in children
+          for (const childId in parent.children) {
+            const child = parent.children[childId];
+            if (child.mimeType === "folder") {
+              if (removeFolder(child, idToRemove)) {
+                return true; // If folder was found and removed in child, exit recursion
+              }
+            }
+          }
+        }
+        return false; // Indicate that the folder was not found
+      };
+
+      // Check if the parent is root
+      if (parentId === "root") {
+        // Iterate over root's children directly
+        removeFolder(updatedStructure.root, folderId);
+      } else {
+        // Iterate over the children of the specified parent
+        const parentFolder = updatedStructure.root.children[parentId];
+        if (parentFolder && parentFolder.children) {
+          removeFolder(parentFolder, folderId);
+        }
+      }
+
+      return updatedStructure;
+    });
   };
 
   return (
