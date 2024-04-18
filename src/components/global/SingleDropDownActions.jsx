@@ -9,39 +9,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "../ui/textarea";
 import { CiMenuKebab } from "react-icons/ci";
-import { MdOutlineGroup } from "react-icons/md";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import ManageMembers from "../dashboard/ManageMembers";
+import ManageDelete from "../dashboard/ManageDelete";
+import { MdPeopleOutline } from "react-icons/md";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const SingleDropDownActions = ({ row, table }) => {
+  // MENU ITEMS
+  const [isManageMembersDialogOpen, setIsManageMembersDialogOpen] =
+    useState(false);
+  const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] = useState(false);
+
   const [emails, setEmails] = useState("");
   const [role, setRole] = useState("");
   const session = useSession();
   const { toast } = useToast();
   let rowsSelected = table.getFilteredSelectedRowModel().rows;
 
-  const handleSubmit = async (e) => {
+  const addMembers = async (e) => {
     e.preventDefault();
     const peoples = emails.split(", ");
 
@@ -82,10 +71,43 @@ const SingleDropDownActions = ({ row, table }) => {
     setEmails("");
     setRole("");
   };
+
+  const deletFile = async () => {
+    try {
+      const URL = "http://localhost:3000/api/dashboard/shared-drive";
+      const id = row.id;
+      const res = await fetch(`${URL}/${id}`, {
+        method: "DELETE",
+        body: JSON.stringify({ driveId: id }),
+        headers: {
+          Authorization: `Bearer ${session.data.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        toast({
+          title: "Success",
+          description: "Drive deleted.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to delete drive.",
+        });
+      }
+      setIsDeleteAlertDialogOpen(false);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   return (
-    <Dialog>
+    <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger>
           <Button
             variant="outline"
             size="icon"
@@ -94,56 +116,35 @@ const SingleDropDownActions = ({ row, table }) => {
             <CiMenuKebab className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-full" align="end">
+        <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DialogTrigger>
-              <DropdownMenuItem>
-                <MdOutlineGroup className="mr-4" />
-                Manage Members
-              </DropdownMenuItem>
-            </DialogTrigger>
+            <DropdownMenuItem
+              onClick={() => setIsManageMembersDialogOpen(true)}
+            >
+              <MdPeopleOutline className="mr-4" /> Manage Members
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setIsDeleteAlertDialogOpen(true)}>
+              <RiDeleteBin6Line className="mr-4" /> Delete
+            </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Manage Members</DialogTitle>
-          <DialogDescription></DialogDescription>
-        </DialogHeader>
-        <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-6 gap-2">
-            <Textarea
-              id="email"
-              placeholder="Add Emails"
-              className="col-span-4"
-              value={emails}
-              onChange={(e) => setEmails(e.target.value)}
-              required
-            />
-            <Select value={role} onValueChange={(value) => setRole(value)}>
-              <SelectTrigger className="col-span-2">
-                <SelectValue placeholder="Select Role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Roles</SelectLabel>
-                  <SelectItem value="reader">Viewer</SelectItem>
-                  <SelectItem value="commenter">Commenter</SelectItem>
-                  <SelectItem value="writer">Contributor</SelectItem>
-                  <SelectItem value="fileOrganizer">Content Manager</SelectItem>
-                  <SelectItem value="organizer">Manager</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <DialogFooter>
-            <Button type="submit">Add Member</Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <ManageMembers
+        isManageMembersDialogOpen={isManageMembersDialogOpen}
+        setIsManageMembersDialogOpen={setIsManageMembersDialogOpen}
+        emails={emails}
+        setEmails={setEmails}
+        role={role}
+        setRole={setRole}
+        addMembers={addMembers}
+      />
+      <ManageDelete
+        isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
+        setIsDeleteAlertDialogOpen={setIsDeleteAlertDialogOpen}
+        deletFile={deletFile}
+      />
+    </>
   );
 };
 

@@ -3,7 +3,6 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 
 import SingleDropDownActions from "@/components/global/SingleDropDownActions";
-import { actions } from "@/components/dashboard/shared-drive/DriveActions";
 
 export const columns = [
   {

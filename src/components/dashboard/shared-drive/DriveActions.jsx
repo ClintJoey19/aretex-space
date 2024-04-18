@@ -8,21 +8,6 @@ import { FaRegTrashCan } from "react-icons/fa6";
 
 export const actions = [
   {
-    text: "Organize",
-    icon: AiOutlineFolderOpen,
-    fn: ({ id }) => console.log(id),
-  },
-  {
-    text: "Make a Copy",
-    icon: IoCopyOutline,
-    fn: ({ id }) => navigator.clipboard.writeText(id),
-  },
-  {
-    text: "Manage Members",
-    icon: MdOutlineGroup,
-    fn: ({ id }) => console.log(id),
-  },
-  {
     text: "Copy Link",
     icon: IoLinkOutline,
     fn: ({ path, id }) => {
@@ -30,27 +15,17 @@ export const actions = [
       navigator.clipboard.writeText(URL);
     },
   },
-  {
-    text: "Rename",
-    icon: MdOutlineEdit,
-    fn: ({ id }) => console.log(id),
-  },
-  {
-    text: "Star",
-    icon: MdOutlineStarOutline,
-    fn: ({ id }) => console.log(id),
-  },
-  {
-    text: "Move to Trash",
-    icon: FaRegTrashCan,
-    fn: ({ id }) => console.log(id),
-  },
 ];
 
 export const multiActions = [
-  {
-    text: "Manage Members",
-    icon: MdOutlineGroup,
-    fn: ({ id }) => console.log(id),
-  },
+  // {
+  //   id: 1,
+  //   trigger: (
+  //     <DropdownMenuItem>
+  //       <MdOutlineGroup className="mr-4" />
+  //       Manage Members
+  //     </DropdownMenuItem>
+  //   ),
+  //   fn: ({ id }) => console.log(id),
+  // },
 ];

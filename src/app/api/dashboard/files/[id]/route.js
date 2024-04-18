@@ -1,6 +1,7 @@
 import { getDriveTemplate } from "@/lib/data";
 import { getDriveAccess } from "@/lib/gdrive";
 import {v4 as uuid} from "uuid"
+import { getFiles } from "../../shared-drive/[id]/route";
 
 const getDrive = async (drive, driveId) => {
     try {
@@ -39,6 +40,7 @@ export const GET = async (req, res) => {
     }
 }
 
+// recursively create folders based from a template
 const createFolders = async (drive, data, destinationId) => {
     try {
       for (const key in data) {

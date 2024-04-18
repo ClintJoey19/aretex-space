@@ -1,4 +1,5 @@
 import { getDriveAccess } from "@/lib/gdrive";
+import { pauseForOneSecond } from "@/lib/utils";
 
 export const GET = async (req, res) => {
     const drive = await getDriveAccess(req, res)
@@ -31,10 +32,12 @@ export const POST = async (req, res) => {
             supportsAllDrives: true
         })
         console.log(`${data.email} is added to ${data.driveId}`);
+        // way to avoid google's rate limiter
+        await pauseForOneSecond()
     
         return Response.json(res)
     } catch (err) {
-        console.error(err.status);
+        console.error(err.message);
         return Response.json({ error: err.message }, {status: err.status});
     }
 }

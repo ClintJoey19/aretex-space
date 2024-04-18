@@ -10,3 +10,7 @@ export const removeSpaces = (value) => {
 
   return text
 }
+
+export const pauseForOneSecond = async () => {
+  return new Promise(resolve => setTimeout(resolve, 1000));
+};

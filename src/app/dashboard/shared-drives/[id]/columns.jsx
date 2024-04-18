@@ -47,7 +47,7 @@ export const columns = [
     cell: ({ row, table }) => {
       return (
         <div className="flex justify-end">
-          <SingleDropDownActions row={row} table={table} />
+          <SingleDropDownActions row={row.original} table={table} />
         </div>
       );
     },
