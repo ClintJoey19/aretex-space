@@ -83,10 +83,7 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
   };
 
   return (
-    <form
-      className="m-2 bg-white rounded-md border flex flex-col gap-4"
-      onSubmit={handleSubmit}
-    >
+    <main className="m-2 bg-white rounded-md border flex flex-col gap-4">
       <div className="p-4 flex flex-col gap-4">
         <h2 className="text-2xl capitalize">{type} Template</h2>
         <div className="grid grid-cols-4 w-[500px] items-center">
@@ -116,12 +113,12 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
           </div>
         </div>
         <div className="w-full flex justify-end gap-4">
-          <Button className="capitalize">
+          <Button className="capitalize" onClick={handleSubmit}>
             {type === "create" ? "create" : "update"}
           </Button>
         </div>
       </div>
-    </form>
+    </main>
   );
 };
 

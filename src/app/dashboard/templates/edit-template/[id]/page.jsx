@@ -2,18 +2,12 @@ import TemplateBuilder from "@/components/dashboard/templates/TemplateBuilder";
 import { getDriveTemplate } from "@/lib/data";
 
 const EditTemplate = async ({ params }) => {
-  const res = await getDriveTemplate(params.id);
+  const { name, template } = await getDriveTemplate(params.id);
+  console.log(template);
 
-  if (res) {
-    return (
-      <TemplateBuilder
-        id={params}
-        type="edit"
-        name={res.name}
-        temp={res.template}
-      />
-    );
-  }
+  return (
+    <TemplateBuilder id={params} type="edit" name={name} temp={template} />
+  );
 };
 
 export default EditTemplate;
