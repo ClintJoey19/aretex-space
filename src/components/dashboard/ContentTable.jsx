@@ -93,29 +93,11 @@ const ContentTable = ({ driveId }) => {
     },
   });
 
-  const loadMoreDrives = async () => {
-    // if (token) {
-    //   setIsFetching(true);
-    //   const res = await getDrives(token);
-    //   const drives = res.result.sharedDrives;
-    //   setData((prev) => [...prev, ...drives]);
-    //   setToken(res.result.newToken);
-    //   setPagination({
-    //     ...pagination,
-    //     pageSize: pagination.pageSize + drives.length,
-    //   });
-    //   setIsFetching(false);
-    // }
-  };
-
   return (
     <div className="w-full">
       <div className="flex justify-end items-center gap-2">
         {table.getFilteredSelectedRowModel().rows.length > 0 ? (
           <div className="flex gap-2 items-center rounded-sm">
-            <Button variant="ghost" size="icon">
-              <AiOutlineClose />
-            </Button>
             <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
             <MultiFolderDropDown table={table} />
           </div>
@@ -209,7 +191,6 @@ const ContentTable = ({ driveId }) => {
         </Table>
       </div>
       <div className="flex gap-2 justify-center">
-        <Button onClick={loadMoreDrives}>Load more</Button>
         {isFetching ? <Spinner /> : ""}
       </div>
     </div>

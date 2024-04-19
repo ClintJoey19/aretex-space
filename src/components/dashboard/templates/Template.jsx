@@ -41,7 +41,7 @@ const Template = ({ template }) => {
   };
 
   return (
-    <div className="flex justify-between items-center rounded-md overflow-hidden border border-primary/15 hover:shadow-md transition-all">
+    <div className="h-full flex justify-between items-center rounded-md overflow-hidden border border-primary/15 hover:shadow-md transition-all">
       <div className="h-full flex gap-2 items-center">
         <div className="w-12 h-full bg-primary flex justify-center items-center">
           <LuFolderKanban className="text-white text-xl" />

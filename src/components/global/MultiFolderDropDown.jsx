@@ -10,9 +10,11 @@ import {
 import { Button } from "../ui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { MdOutlineLink } from "react-icons/md";
+import { useToast } from "../ui/use-toast";
 
 const MultiFolderDropDown = ({ table }) => {
   let rowsSelected = table.getFilteredSelectedRowModel().rows;
+  const { toast } = useToast();
 
   const handleCopyLinks = () => {
     const links = rowsSelected.map(
@@ -21,6 +23,11 @@ const MultiFolderDropDown = ({ table }) => {
     );
 
     navigator.clipboard.writeText(links.join("\n"));
+    toast({
+      description: `${links.length} ${
+        links.length > 1 ? "links" : "link"
+      } copied.`,
+    });
   };
 
   return (
@@ -34,7 +41,8 @@ const MultiFolderDropDown = ({ table }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => handleCopyLinks()}>
-            <MdOutlineLink className="mr-4" /> Copy Link
+            <MdOutlineLink className="mr-4" /> Copy{" "}
+            {rowsSelected.length > 1 ? "Links" : "Link"}
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

@@ -10,9 +10,11 @@ import {
 import { Button } from "../ui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { MdOutlineLink } from "react-icons/md";
+import { useToast } from "../ui/use-toast";
 
 const SingleFolderDropDown = ({ row, table }) => {
   let rowsSelected = table.getFilteredSelectedRowModel().rows;
+  const { toast } = useToast();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,11 +30,14 @@ const SingleFolderDropDown = ({ row, table }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onClick={() =>
+            onClick={() => {
               navigator.clipboard.writeText(
                 `http://localhost:3000/dashboard/shared-drives/${row.id}`
-              )
-            }
+              );
+              toast({
+                description: "Link copied.",
+              });
+            }}
           >
             <MdOutlineLink className="mr-4" /> Copy Link
           </DropdownMenuItem>

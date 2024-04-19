@@ -135,9 +135,6 @@ export function DataTableDemo() {
       <div className="flex justify-end items-center gap-2">
         {table.getFilteredSelectedRowModel().rows.length > 0 ? (
           <div className="flex gap-2 items-center rounded-sm">
-            <Button variant="ghost" size="icon">
-              <AiOutlineClose />
-            </Button>
             <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
             <Button variant="outline" size="icon">
               <DropdownMenuTableActions
