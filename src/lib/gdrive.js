@@ -35,6 +35,54 @@ export async function getDriveAccess(req, res) {
   }
 }
 
+export const getSharedDrives = async (token) => {
+  console.log(token);
+  const res = await fetch("https://www.googleapis.com/drive/v3/drives", {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    params: {
+      pageSize: 10,
+      fields: "files(id, name, capabilities)",
+      useDomainAdminAccess: true
+    }
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed to get shared drives: ${res.statusText}`)
+  }
+
+  const {nextPageToken, drives} = await res.json()
+
+  // for (const drive of drives) {
+  //   const members = await getDriveMembers(drive.id, token)
+  //   console.log(members);
+  // }
+
+  return {nextPageToken, drives}
+}
+
+const getDriveMembers = async (fileId, token) => {
+  console.log(fileId);
+  try {
+    const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}/permissions`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      params: {
+        supportsAllDrives: true,
+        useDomainAdminAccess: true
+      }
+    })
+
+    return await res.json()
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
 export const getMembers = async (drive, fileId) => {
   try {
     const response = await drive.permissions.list({

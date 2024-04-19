@@ -19,7 +19,7 @@ import {
 import DisplayType from "@/components/global/DisplayType";
 import { AiOutlineClose } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
+import MultiFolderDropDown from "../global/MultiFolderDropDown";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -31,10 +31,6 @@ import {
 } from "@/components/ui/table";
 import { useIntersection } from "@mantine/hooks";
 import { columns } from "@/app/dashboard/shared-drives/[id]/columns";
-import {
-  actions,
-  multiActions,
-} from "@/components/dashboard/shared-drive/DriveActions";
 import Spinner from "../global/Spinner";
 
 const getDrive = async (driveId, fileId) => {
@@ -121,17 +117,7 @@ const ContentTable = ({ driveId }) => {
               <AiOutlineClose />
             </Button>
             <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
-            <Button variant="outline" size="icon">
-              <DropdownMenuTableActions
-                type="multiple"
-                actions={
-                  table.getFilteredSelectedRowModel().rows.length > 2
-                    ? multiActions
-                    : actions
-                }
-                table={table}
-              />
-            </Button>
+            <MultiFolderDropDown table={table} />
           </div>
         ) : null}
         <DisplayType display={display} setDisplay={setDisplay} />
@@ -224,7 +210,7 @@ const ContentTable = ({ driveId }) => {
       </div>
       <div className="flex gap-2 justify-center">
         <Button onClick={loadMoreDrives}>Load more</Button>
-        <p>{isFetching ? <Spinner /> : ""}</p>
+        {isFetching ? <Spinner /> : ""}
       </div>
     </div>
   );

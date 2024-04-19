@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { TfiHarddrives } from "react-icons/tfi";
 import { useParams, usePathname } from "next/navigation";
@@ -36,6 +36,7 @@ const navLinks = [
 const Sidebar = () => {
   const path = usePathname();
   const { id } = useParams();
+  const router = useRouter();
 
   let actionBtn = (
     <Button disabled>
@@ -53,10 +54,10 @@ const Sidebar = () => {
 
   if (path === "/dashboard/templates") {
     actionBtn = (
-      <Button>
-        <Link href="/dashboard/templates/create-template" className="flex">
-          <MdCloudUpload className="text-xl mr-4" /> New
-        </Link>
+      <Button
+        onClick={() => router.push("/dashboard/templates/create-template")}
+      >
+        <MdCloudUpload className="text-xl mr-4" /> New
       </Button>
     );
   }
@@ -64,7 +65,9 @@ const Sidebar = () => {
   return (
     <section className="h-full flex justify-center bg-white border">
       <div className="w-[80%] h-full flex flex-col gap-2">
-        <div className="w-full mt-4">{actionBtn}</div>
+        <div className="w-full mt-4" suppressHydrationWarning>
+          {actionBtn}
+        </div>
         <nav className="w-full">
           <ul className="w-full flex flex-col gap-2 py-2">
             {navLinks.map((item, i) => (

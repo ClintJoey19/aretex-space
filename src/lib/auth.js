@@ -1,6 +1,6 @@
 import { User } from "@/lib/models";
 import { connect } from "@/lib/connection";
-import NextAuth from "next-auth/next";
+import NextAuth, { getServerSession } from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 
 const GOOGLE_ID = process.env.CLIENT_ID;
@@ -45,7 +45,7 @@ export const authOptions = {
       return session;
     },
     async signIn({ user, account, profile }) {
-      // console.log(user, account, profile);
+      console.log(account);
       if (account.provider === "google") {
         connect();
         try {
@@ -69,5 +69,9 @@ export const authOptions = {
     },
   },
 };
+
+export const auth = (...args) => {
+  return getServerSession(...args, authOptions)
+}
 
 export const handler = NextAuth(authOptions);

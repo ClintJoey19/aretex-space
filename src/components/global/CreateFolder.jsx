@@ -27,7 +27,7 @@ const CreateFolder = ({ file }) => {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button>
           <MdCloudUpload className="text-xl mr-4" /> New
         </Button>

@@ -17,7 +17,7 @@ import { useSession } from "next-auth/react";
 import { MdPeopleOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
-export function DropdownMenuTableActions({ row, table }) {
+export function DropdownMenuTableActions({ table }) {
   const [isManageMembersDialogOpen, setIsManageMembersDialogOpen] =
     useState(false);
   const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] = useState(false);
@@ -111,7 +111,7 @@ export function DropdownMenuTableActions({ row, table }) {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">
             <CiMenuKebab className="h-4 w-4" />
           </Button>

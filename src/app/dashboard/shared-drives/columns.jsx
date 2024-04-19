@@ -46,7 +46,7 @@ export const columns = [
     accessorKey: "members",
     header: () => <div className="text-right">Members</div>,
     cell: ({ row }) => {
-      const members = row.getValue("members").length;
+      const members = row.getValue("members").length || "";
 
       return (
         <div className="text-right font-medium">

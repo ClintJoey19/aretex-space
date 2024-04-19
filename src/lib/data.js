@@ -8,7 +8,7 @@ export const getUsers = async () => {
   try {
     connect();
     const result = await User.find();
-    return Response.json(result);
+    return JSON.parse(JSON.stringify(result));
   } catch (err) {
     console.log(err);
   }

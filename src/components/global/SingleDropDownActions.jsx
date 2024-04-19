@@ -107,7 +107,7 @@ const SingleDropDownActions = ({ row, table }) => {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
             size="icon"

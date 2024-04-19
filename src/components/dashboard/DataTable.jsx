@@ -242,7 +242,7 @@ export function DataTableDemo() {
       </div>
       <div className="flex gap-2 justify-center">
         <Button onClick={loadMoreDrives}>Load more</Button>
-        <p>{isFetching ? <Spinner /> : ""}</p>
+        {isFetching ? <Spinner /> : ""}
       </div>
     </div>
   );

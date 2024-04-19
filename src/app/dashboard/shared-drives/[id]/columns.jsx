@@ -1,7 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CaretSortIcon } from "@radix-ui/react-icons";
-import SingleDropDownActions from "@/components/global/SingleDropDownActions";
+import SingleFolderDropDown from "@/components/global/SingleFolderDropDown";
 
 export const columns = [
   {
@@ -47,7 +47,7 @@ export const columns = [
     cell: ({ row, table }) => {
       return (
         <div className="flex justify-end">
-          <SingleDropDownActions row={row.original} table={table} />
+          <SingleFolderDropDown row={row.original} table={table} />
         </div>
       );
     },
