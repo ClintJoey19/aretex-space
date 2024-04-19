@@ -48,7 +48,7 @@ const Folder = ({
         </div>
       </div>
       <div className="ml-[40px]">
-        {Object.keys(template.children).map((uuid) => (
+        {Object.keys(template.children || {}).map((uuid) => (
           <Folder
             key={uuid}
             parentKey={uuid}

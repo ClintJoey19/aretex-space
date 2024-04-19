@@ -6,7 +6,7 @@ const EditTemplate = async ({ params }) => {
   console.log(template);
 
   return (
-    <TemplateBuilder id={params} type="edit" name={name} temp={template} />
+    <TemplateBuilder id={params.id} type="edit" name={name} temp={template} />
   );
 };
 

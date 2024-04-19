@@ -80,14 +80,18 @@ export const addTemplate = async ({ name, template }) => {
   }
 };
 
-export const editTemplate = async (id, template) => {
+export const editTemplate = async (id, {name, template}) => {
   try {
     connect()
 
-    // pending
+    console.log(id, name, template);
 
-    revalidatePath("/dashboard/templates")
-    return
+    const res = await DriveTemplate.findByIdAndUpdate(id, {name, template})
+
+    if (res) {
+      revalidatePath("/dashboard/templates")
+      return JSON.parse(JSON.stringify(res))
+    }
   } catch(err) {
     console.error(err.message);
   }

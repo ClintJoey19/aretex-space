@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Folder from "./create-template/Folder";
-import { addTemplate } from "@/lib/data";
+import { addTemplate, editTemplate } from "@/lib/data";
+import { toast, useToast } from "@/components/ui/use-toast";
 
 const sample = {
   root: {
@@ -18,17 +19,35 @@ const sample = {
 
 const TemplateBuilder = ({ id, type, name, temp }) => {
   const [templateName, setTemplateName] = useState(name || "");
-  const [template, setTemplate] = useState(sample);
+  const [template, setTemplate] = useState(temp ? temp : sample);
   const router = useRouter();
+  const { toast } = useToast();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     const newTemplate = { name: templateName, template };
-    console.log(newTemplate);
-    const res = await addTemplate(newTemplate);
+    console.log(type);
+
+    const res =
+      type === "create"
+        ? await addTemplate(newTemplate)
+        : await editTemplate(id, newTemplate);
 
     if (res) {
+      toast({
+        title: "Success",
+        description: `Template was ${
+          type === "create" ? "created" : "updated"
+        } successfully.`,
+      });
       router.push("/dashboard/templates");
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: `There was an error ${
+          type === "create" ? "creating" : "updating"
+        } the template.`,
+      });
     }
   };
 
@@ -45,24 +64,6 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
       }
     }
     return null;
-  };
-
-  const findParentIdById = (structure, targetFolderId) => {
-    const traverse = (node, parentId) => {
-      for (const childId in node) {
-        const child = node[childId];
-        if (childId === targetFolderId) {
-          return parentId;
-        }
-        if (child.children && typeof child.children === "object") {
-          const result = traverse(child.children, childId);
-          if (result) return result;
-        }
-      }
-      return null;
-    };
-
-    return traverse(structure, "root");
   };
 
   const handleAddFolder = (parentKey, newFolderName) => {
@@ -90,7 +91,39 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
     }
   };
 
-  console.log(template);
+  const findParentIdById = (structure, targetFolderId) => {
+    const traverse = (node, parentId) => {
+      for (const childId in node) {
+        const child = node[childId];
+        if (childId === targetFolderId) {
+          return parentId;
+        }
+        if (child.children) {
+          const result = traverse(child.children, childId);
+          if (result) return result;
+        }
+      }
+      return null;
+    };
+
+    return traverse(structure, "root");
+  };
+
+  const findAndRemoveFolder = (structure, targetFolderId) => {
+    if (!structure.children) return false; // No children to search
+
+    for (const childId in structure.children) {
+      const child = structure.children[childId];
+      if (childId === targetFolderId) {
+        delete structure.children[childId];
+        return true;
+      }
+      const removedInChild = findAndRemoveFolder(child, targetFolderId);
+      if (removedInChild) return true;
+    }
+
+    return false;
+  };
 
   const handleDeleteFolder = (folderId) => {
     const parentId = findParentIdById(template, folderId);
@@ -100,35 +133,7 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
       const updatedStructure = { ...prevStructure };
 
       // Function to recursively search for and remove the folder
-      const removeFolder = (parent, idToRemove) => {
-        if (parent.children[idToRemove]) {
-          delete parent.children[idToRemove]; // Remove the folder if found
-          return true; // Indicate that the folder was found and removed
-        } else {
-          // If the folder is not found in the current level, recursively search in children
-          for (const childId in parent.children) {
-            const child = parent.children[childId];
-            if (child.mimeType === "folder") {
-              if (removeFolder(child, idToRemove)) {
-                return true; // If folder was found and removed in child, exit recursion
-              }
-            }
-          }
-        }
-        return false; // Indicate that the folder was not found
-      };
-
-      // Check if the parent is root
-      if (parentId === "root") {
-        // Iterate over root's children directly
-        removeFolder(updatedStructure.root, folderId);
-      } else {
-        // Iterate over the children of the specified parent
-        const parentFolder = updatedStructure.root.children[parentId];
-        if (parentFolder && parentFolder.children) {
-          removeFolder(parentFolder, folderId);
-        }
-      }
+      findAndRemoveFolder(updatedStructure.root, folderId);
 
       return updatedStructure;
     });
@@ -152,7 +157,6 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
             required
           />
         </div>
-
         <div className="h-[56vh] border border-primary/50 w-full p-2 rounded-md overflow-auto">
           <div>
             <Folder
