@@ -70,7 +70,7 @@ const Template = ({ template }) => {
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete the
-                drive template's data from the servers.
+                drive template&apos;s data from the servers.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
