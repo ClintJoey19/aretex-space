@@ -17,7 +17,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import DisplayType from "@/components/global/DisplayType";
-import { AiOutlineClose } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
 import { Input } from "@/components/ui/input";
@@ -29,7 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useIntersection } from "@mantine/hooks";
+import { useInView } from "react-intersection-observer";
 import { columns } from "@/app/dashboard/shared-drives/columns";
 import {
   actions,
@@ -70,17 +69,9 @@ export function DataTableDemo() {
   const [rowSelection, setRowSelection] = useState({});
   const [isFetching, setIsFetching] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    const fetched = async () => {
-      const res = await getDrives();
-      setData(res.result.sharedDrives);
-      setToken(res.result.newToken);
-      setIsFetching(false);
-    };
-
-    fetched();
-  }, []);
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
 
   const table = useReactTable({
     data,
@@ -103,12 +94,6 @@ export function DataTableDemo() {
     },
   });
 
-  const lastItemRef = useRef(null);
-  const { ref, entry } = useIntersection({
-    root: lastItemRef.current,
-    threshold: 1,
-  });
-
   const loadMoreDrives = async () => {
     if (token) {
       setIsFetching(true);
@@ -121,14 +106,19 @@ export function DataTableDemo() {
         pageSize: pagination.pageSize + drives.length,
       });
       setIsFetching(false);
+    } else {
+      const res = await getDrives();
+      setData(res.result.sharedDrives);
+      setToken(res.result.newToken);
+      setIsFetching(false);
     }
   };
 
   useEffect(() => {
-    if (entry?.isIntersecting) {
-      alert("Intersecting");
+    if (inView) {
+      loadMoreDrives();
     }
-  }, [entry]);
+  }, [inView]);
 
   return (
     <div className="w-full">
@@ -209,7 +199,7 @@ export function DataTableDemo() {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, i) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -228,18 +218,19 @@ export function DataTableDemo() {
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              <TableRow className={isFetching && "hidden"}>
                 <TableCell colSpan={10} className="h-24 text-center">
-                  {isFetching ? <Spinner /> : "No results."}
+                  No results.
                 </TableCell>
               </TableRow>
             )}
+            <TableRow ref={ref} className={token === undefined && "hidden"}>
+              <TableCell colSpan={10} className="h-24 text-center">
+                {token !== undefined && <Spinner />}
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
-      </div>
-      <div className="flex gap-2 justify-center">
-        <Button onClick={loadMoreDrives}>Load more</Button>
-        {isFetching ? <Spinner /> : ""}
       </div>
     </div>
   );
