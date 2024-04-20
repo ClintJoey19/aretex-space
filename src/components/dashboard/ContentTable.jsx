@@ -1,14 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { flexRender } from "@tanstack/react-table";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -17,8 +10,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import DisplayType from "@/components/global/DisplayType";
-import { AiOutlineClose } from "react-icons/ai";
-import { Button } from "@/components/ui/button";
 import MultiFolderDropDown from "../global/MultiFolderDropDown";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,20 +20,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useIntersection } from "@mantine/hooks";
 import { columns } from "@/app/dashboard/shared-drives/[id]/columns";
 import Spinner from "../global/Spinner";
+import { DOMAIN } from "@/lib/utils";
+import { useInView } from "react-intersection-observer";
 
-const getDrive = async (driveId, fileId) => {
-  let URL = "http://localhost:3000/api/dashboard/shared-drive/";
-  let id = driveId;
+const getDrive = async (driveId, token = null) => {
+  let URL = `${DOMAIN}/api/dashboard/shared-drive/${driveId}`;
 
-  if (fileId) {
-    URL = "http://localhost:3000/api/dashboard/file/";
-    id = fileId;
+  if (token) {
+    URL += `?nextPageToken=${token}`;
   }
 
-  const res = await fetch(`${URL}/${id}`);
+  const res = await fetch(URL);
   const data = await res.json();
 
   return data;
@@ -62,15 +52,7 @@ const ContentTable = ({ driveId }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [isFetching, setIsFetching] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    const fetched = async () => {
-      const res = await getDrive(driveId);
-      setData(res);
-      setIsFetching(false);
-    };
-    fetched();
-  }, []);
+  const { ref, inView } = useInView();
 
   const table = useReactTable({
     data,
@@ -93,6 +75,29 @@ const ContentTable = ({ driveId }) => {
     },
   });
 
+  const loadMore = async () => {
+    if (token) {
+      setIsFetching(true);
+      const { nextPageToken, files } = await getDrive(driveId, token);
+      setData((prev) => [...prev, ...files]);
+      setToken(nextPageToken);
+      setPagination({
+        ...pagination,
+        pageSize: pagination.pageSize + files.length,
+      });
+      setIsFetching(false);
+    } else {
+      const { nextPageToken, files } = await getDrive(driveId);
+      setData(files);
+      setToken(nextPageToken);
+      setIsFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    loadMore();
+  }, [inView]);
+
   return (
     <div className="w-full">
       <div className="flex justify-end items-center gap-2">
@@ -113,34 +118,8 @@ const ContentTable = ({ driveId }) => {
           }}
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) => {
-                      column.toggleVisibility(!!value);
-                    }}
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
-      <div className="rounded-md border h-[58vh] overflow-y-auto relative">
+      <div className="rounded-md border h-[60vh] overflow-y-auto relative">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -181,17 +160,19 @@ const ContentTable = ({ driveId }) => {
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              <TableRow className={isFetching && "hidden"}>
                 <TableCell colSpan={10} className="h-24 text-center">
-                  {isFetching ? <Spinner /> : "No results."}
+                  No results.
                 </TableCell>
               </TableRow>
             )}
+            <TableRow ref={ref} className={token === undefined && "hidden"}>
+              <TableCell colSpan={10} className="h-24 text-center">
+                {token !== undefined && <Spinner />}
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
-      </div>
-      <div className="flex gap-2 justify-center">
-        {isFetching ? <Spinner /> : ""}
       </div>
     </div>
   );

@@ -12,16 +12,12 @@ const icons = [
     icon: CiGrid41,
     href: "/",
   },
-  {
-    icon: PiTreeStructureThin,
-    href: "/",
-  },
 ];
 
 const DisplayType = ({ display, setDisplay }) => {
   return (
     <div className="border rounded-sm p-1">
-      <div className="flex justify-between items-center gap-2">
+      <div className="flex justify-between items-center gap-1">
         {icons.map((item, i) => (
           <div
             onClick={() => setDisplay(i)}

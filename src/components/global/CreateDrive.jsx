@@ -24,6 +24,7 @@ import { ToastAction } from "../ui/toast";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { getDriveTemplates } from "@/lib/data";
+import { DOMAIN } from "@/lib/utils";
 
 const CreateDrive = ({ file }) => {
   const title = `New ${file}`;
@@ -54,10 +55,7 @@ const CreateDrive = ({ file }) => {
       };
 
       try {
-        // const URL =
-        //   "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // production
-        // const URL = "https://cheerful-cat-3fcb8b.netlify.app/shared-drive"; // production
-        const URL = "http://localhost:3000/api/dashboard/shared-drive";
+        const URL = `${DOMAIN}/api/dashboard/shared-drive`;
         const res = await fetch(URL, {
           method: "POST",
           body: JSON.stringify({

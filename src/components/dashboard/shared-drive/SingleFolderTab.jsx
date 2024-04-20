@@ -2,13 +2,12 @@ import { DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 import CustomSelect from "@/components/global/CustomSelect";
+import { DOMAIN } from "@/lib/utils";
 
 const SingleFolderTab = ({ file, parentId, templates }) => {
   const title = `New ${file}`;
-  const session = useSession();
   const [folderName, setFolderName] = useState("");
   const [template, setTemplate] = useState("");
   const { toast } = useToast();
@@ -25,7 +24,7 @@ const SingleFolderTab = ({ file, parentId, templates }) => {
       template,
     };
 
-    let URL = "http://localhost:3000/api/dashboard/files";
+    let URL = `${DOMAIN}/api/dashboard/files`;
     const res = await fetch(`${URL}/${parentId}`, {
       method: "POST",
       body: JSON.stringify(newFolder),

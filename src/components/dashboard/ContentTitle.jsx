@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
+import { DOMAIN } from "@/lib/utils";
 
 const ContentTitle = ({ id }) => {
   const [name, setName] = useState("");
 
   useEffect(() => {
-    let URL = "http://localhost:3000/api/dashboard/files";
+    let URL = `${DOMAIN}/api/dashboard/files`;
     const fetched = async () => {
       const res = await fetch(`${URL}/${id}`);
       const data = await res.json();

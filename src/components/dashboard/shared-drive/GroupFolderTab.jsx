@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import { DOMAIN } from "@/lib/utils";
 
 const GroupFolderTab = ({ file, parentId, templates }) => {
   const title = `New ${file}s`;
@@ -45,7 +46,7 @@ const GroupFolderTab = ({ file, parentId, templates }) => {
       return;
     }
 
-    const URL = "http://localhost:3000/api/dashboard/files";
+    const URL = `${DOMAIN}/api/dashboard/files`;
 
     for (const folder of folders) {
       const res = await fetch(`${URL}/${parentId}`, {

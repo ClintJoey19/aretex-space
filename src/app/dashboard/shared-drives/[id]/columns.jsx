@@ -1,6 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CaretSortIcon } from "@radix-ui/react-icons";
+import { HiFolder } from "react-icons/hi";
 import SingleFolderDropDown from "@/components/global/SingleFolderDropDown";
 
 export const columns = [
@@ -39,7 +40,14 @@ export const columns = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="text-left">{row.original.name}</div>,
+    cell: ({ row }) => (
+      <div className="flex justify-start items-center gap-2">
+        {row.original.mimeType === "application/vnd.google-apps.folder" && (
+          <HiFolder className="text-xl" />
+        )}
+        {row.original.name}
+      </div>
+    ),
   },
   {
     id: "actions",

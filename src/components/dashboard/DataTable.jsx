@@ -35,12 +35,10 @@ import {
   multiActions,
 } from "@/components/dashboard/shared-drive/DriveActions";
 import Spinner from "../global/Spinner";
+import { DOMAIN } from "@/lib/utils";
 
 const getDrives = async (nextPageToken = null) => {
-  // let URL = "https://aretex-space.vercel.app/api/dashboard/shared-drive"; // vercel
-  // let URL =
-  //   "https://cheerful-cat-3fcb8b.netlify.app/api/dashboard/shared-drive"; // netlify
-  let URL = "http://localhost:3000/api/dashboard/shared-drive";
+  let URL = `${DOMAIN}/api/dashboard/shared-drive`;
 
   if (nextPageToken) {
     URL += `?nextPageToken=${nextPageToken}`;
@@ -126,22 +124,20 @@ export function DataTableDemo() {
         {table.getFilteredSelectedRowModel().rows.length > 0 ? (
           <div className="flex gap-2 items-center rounded-sm">
             <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
-            <Button variant="outline" size="icon">
-              <DropdownMenuTableActions
-                type="multiple"
-                actions={
-                  table.getFilteredSelectedRowModel().rows.length > 2
-                    ? multiActions
-                    : actions
-                }
-                table={table}
-              />
-            </Button>
+            <DropdownMenuTableActions
+              type="multiple"
+              actions={
+                table.getFilteredSelectedRowModel().rows.length > 2
+                  ? multiActions
+                  : actions
+              }
+              table={table}
+            />
           </div>
         ) : null}
         <DisplayType display={display} setDisplay={setDisplay} />
       </div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-2">
         <Input
           placeholder="Filter name..."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
@@ -177,7 +173,7 @@ export function DataTableDemo() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border h-[58vh] overflow-y-auto relative">
+      <div className="rounded-md border h-[60vh] overflow-y-auto relative">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

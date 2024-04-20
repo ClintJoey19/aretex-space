@@ -29,7 +29,6 @@ const ManageMembers = ({
 }) => {
   return (
     <>
-      {/* Your Dropdown Menu component here */}
       <Dialog
         open={isManageMembersDialogOpen}
         onClose={() => setIsManageMembersDialogOpen(false)}
@@ -68,7 +67,6 @@ const ManageMembers = ({
                 </SelectContent>
               </Select>
             </div>
-            {/* Content for managing members (form, list, etc.) */}
             <DialogFooter>
               <Button
                 variant="outline"
@@ -77,7 +75,6 @@ const ManageMembers = ({
                 Close
               </Button>
               <Button type="submit">Add Member</Button>
-              {/* Additional buttons for managing members */}
             </DialogFooter>
           </form>
         </DialogContent>

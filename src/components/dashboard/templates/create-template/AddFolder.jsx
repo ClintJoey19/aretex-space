@@ -17,7 +17,6 @@ const AddFolder = ({ parentKey, template, onAddFolder }) => {
   const [newFolder, setNewFolder] = useState("");
 
   const handleSubmit = () => {
-    // pending
     onAddFolder(parentKey, newFolder);
     setNewFolder("");
   };

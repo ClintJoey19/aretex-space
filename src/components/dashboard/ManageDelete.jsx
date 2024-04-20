@@ -16,7 +16,6 @@ const ManageDelete = ({
 }) => {
   return (
     <>
-      {/* Your Dropdown Menu component here */}
       <AlertDialog
         open={isDeleteAlertDialogOpen}
         onClose={() => setIsDeleteAlertDialogOpen(false)}

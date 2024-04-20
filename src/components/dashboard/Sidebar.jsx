@@ -1,12 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { TfiHarddrives } from "react-icons/tfi";
+import { BiSolidDashboard } from "react-icons/bi";
+import { PiHardDrivesFill } from "react-icons/pi";
 import { useParams, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { MdCloudUpload, MdOutlineGroup } from "react-icons/md";
-import { LiaProjectDiagramSolid } from "react-icons/lia";
+import { MdCloudUpload } from "react-icons/md";
+import { HiUserGroup } from "react-icons/hi2";
+import { PiTreeStructureFill } from "react-icons/pi";
 import CreateDrive from "../global/CreateDrive";
 import CreateFolder from "../global/CreateFolder";
 
@@ -14,22 +15,22 @@ const navLinks = [
   {
     text: "Dashboard",
     href: "/dashboard",
-    icon: LuLayoutDashboard,
+    icon: BiSolidDashboard,
   },
   {
     text: "Shared Drives",
     href: "/dashboard/shared-drives",
-    icon: TfiHarddrives,
+    icon: PiHardDrivesFill,
   },
   {
     text: "Users",
     href: "/dashboard/users",
-    icon: MdOutlineGroup,
+    icon: HiUserGroup,
   },
   {
     text: "Templates",
     href: "/dashboard/templates",
-    icon: LiaProjectDiagramSolid,
+    icon: PiTreeStructureFill,
   },
 ];
 
@@ -48,7 +49,7 @@ const Sidebar = () => {
     actionBtn = <CreateDrive file="Drive" />;
   }
 
-  if (path.includes(id)) {
+  if (path.includes(`/dashboard/shared-drives/${id}`)) {
     actionBtn = <CreateFolder file="Folder" />;
   }
 

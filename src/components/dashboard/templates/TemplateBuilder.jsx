@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Folder from "./create-template/Folder";
 import { addTemplate, editTemplate } from "@/lib/data";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const sample = {
   root: {
@@ -25,7 +25,6 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
 
   const handleSubmit = async () => {
     const newTemplate = { name: templateName, template };
-    console.log(type);
 
     const res =
       type === "create"
@@ -126,9 +125,6 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
   };
 
   const handleDeleteFolder = (folderId) => {
-    const parentId = findParentIdById(template, folderId);
-    console.log(parentId);
-
     setTemplate((prevStructure) => {
       const updatedStructure = { ...prevStructure };
 
@@ -157,7 +153,7 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
             required
           />
         </div>
-        <div className="h-[56vh] border border-primary/50 w-full p-2 rounded-md overflow-auto">
+        <div className="max-h-[62vh] border border-primary/50 w-full p-2 rounded-md overflow-auto">
           <div>
             <Folder
               parentKey={Object.keys(template)[0]}
