@@ -33,7 +33,7 @@ const SingleFolderDropDown = ({ row, table }) => {
           <DropdownMenuItem
             onClick={() => {
               navigator.clipboard.writeText(
-                `${DOMAIN}/shared-drives/${row.id}`
+                `${DOMAIN}/dashboard/shared-drives/${row.id}`
               );
               toast({
                 description: "Link copied.",
