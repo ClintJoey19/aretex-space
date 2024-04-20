@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { MdOutlineLink } from "react-icons/md";
 import { useToast } from "../ui/use-toast";
+import { DOMAIN } from "@/lib/utils";
 
 const MultiFolderDropDown = ({ table }) => {
   let rowsSelected = table.getFilteredSelectedRowModel().rows;
@@ -18,8 +19,7 @@ const MultiFolderDropDown = ({ table }) => {
 
   const handleCopyLinks = () => {
     const links = rowsSelected.map(
-      (row) =>
-        `http://localhost:3000/dashboard/shared-drives/${row.original.id}`
+      (row) => `${DOMAIN}/dashboard/shared-drives/${row.original.id}`
     );
 
     navigator.clipboard.writeText(links.join("\n"));

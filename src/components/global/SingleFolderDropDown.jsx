@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { MdOutlineLink } from "react-icons/md";
 import { useToast } from "../ui/use-toast";
+import { DOMAIN } from "@/lib/utils";
 
 const SingleFolderDropDown = ({ row, table }) => {
   let rowsSelected = table.getFilteredSelectedRowModel().rows;
@@ -32,7 +33,7 @@ const SingleFolderDropDown = ({ row, table }) => {
           <DropdownMenuItem
             onClick={() => {
               navigator.clipboard.writeText(
-                `http://localhost:3000/dashboard/shared-drives/${row.id}`
+                `${DOMAIN}/shared-drives/${row.id}`
               );
               toast({
                 description: "Link copied.",

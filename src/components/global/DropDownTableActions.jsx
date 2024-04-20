@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { MdPeopleOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { DOMAIN } from "@/lib/utils";
 
 export function DropdownMenuTableActions({ table }) {
   const [isManageMembersDialogOpen, setIsManageMembersDialogOpen] =
@@ -36,12 +37,7 @@ export function DropdownMenuTableActions({ table }) {
 
       peoples.forEach(async (people) => {
         try {
-          // const URL =
-          //   "https://aretex-space.vercel.app/api/dashboard/shared-drive/manage-members"; // production
-          // const URL =
-          //   "https://cheerful-cat-3fcb8b.netlify.app/api/dashboard/shared-drive/manage-members"; // production
-          const URL =
-            "http://localhost:3000/api/dashboard/shared-drive/manage-members";
+          const URL = `${DOMAIN}/api/dashboard/shared-drive/manage-members`;
           const res = await fetch(URL, {
             method: "POST",
             body: JSON.stringify({ driveId, email: people, role: role }),
@@ -78,7 +74,7 @@ export function DropdownMenuTableActions({ table }) {
   const deletFile = async () => {
     for (const row of rowsSelected) {
       try {
-        const URL = "http://localhost:3000/api/dashboard/shared-drive";
+        const URL = `${DOMAIN}/api/dashboard/shared-drive`;
         const id = row.original.id;
         const res = await fetch(`${URL}/${id}`, {
           method: "DELETE",

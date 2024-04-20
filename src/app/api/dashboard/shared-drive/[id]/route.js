@@ -19,8 +19,6 @@ export const getFiles = async (drive, id, token) => {
     return nameA.localeCompare(nameB);
   });
 
-  console.log(nextPageToken);
-
   return { nextPageToken, files };
 };
 
