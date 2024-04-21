@@ -5,7 +5,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
-import { MdCloudUpload } from "react-icons/md";
+import { RiAddLine } from "react-icons/ri";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SingleFolderTab from "../dashboard/shared-drive/SingleFolderTab";
 import GroupFolderTab from "../dashboard/shared-drive/GroupFolderTab";
@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { getDriveTemplates } from "@/lib/data";
 import { useParams } from "next/navigation";
 
-const CreateFolder = ({ file }) => {
+const CreateFolder = () => {
   const [templates, setTemplates] = useState([]);
   const { id } = useParams();
 
@@ -28,8 +28,8 @@ const CreateFolder = ({ file }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
-          <MdCloudUpload className="text-xl mr-4" /> New
+        <Button size="md">
+          <RiAddLine />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -40,14 +40,10 @@ const CreateFolder = ({ file }) => {
               <TabsTrigger value="group">Group</TabsTrigger>
             </TabsList>
             <TabsContent value="single">
-              <SingleFolderTab
-                file={file}
-                parentId={id}
-                templates={templates}
-              />
+              <SingleFolderTab parentId={id} templates={templates} />
             </TabsContent>
             <TabsContent value="group">
-              <GroupFolderTab file={file} parentId={id} templates={templates} />
+              <GroupFolderTab parentId={id} templates={templates} />
             </TabsContent>
           </Tabs>
         </DialogHeader>

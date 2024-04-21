@@ -6,8 +6,8 @@ import { useToast } from "@/components/ui/use-toast";
 import CustomSelect from "@/components/global/CustomSelect";
 import { DOMAIN } from "@/lib/utils";
 
-const SingleFolderTab = ({ file, parentId, templates }) => {
-  const title = `New ${file}`;
+const SingleFolderTab = ({ parentId, templates }) => {
+  const title = `New Folder`;
   const [folderName, setFolderName] = useState("");
   const [template, setTemplate] = useState("");
   const { toast } = useToast();

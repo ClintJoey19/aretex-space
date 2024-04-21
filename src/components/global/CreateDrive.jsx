@@ -1,3 +1,4 @@
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -15,9 +16,9 @@ import {
   SelectLabel,
   SelectItem,
 } from "../ui/select";
+import { RiAddLine } from "react-icons/ri";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { MdCloudUpload } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { ToastAction } from "../ui/toast";
@@ -26,8 +27,7 @@ import { useRouter } from "next/navigation";
 import { getDriveTemplates } from "@/lib/data";
 import { DOMAIN } from "@/lib/utils";
 
-const CreateDrive = ({ file }) => {
-  const title = `New ${file}`;
+const CreateDrive = () => {
   const session = useSession();
   const [driveName, setDriveName] = useState("");
   const [templates, setTemplates] = useState([]);
@@ -104,14 +104,14 @@ const CreateDrive = ({ file }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
-          <MdCloudUpload className="text-xl mr-4" /> New
+        <Button size="md">
+          <RiAddLine />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <form onSubmit={handleSubmitDrive}>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle>Generate Drive</DialogTitle>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 items-center gap-4">
                 <Input

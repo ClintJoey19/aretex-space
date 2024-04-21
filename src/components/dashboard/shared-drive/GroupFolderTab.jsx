@@ -19,8 +19,8 @@ import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { DOMAIN } from "@/lib/utils";
 
-const GroupFolderTab = ({ file, parentId, templates }) => {
-  const title = `New ${file}s`;
+const GroupFolderTab = ({ parentId, templates }) => {
+  const title = `New Folders`;
   const [name, setName] = useState("");
   const [template, setTemplate] = useState("");
   const [folders, setFolders] = useState([]);

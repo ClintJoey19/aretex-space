@@ -68,12 +68,6 @@ const ManageMembers = ({
               </Select>
             </div>
             <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsManageMembersDialogOpen(false)}
-              >
-                Close
-              </Button>
               <Button type="submit">Add Member</Button>
             </DialogFooter>
           </form>

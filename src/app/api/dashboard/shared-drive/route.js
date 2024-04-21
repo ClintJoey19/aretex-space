@@ -28,7 +28,7 @@ const getSharedDrives = async (drive, nextPageToken) => {
     const response = await drive.drives.list({
       pageToken: nextPageToken,
       pageSize: 10,
-      fields: "drives(id, name, capabilities, createdTime), nextPageToken",
+      fields: "drives(id, name, kind), nextPageToken",
     });
 
     const fetched = response.data.drives.map(async (item) => {
@@ -103,19 +103,24 @@ export const POST = async (req, res) => {
         name: newDrive.driveName,
       },
       requestId: uuid(),
-      fields: "id",
     });
 
     const destinationId = res.data.id;
     const temp = await getDriveTemplate(newDrive.template);
-    
+
     if (temp) {
       await createFolders(drive, temp.template.root.children, destinationId);
     }
-    
-    console.log(`${destinationId} drive is created`);
+
+    const members = await getMembers(drive, destinationId);
+
+    const data = {
+      ...res.data,
+      members,
+    };
+
     revalidatePath("/dashboard/shared-drives");
-    return Response.json(res);
+    return Response.json(data);
   } catch (err) {
     console.error(err.message);
   }

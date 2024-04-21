@@ -30,42 +30,22 @@ import {
 } from "@/components/ui/table";
 import { useInView } from "react-intersection-observer";
 import { columns } from "@/app/dashboard/shared-drives/columns";
-import {
-  actions,
-  multiActions,
-} from "@/components/dashboard/shared-drive/DriveActions";
 import Spinner from "../global/Spinner";
-import { DOMAIN } from "@/lib/utils";
 
-const getDrives = async (nextPageToken = null) => {
-  let URL = `${DOMAIN}/api/dashboard/shared-drive`;
-
-  if (nextPageToken) {
-    URL += `?nextPageToken=${nextPageToken}`;
-  }
-
-  const res = await fetch(URL, { cache: "no-store" });
-
-  if (!res.ok) {
-    console.log("Something went wrong");
-  }
-
-  return res.json();
-};
-
-export function DataTableDemo() {
-  const [display, setDisplay] = useState(0);
-  const [data, setData] = useState([]);
-  const [token, setToken] = useState(null);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+export function DataTableDemo({
+  display,
+  setDisplay,
+  data,
+  token,
+  pagination,
+  setPagination,
+  isFetching,
+  loadMoreDrives,
+}) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
-  const [isFetching, setIsFetching] = useState(true);
   const router = useRouter();
   const { ref, inView } = useInView({
     threshold: 0,
@@ -92,26 +72,6 @@ export function DataTableDemo() {
     },
   });
 
-  const loadMoreDrives = async () => {
-    if (token) {
-      setIsFetching(true);
-      const res = await getDrives(token);
-      const drives = res.result.sharedDrives;
-      setData((prev) => [...prev, ...drives]);
-      setToken(res.result.newToken);
-      setPagination({
-        ...pagination,
-        pageSize: pagination.pageSize + drives.length,
-      });
-      setIsFetching(false);
-    } else {
-      const res = await getDrives();
-      setData(res.result.sharedDrives);
-      setToken(res.result.newToken);
-      setIsFetching(false);
-    }
-  };
-
   useEffect(() => {
     if (inView) {
       loadMoreDrives();
@@ -121,20 +81,12 @@ export function DataTableDemo() {
   return (
     <div className="w-full">
       <div className="flex justify-end items-center gap-2">
-        {table.getFilteredSelectedRowModel().rows.length > 0 ? (
+        {table.getFilteredSelectedRowModel().rows.length > 0 && (
           <div className="flex gap-2 items-center rounded-sm">
             <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
-            <DropdownMenuTableActions
-              type="multiple"
-              actions={
-                table.getFilteredSelectedRowModel().rows.length > 2
-                  ? multiActions
-                  : actions
-              }
-              table={table}
-            />
+            <DropdownMenuTableActions type="multiple" table={table} />
           </div>
-        ) : null}
+        )}
         <DisplayType display={display} setDisplay={setDisplay} />
       </div>
       <div className="flex items-center py-2">
@@ -173,7 +125,7 @@ export function DataTableDemo() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border h-[60vh] overflow-y-auto relative">
+      <div className="rounded-md border h-[60vh] overflow-auto relative">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

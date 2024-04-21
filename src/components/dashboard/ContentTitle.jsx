@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import CreateFolder from "../global/CreateFolder";
 import { DOMAIN } from "@/lib/utils";
 
 const ContentTitle = ({ id }) => {
@@ -15,9 +16,12 @@ const ContentTitle = ({ id }) => {
     fetched();
   });
   return (
-    <>
-      <h2 className="text-2xl">{name}</h2>
-    </>
+    <div className="w-full flex gap-3 items-center">
+      <h2 className="text-2xl">
+        {name.length > 20 ? `${name.slice(0, 20)}...` : name}
+      </h2>
+      <CreateFolder />
+    </div>
   );
 };
 

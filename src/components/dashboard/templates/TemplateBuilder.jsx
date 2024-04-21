@@ -153,7 +153,7 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
             required
           />
         </div>
-        <div className="max-h-[62vh] border border-primary/50 w-full p-2 rounded-md overflow-auto">
+        <div className="h-[62vh] border border-primary/50 w-full p-2 rounded-md overflow-auto">
           <div>
             <Folder
               parentKey={Object.keys(template)[0]}
