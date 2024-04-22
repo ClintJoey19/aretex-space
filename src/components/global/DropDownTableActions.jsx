@@ -28,10 +28,7 @@ export function DropdownMenuTableActions({ table }) {
   const { toast } = useToast();
   let rowsSelected = table.getFilteredSelectedRowModel().rows;
 
-  const addMembers = async (e) => {
-    e.preventDefault();
-    const peoples = emails.split(", ");
-
+  const addMembers = async (peoples) => {
     for (const row of rowsSelected) {
       let driveId = row.original.id;
 
@@ -49,7 +46,6 @@ export function DropdownMenuTableActions({ table }) {
 
           if (res.ok) {
             const data = await res.json();
-            console.log(data);
             toast({
               title: "Success",
               description: `${people} is added to drive`,
@@ -67,11 +63,9 @@ export function DropdownMenuTableActions({ table }) {
         }
       });
     }
-    setEmails("");
-    setRole("");
   };
 
-  const deletFile = async () => {
+  const deletFiles = async () => {
     for (const row of rowsSelected) {
       try {
         const URL = `${DOMAIN}/api/dashboard/shared-drive`;
@@ -98,11 +92,26 @@ export function DropdownMenuTableActions({ table }) {
             description: "Failed to delete drive.",
           });
         }
-        setIsDeleteAlertDialogOpen(false);
       } catch (err) {
         console.error(err.message);
       }
     }
+  };
+
+  const handleAddMembers = async (e) => {
+    e.preventDefault();
+
+    const peoples = emails.split(", ");
+    await addMembers(peoples);
+
+    setIsManageMembersDialogOpen(false);
+    location.reload();
+  };
+
+  const handleDelete = async () => {
+    await deletFiles();
+    setIsDeleteAlertDialogOpen(false);
+    location.reload();
   };
   return (
     <>
@@ -133,12 +142,12 @@ export function DropdownMenuTableActions({ table }) {
         setEmails={setEmails}
         role={role}
         setRole={setRole}
-        addMembers={addMembers}
+        addMembers={handleAddMembers}
       />
       <ManageDelete
         isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
         setIsDeleteAlertDialogOpen={setIsDeleteAlertDialogOpen}
-        deletFile={deletFile}
+        deletFile={handleDelete}
       />
     </>
   );

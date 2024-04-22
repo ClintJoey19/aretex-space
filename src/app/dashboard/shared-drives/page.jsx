@@ -55,7 +55,7 @@ const SharedDrives = () => {
       <div className="p-4 flex flex-col gap-4">
         <div className="w-full flex gap-3 items-center">
           <h2 className="text-2xl">Shared Drives</h2>
-          <CreateDrive />
+          <CreateDrive setData={setData} />
         </div>
         <DataTableDemo
           display={display}

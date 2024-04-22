@@ -84,7 +84,7 @@ export function DataTableDemo({
         {table.getFilteredSelectedRowModel().rows.length > 0 && (
           <div className="flex gap-2 items-center rounded-sm">
             <p>{table.getFilteredSelectedRowModel().rows.length} selected</p>
-            <DropdownMenuTableActions type="multiple" table={table} />
+            <DropdownMenuTableActions table={table} />
           </div>
         )}
         <DisplayType display={display} setDisplay={setDisplay} />
@@ -125,8 +125,8 @@ export function DataTableDemo({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border h-[60vh] overflow-auto relative">
-        <Table>
+      <div className="w-full rounded-md border h-[60vh] overflow-auto relative">
+        <Table className="">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -174,7 +174,11 @@ export function DataTableDemo({
             )}
             <TableRow ref={ref} className={token === undefined && "hidden"}>
               <TableCell colSpan={10} className="h-24 text-center">
-                {token !== undefined && <Spinner />}
+                {token !== undefined && (
+                  <div className="w-full flex justify-center items-center">
+                    <Spinner />
+                  </div>
+                )}
               </TableCell>
             </TableRow>
           </TableBody>

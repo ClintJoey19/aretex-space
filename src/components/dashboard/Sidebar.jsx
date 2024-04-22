@@ -46,14 +46,14 @@ const Sidebar = () => {
               <li key={i} className="w-full">
                 <Link
                   href={item.href}
-                  className={`w-full flex items-center gap-4 py-2 px-4 ${
+                  className={`w-full flex items-center max-md:justify-center gap-4 py-2 md:px-4 ${
                     path === item.href
                       ? "bg-primary hover:bg-primary text-white"
                       : "hover:bg-primary/15"
                   } text-muted-foreground rounded-sm transition-all`}
                 >
                   <item.icon className="text-xl" />
-                  <p>{item.text}</p>
+                  <p className="max-md:hidden">{item.text}</p>
                 </Link>
               </li>
             ))}

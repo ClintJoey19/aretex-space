@@ -168,7 +168,11 @@ const ContentTable = ({ driveId }) => {
             )}
             <TableRow ref={ref} className={token === undefined && "hidden"}>
               <TableCell colSpan={10} className="h-24 text-center">
-                {token !== undefined && <Spinner />}
+                {token !== undefined && (
+                  <div className="w-full flex justify-center items-center">
+                    <Spinner />
+                  </div>
+                )}
               </TableCell>
             </TableRow>
           </TableBody>

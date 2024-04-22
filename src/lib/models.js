@@ -1,8 +1,8 @@
-import { Schema, models, model } from "mongoose";
+import { Schema, models, model, Types } from "mongoose";
 
 export const userModel = new Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
       unique: true,
@@ -25,9 +25,38 @@ export const userModel = new Schema(
   { timestamps: true }
 );
 
+export const driveTemplateSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    }
+  },
+  {
+    template: {
+      type: Object,
+      required: true
+    }
+  },
+  {
+    createdBy: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true
+    }
+  },
+  {
+    updatedBy: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true
+    }
+  },
+)
+
 export const DriveTemplate =
   models?.DriveTemplate ||
-  model("DriveTemplate", new Schema({}, { strict: false }));
+  model("DriveTemplate", driveTemplateSchema);
 
 export const User = models?.User || model("User", userModel);
 // export const FolderTemplate = models?.FolderTemplate || model("FolderTemplate", folderSchema)

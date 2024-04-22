@@ -28,7 +28,7 @@ export const columns = [
     enableHiding: false,
   },
   {
-    accessorKey: "username",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
@@ -40,7 +40,7 @@ export const columns = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("username")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "email",

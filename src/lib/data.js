@@ -1,5 +1,4 @@
 "use server";
-import { redirect } from "next/navigation";
 import { connect } from "./connection";
 import { User, DriveTemplate } from "./models";
 import { revalidatePath } from "next/cache";
@@ -23,6 +22,16 @@ export const getUser = async (id) => {
     console.log(err);
   }
 };
+
+export const getUserByEmail = async (email) => {
+  try {
+    connect()
+    const user = await User.findOne({email})
+    return JSON.parse(JSON.stringify(user))
+  } catch (err) {
+    console.error(err.message);
+  }
+}
 
 export const getDriveTemplates = async () => {
   try {
@@ -64,13 +73,15 @@ const createFolders = async (folderData) => {
   return createdFolders;
 };
 
-export const addTemplate = async ({ name, template }) => {
+export const addTemplate = async ({ name, template }, userId) => {
   try {
     connect();
 
     const newTemplate = await DriveTemplate.create({
       name,
       template,
+      createdBy: userId, 
+      updatedBy: userId
     });
 
     revalidatePath("/dashboard/templates");
@@ -80,13 +91,17 @@ export const addTemplate = async ({ name, template }) => {
   }
 };
 
-export const editTemplate = async (id, {name, template}) => {
+export const editTemplate = async (id, {name, template}, userId) => {
   try {
     connect()
 
-    console.log(id, name, template);
+    const updatedTemplate = {
+      name,
+      template,
+      updatedBy: userId
+    }
 
-    const res = await DriveTemplate.findByIdAndUpdate(id, {name, template})
+    const res = await DriveTemplate.findByIdAndUpdate(id, updatedTemplate)
 
     if (res) {
       revalidatePath("/dashboard/templates")

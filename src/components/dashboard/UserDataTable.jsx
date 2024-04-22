@@ -85,7 +85,7 @@ export function UserDataTable({ rows }) {
                       column.toggleVisibility(!!value);
                     }}
                   >
-                    {column._id}
+                    {column.id}
                   </DropdownMenuCheckboxItem>
                 );
               })}

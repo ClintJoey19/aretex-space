@@ -45,7 +45,6 @@ export const authOptions = {
       return session;
     },
     async signIn({ user, account, profile }) {
-      console.log(account);
       if (account.provider === "google") {
         connect();
         try {
@@ -53,7 +52,7 @@ export const authOptions = {
 
           if (!user) {
             const newUser = new User({
-              username: profile.name,
+              name: profile.name,
               email: profile.email,
               img: profile.picture,
             });

@@ -17,6 +17,8 @@ import ManageMembers from "../dashboard/ManageMembers";
 import ManageDelete from "../dashboard/ManageDelete";
 import { MdPeopleOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { DOMAIN } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const SingleDropDownActions = ({ row, table }) => {
   // MENU ITEMS
@@ -27,6 +29,7 @@ const SingleDropDownActions = ({ row, table }) => {
   const [emails, setEmails] = useState("");
   const [role, setRole] = useState("");
   const session = useSession();
+  const router = useRouter();
   const { toast } = useToast();
   let rowsSelected = table.getFilteredSelectedRowModel().rows;
 
@@ -52,6 +55,9 @@ const SingleDropDownActions = ({ row, table }) => {
             title: "Success",
             description: `${people} is added to drive`,
           });
+          setEmails("");
+          setRole("");
+          location.reload();
         } else {
           toast({
             variant: "destructive",
@@ -63,8 +69,6 @@ const SingleDropDownActions = ({ row, table }) => {
         console.error(err.message);
       }
     });
-    setEmails("");
-    setRole("");
   };
 
   const deletFile = async () => {
@@ -94,6 +98,7 @@ const SingleDropDownActions = ({ row, table }) => {
         });
       }
       setIsDeleteAlertDialogOpen(false);
+      location.reload();
     } catch (err) {
       console.error(err.message);
     }

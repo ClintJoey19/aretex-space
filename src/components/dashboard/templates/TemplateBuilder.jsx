@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Spinner from "@/components/global/Spinner";
 import Folder from "./create-template/Folder";
 import { addTemplate, editTemplate } from "@/lib/data";
 import { useToast } from "@/components/ui/use-toast";
@@ -17,19 +18,21 @@ const sample = {
   },
 };
 
-const TemplateBuilder = ({ id, type, name, temp }) => {
+const TemplateBuilder = ({ id, type, name, temp, userId }) => {
   const [templateName, setTemplateName] = useState(name || "");
   const [template, setTemplate] = useState(temp ? temp : sample);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     const newTemplate = { name: templateName, template };
 
     const res =
       type === "create"
-        ? await addTemplate(newTemplate)
-        : await editTemplate(id, newTemplate);
+        ? await addTemplate(newTemplate, userId)
+        : await editTemplate(id, newTemplate, userId);
 
     if (res) {
       toast({
@@ -38,6 +41,9 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
           type === "create" ? "created" : "updated"
         } successfully.`,
       });
+      setTemplateName("");
+      setTemplate({ ...template, sample });
+      setIsSubmitting(false);
       router.push("/dashboard/templates");
     } else {
       toast({
@@ -47,6 +53,7 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
           type === "create" ? "creating" : "updating"
         } the template.`,
       });
+      setIsSubmitting(false);
     }
   };
 
@@ -153,7 +160,7 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
             required
           />
         </div>
-        <div className="h-[62vh] border border-primary/50 w-full p-2 rounded-md overflow-auto">
+        <div className="h-[62vh] min-w-[500px] border border-primary/50 w-full p-2 rounded-md overflow-auto">
           <div>
             <Folder
               parentKey={Object.keys(template)[0]}
@@ -164,8 +171,13 @@ const TemplateBuilder = ({ id, type, name, temp }) => {
             />
           </div>
         </div>
-        <div className="w-full flex justify-end gap-4">
-          <Button className="capitalize" onClick={handleSubmit}>
+        <div className="w-full flex items-center justify-end gap-2">
+          {isSubmitting && <Spinner className="w-6 h-6" />}
+          <Button
+            className="capitalize"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
             {type === "create" ? "create" : "update"}
           </Button>
         </div>

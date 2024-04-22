@@ -43,11 +43,7 @@ const CreateDrive = () => {
     fetched();
   }, []);
 
-  const handleSubmitDrive = async (e) => {
-    e.preventDefault();
-
-    const names = driveName.split(", ");
-
+  const createDrives = async (names) => {
     for (const name of names) {
       const newDrive = {
         driveName: name,
@@ -96,9 +92,18 @@ const CreateDrive = () => {
         console.error(err.message);
       }
     }
+  };
+
+  const handleSubmitDrive = async (e) => {
+    e.preventDefault();
+
+    const names = driveName.split(", ");
+
+    await createDrives(names);
 
     setDriveName("");
     setTemplate("");
+    location.reload();
   };
 
   return (
@@ -113,7 +118,7 @@ const CreateDrive = () => {
           <form onSubmit={handleSubmitDrive}>
             <DialogTitle>Generate Drive</DialogTitle>
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 items-center gap-4">
+              <div className="flex flex-col gap-4">
                 <Input
                   id="name"
                   value={driveName}
