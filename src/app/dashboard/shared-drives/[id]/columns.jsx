@@ -43,7 +43,7 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex justify-start items-center gap-2">
         {row.original.mimeType === "application/vnd.google-apps.folder" && (
-          <HiFolder className="text-xl" />
+          <HiFolder className="text-xl text-muted-foreground" />
         )}
         {row.original.name}
       </div>

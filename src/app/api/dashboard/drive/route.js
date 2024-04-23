@@ -8,10 +8,9 @@ export const GET = async (req, res) => {
     const res = await drive.about.get({
       fields: "storageQuota",
     });
-    const storage = res.data.storageQuota;
-    console.log(formatBytes(storage.usageInDriveTrash));
+    const {limit, usage, usageInDrive, usageInDriveTrash} = res.data.storageQuota;
 
-    return Response.json(res.data);
+    return Response.json([Number(limit), Number(usage), Number(usageInDrive), Number(usageInDriveTrash)]);
   } catch (err) {
     console.error(err.message);
   }
