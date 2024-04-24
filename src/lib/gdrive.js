@@ -43,8 +43,10 @@ export const getSharedDrives = async (token) => {
     },
     params: {
       pageSize: 10,
-      fields: "files(id, name, capabilities)",
+      fields: "drives(id, name, capabilities)",
       useDomainAdminAccess: true,
+      q: "trashed=false",
+      orderBy: "createdTime",
     },
   });
 

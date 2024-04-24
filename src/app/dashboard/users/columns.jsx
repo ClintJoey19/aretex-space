@@ -1,8 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuTableActions } from "@/components/global/DropDownTableActions";
-import { actions } from "@/components/dashboard/shared-drive/DriveActions";
+import Image from "next/image";
 
 export const columns = [
   {
@@ -40,7 +39,14 @@ export const columns = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          {/* <Image src={row.original.img} height={10} width={10} /> */}
+          {row.getValue("name")}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "email",
