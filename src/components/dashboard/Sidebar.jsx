@@ -4,7 +4,7 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { PiHardDrivesFill } from "react-icons/pi";
 import { useParams, usePathname } from "next/navigation";
 import { HiUserGroup } from "react-icons/hi2";
-import { PiTreeStructureFill } from "react-icons/pi";
+import { HiPuzzlePiece } from "react-icons/hi2";
 
 const navLinks = [
   {
@@ -28,7 +28,7 @@ const navLinks = [
   {
     text: "Templates",
     href: "/dashboard/templates",
-    icon: PiTreeStructureFill,
+    icon: HiPuzzlePiece,
     child: ["create-template", "edit-template"],
   },
 ];

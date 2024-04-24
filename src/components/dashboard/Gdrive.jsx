@@ -38,7 +38,7 @@ const Gdrive = () => {
     },
   ];
   return (
-    <div className="bg-white flex flex-col gap-2 rounded-md p-4">
+    <div className="h-full bg-white flex flex-col gap-2 rounded-md p-4">
       <div className="w-full flex justify-center items-center gap-2">
         <Image
           src="/gdrive-logo.png"
