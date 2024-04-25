@@ -5,8 +5,8 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-// export const DOMAIN = "http://localhost:3000"; // local
-export const DOMAIN = "https://aretex-space.vercel.app"; // vercel
+export const DOMAIN = "http://localhost:3000"; // local
+// export const DOMAIN = "https://aretex-space.vercel.app"; // vercel
 // export const DOMAIN = "http://localhost:3000"; // amplify
 
 export const removeSpaces = (value) => {
@@ -29,7 +29,7 @@ export const formatBytes = (bytes, decimals = 2) => {
     i++;
   }
 
-  return `${size.toFixed(2)} ${units[i]}`;
+  return `${size.toFixed(decimals)} ${units[i]}`;
 };
 
 const mimeTypes = {
