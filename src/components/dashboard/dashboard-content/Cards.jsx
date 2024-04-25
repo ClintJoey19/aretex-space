@@ -5,8 +5,8 @@ import { HiUserGroup } from "react-icons/hi2";
 import { LuFolderKanban } from "react-icons/lu";
 import { DOMAIN } from "@/lib/utils";
 
-const getData = async (link) => {
-  const res = await fetch(`${DOMAIN}/${link}`);
+const getData = async () => {
+  const res = await fetch(`${DOMAIN}/api/dashboard`);
   const data = await res.json();
   return data;
 };
@@ -34,7 +34,7 @@ const Cards = ({ users, templates }) => {
 
   useEffect(() => {
     const fetched = async () => {
-      setDrives(await getData("api/dashboard"));
+      setDrives(await getData());
     };
     fetched();
   }, []);
