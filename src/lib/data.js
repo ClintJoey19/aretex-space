@@ -25,13 +25,13 @@ export const getUser = async (id) => {
 
 export const getUserByEmail = async (email) => {
   try {
-    connect()
-    const user = await User.findOne({email})
-    return JSON.parse(JSON.stringify(user))
+    connect();
+    const user = await User.findOne({ email });
+    return JSON.parse(JSON.stringify(user));
   } catch (err) {
     console.error(err.message);
   }
-}
+};
 
 export const getDriveTemplates = async () => {
   try {
@@ -73,16 +73,18 @@ const createFolders = async (folderData) => {
   return createdFolders;
 };
 
-export const addTemplate = async ({ name, template }, userId) => {
+export const addTemplate = async (template, userId) => {
   try {
     connect();
 
-    const newTemplate = await DriveTemplate.create({
-      name,
-      template,
-      createdBy: userId, 
-      updatedBy: userId
+    const newTemplate = new DriveTemplate({
+      name: template.name,
+      template: template.template,
+      createdBy: userId,
+      updatedBy: userId,
     });
+
+    const res = await newTemplate.save();
 
     revalidatePath("/dashboard/templates");
     return JSON.parse(JSON.stringify(newTemplate));
@@ -91,42 +93,42 @@ export const addTemplate = async ({ name, template }, userId) => {
   }
 };
 
-export const editTemplate = async (id, {name, template}, userId) => {
+export const editTemplate = async (id, { name, template }, userId) => {
   try {
-    connect()
+    connect();
 
     const updatedTemplate = {
       name,
       template,
-      updatedBy: userId
-    }
+      updatedBy: userId,
+    };
 
-    const res = await DriveTemplate.findByIdAndUpdate(id, updatedTemplate)
+    const res = await DriveTemplate.findByIdAndUpdate(id, updatedTemplate);
 
     if (res) {
-      revalidatePath("/dashboard/templates")
-      return JSON.parse(JSON.stringify(res))
+      revalidatePath("/dashboard/templates");
+      return JSON.parse(JSON.stringify(res));
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err.message);
   }
-}
+};
 
 export const deleteTemplate = async (id) => {
   try {
-    connect()
+    connect();
 
     // pending
-    const res = await DriveTemplate.findByIdAndDelete(id)
+    const res = await DriveTemplate.findByIdAndDelete(id);
     console.log(res);
-    
+
     if (!res) {
-      return {error: "Failed to delete the template"}
+      return { error: "Failed to delete the template" };
     }
 
-    revalidatePath("/dashboard/templates")
-    return {message: "Drive deleted"}
-  } catch(err) {
+    revalidatePath("/dashboard/templates");
+    return { message: "Drive deleted" };
+  } catch (err) {
     console.error(err.message);
   }
-}
+};

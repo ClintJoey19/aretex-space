@@ -28,13 +28,13 @@ const Navbar = async () => {
 
   return (
     <section className="w-full h-[8vh] flex justify-center items-center">
-      <Container className="min-w-[1220px] h-full flex justify-between items-center">
+      <Container className="max-w-[1220px] w-full h-full flex justify-between items-center">
         <div className="cursor-pointer overflow-hidden">
           <h2 className="font-bold text-lg">
             Space<span className="text-primary">.</span>
           </h2>
         </div>
-        <div className="">
+        <div className="max-md:hidden">
           <Navlinks navLinks={navLinks} session={session?.user} />
         </div>
         <div className="flex gap-5 cursor-pointer">

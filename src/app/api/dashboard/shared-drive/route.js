@@ -49,7 +49,6 @@ const getSharedDrives = async (drive, nextPageToken) => {
     return { newToken, sharedDrives };
   } catch (err) {
     console.log(err.message);
-    throw new Error("Failed to fetch shared drives");
   }
 };
 

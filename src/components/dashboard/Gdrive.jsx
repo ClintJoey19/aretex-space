@@ -5,6 +5,7 @@ import Legend from "./graphs/Legend";
 import { useState, useEffect } from "react";
 import DonutSkeleton from "../skeletons/DonutSkeleton";
 import TextSkeleton from "../skeletons/TextSkeleton";
+import { DOMAIN } from "@/lib/utils";
 
 const Gdrive = () => {
   const [storage, setStorage] = useState([]);
@@ -12,7 +13,7 @@ const Gdrive = () => {
 
   useEffect(() => {
     const fetched = async () => {
-      const res = await fetch("http://localhost:3000/api/dashboard/drive");
+      const res = await fetch(`${DOMAIN}/api/dashboard/drive`);
       setStorage(await res.json());
       setIsFetching(false);
     };

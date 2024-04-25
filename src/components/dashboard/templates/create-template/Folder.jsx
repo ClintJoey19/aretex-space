@@ -15,7 +15,9 @@ const Folder = ({
     <div className="flex flex-col gap-2">
       <div className="w-full flex items-center hover:bg-primary/15 gap-2 py-1 px-4 rounded-md transition-all">
         <div className="flex items-center gap-2">
-          {template.mimeType !== "drive" && <HiFolder className="text-xl" />}
+          {template.mimeType !== "drive" && (
+            <HiFolder className="text-xl text-muted-foreground" />
+          )}
           <p className={template.mimeType === "drive" ? "text-primary" : ""}>
             {template.name}
           </p>

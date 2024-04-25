@@ -27,7 +27,7 @@ const TemplateBuilder = ({ id, type, name, temp, userId }) => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    const newTemplate = { name: templateName, template };
+    const newTemplate = { name: templateName, template: template };
 
     const res =
       type === "create"
@@ -95,24 +95,6 @@ const TemplateBuilder = ({ id, type, name, temp, userId }) => {
       parent.name = newFolderName;
       setTemplate({ ...template });
     }
-  };
-
-  const findParentIdById = (structure, targetFolderId) => {
-    const traverse = (node, parentId) => {
-      for (const childId in node) {
-        const child = node[childId];
-        if (childId === targetFolderId) {
-          return parentId;
-        }
-        if (child.children) {
-          const result = traverse(child.children, childId);
-          if (result) return result;
-        }
-      }
-      return null;
-    };
-
-    return traverse(structure, "root");
   };
 
   const findAndRemoveFolder = (structure, targetFolderId) => {

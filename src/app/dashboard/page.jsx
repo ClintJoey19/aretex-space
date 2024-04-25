@@ -1,44 +1,25 @@
 import { getDriveTemplates, getUsers } from "@/lib/data";
-import { auth } from "@/lib/auth";
-import { getSharedDrives } from "@/lib/gdrive";
-import { PiHardDrivesFill } from "react-icons/pi";
-import { HiUserGroup } from "react-icons/hi2";
-import { HiPuzzlePiece } from "react-icons/hi2";
+import { LuFolderKanban } from "react-icons/lu";
 import Gdrive from "@/components/dashboard/Gdrive";
-import Drive from "@/components/dashboard/Drive";
+import Cards from "@/components/dashboard/dashboard-content/Cards";
+import RecentDrives from "@/components/dashboard/dashboard-content/RecentDrives";
+import { getServerSession } from "next-auth";
+import { useMediaQuery } from "@mantine/hooks";
 
 const DashboardPage = async () => {
   const templates = await getDriveTemplates();
   const users = await getUsers();
-  const { user, accessToken } = await auth();
-  const { nextPageToken, drives } = await getSharedDrives(accessToken);
-  const cards = [
-    {
-      name: "Shared Drives",
-      icon: PiHardDrivesFill,
-      count: drives.length,
-    },
-    {
-      name: "Users",
-      icon: HiUserGroup,
-      count: users.length,
-    },
-    {
-      name: "Templates",
-      icon: HiPuzzlePiece,
-      count: templates.length,
-    },
-  ];
+  const { user } = await getServerSession();
 
   return (
-    <main className="m-4">
-      <div className="h-full grid grid-cols-[1fr_350px] max-md:grid-cols-1 gap-4">
+    <main className="m-4 overflow-hidden">
+      <div className="h-full grid grid-cols-[1fr_300px] max-xl:grid-cols-1 gap-4">
         <div className="h-full flex flex-col gap-4">
           <h2 className="text-2xl font-semibold">
             Hello there,{" "}
             <span className="text-primary">{user.name} &#128075;</span>
           </h2>
-          <Cards cards={cards} />
+          <Cards users={users} templates={templates} />
           <div className="h-[250px] flex flex-col gap-4">
             <div className="w-full flex justify-between">
               <h2 className="text-md font-semibold">New Drives</h2>
@@ -46,12 +27,9 @@ const DashboardPage = async () => {
                 See More
               </h2>
             </div>
-            <RecentDrives drives={drives} />
+            <RecentDrives />
           </div>
-          <div className="w-full h-full flex flex-col gap-4">
-            <h2 className="text-md font-semibold">New Templates</h2>
-            <div className="h-full w-full bg-white rounded-md"></div>
-          </div>
+          <MyTemplates />
         </div>
         <div className="bg-white h-full flex flex-col gap-4 rounded-md">
           <Gdrive />
@@ -64,30 +42,24 @@ const DashboardPage = async () => {
 
 export default DashboardPage;
 
-function Cards({ cards }) {
+async function MyTemplates() {
+  const myTemp = await getDriveTemplates();
   return (
-    <div className="h-[250px] grid grid-cols-3 gap-4">
-      {cards.map((card, i) => (
-        <div className="h-full bg-white p-4 flex flex-col justify-between rounded-md">
-          <div className="flex items-center gap-4">
-            <div className="bg-primary p-2 rounded-md">
-              <card.icon className="text-2xl text-white" />
-            </div>
-            <p className="text-xl font-semibold">{card.name}</p>
+    <div className="w-full h-full flex flex-col gap-4">
+      <h2 className="text-md font-semibold">My Templates</h2>
+      <div className="w-full grid grid-cols-4 max-lg:grid-cols-3 gap-4">
+        {myTemp.map((temp) => (
+          <div
+            key={temp._id}
+            className="bg-white rounded-md p-2 flex items-center gap-4 border-2 border-transparent hover:border-primary transition-colors"
+          >
+            <div className="p-1 bg-primary rounded-sm">
+              <LuFolderKanban className="text-white" />
+            </div>{" "}
+            {temp.name.length > 8 ? `${temp.name.slice(0, 8)}...` : temp.name}
           </div>
-          <p className="text-end font-bold text-xl">{card.count}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function RecentDrives({ drives }) {
-  return (
-    <div className="h-full grid grid-cols-5 gap-4">
-      {drives.map((drive, i) => (
-        <Drive key={i} drive={drive} />
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

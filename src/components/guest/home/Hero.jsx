@@ -7,8 +7,8 @@ const Hero = () => {
   return (
     <Section className="h-[80vh] flex justify-center items-center">
       <Container className="flex justify-center items-center">
-        <div className="w-[700px] flex flex-col items-center gap-5">
-          <h1 className="text-6xl font-bold text-center leading-[4rem]">
+        <div className="md:w-[700px] flex flex-col items-center gap-5">
+          <h1 className="text-6xl max-md:text-5xl font-bold text-center leading-[4rem]">
             Harnessing advanced{" "}
             <span className="px-2 text-primary rounded-md">
               file management

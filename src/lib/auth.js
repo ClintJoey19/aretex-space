@@ -3,8 +3,8 @@ import { connect } from "@/lib/connection";
 import NextAuth, { getServerSession } from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 
-const GOOGLE_ID = process.env.CLIENT_ID;
-const GOOGLE_SECRET = process.env.CLIENT_SECRET;
+const GOOGLE_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+const GOOGLE_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET;
 
 export const authOptions = {
   session: {
@@ -17,7 +17,6 @@ export const authOptions = {
       authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth",
       authorization: {
         params: {
-          prompt: "consent",
           access_type: "offline",
           scope:
             "openid email profile https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file",
@@ -70,7 +69,7 @@ export const authOptions = {
 };
 
 export const auth = (...args) => {
-  return getServerSession(...args, authOptions)
-}
+  return getServerSession(...args, authOptions);
+};
 
 export const handler = NextAuth(authOptions);

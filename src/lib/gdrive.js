@@ -9,8 +9,8 @@ export async function getDriveAccess(req, res) {
       res.status(404);
     }
 
-    const CLIENT_ID = process.env.CLIENT_ID;
-    const CLIENT_SECRET = process.env.CLIENT_SECRET;
+    const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+    const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET;
     const accesToken = token.accessToken;
     const refreshToken = token.refreshToken;
 
@@ -35,7 +35,7 @@ export async function getDriveAccess(req, res) {
   }
 }
 
-export const getSharedDrives = async (token) => {
+export const getSharedDrives = async (token, page) => {
   const res = await fetch("https://www.googleapis.com/drive/v3/drives", {
     headers: {
       "Content-Type": "application/json",
@@ -56,52 +56,35 @@ export const getSharedDrives = async (token) => {
 
   const { nextPageToken, drives } = await res.json();
 
-  // for (const drive of drives) {
-  //   const members = await getDriveMembers(drive.id, token)
-  //   console.log(members);
-  // }
-
   return { nextPageToken, drives };
 };
 
-export const getStorage = async (token) => {
+export const getAllDrives = async (token) => {
+  let drives = [];
+  let nextPageToken = null;
+
   try {
-    const res = await fetch("https://www.googleapis.com/drive/v3/about", {
+    const res = await fetch("https://www.googleapis.com/drive/v3/drives", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       params: {
-        fields: "storageQuota",
+        pageSize: 10,
+        pageToken: nextPageToken,
+        fields: "drives(id, name, capabilities)",
+        useDomainAdminAccess: true,
+        q: "trashed=false",
+        orderBy: "createdTime",
       },
     });
 
     const data = await res.json();
-
     console.log(data);
-  } catch (err) {
-    console.error(err.message);
-  }
-};
 
-const getDriveMembers = async (fileId, token) => {
-  console.log(fileId);
-  try {
-    const res = await fetch(
-      `https://www.googleapis.com/drive/v3/files/${fileId}/permissions`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          supportsAllDrives: true,
-          useDomainAdminAccess: true,
-        },
-      }
-    );
+    drives = [...drives, data.drives];
 
-    return await res.json();
+    return JSON.parse(JSON.stringify(drives));
   } catch (err) {
     console.error(err.message);
   }
