@@ -4,18 +4,22 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import CustomSelect from "@/components/global/CustomSelect";
+import Spinner from "@/components/global/Spinner";
 import { DOMAIN } from "@/lib/utils";
 
 const SingleFolderTab = ({ parentId, templates }) => {
   const title = `New Folder`;
   const [folderName, setFolderName] = useState("");
   const [template, setTemplate] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handleSubmitDrive = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (!folderName && !template) {
+      setIsSubmitting(false);
       return;
     }
 
@@ -51,6 +55,8 @@ const SingleFolderTab = ({ parentId, templates }) => {
 
     setFolderName("");
     setTemplate("");
+    setIsSubmitting(false);
+    location.reload();
   };
   return (
     <form onSubmit={handleSubmitDrive}>
@@ -72,8 +78,9 @@ const SingleFolderTab = ({ parentId, templates }) => {
           />
         </div>
       </div>
-      <DialogFooter>
-        <Button>Generate</Button>
+      <DialogFooter className="flex justify-end items-center gap-2">
+        {isSubmitting && <Spinner className="w-6 h-6" />}
+        <Button disabled={isSubmitting}>Generate</Button>
       </DialogFooter>
     </form>
   );

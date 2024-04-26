@@ -17,7 +17,8 @@ import ManageMembers from "../dashboard/ManageMembers";
 import ManageDelete from "../dashboard/ManageDelete";
 import { MdPeopleOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { DOMAIN } from "@/lib/utils";
+import Spinner from "./Spinner";
+import { DOMAIN, pauseForOneSecond } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const SingleDropDownActions = ({ row, table }) => {
@@ -25,7 +26,7 @@ const SingleDropDownActions = ({ row, table }) => {
   const [isManageMembersDialogOpen, setIsManageMembersDialogOpen] =
     useState(false);
   const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [emails, setEmails] = useState("");
   const [role, setRole] = useState("");
   const session = useSession();
@@ -35,9 +36,10 @@ const SingleDropDownActions = ({ row, table }) => {
 
   const addMembers = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const peoples = emails.split(", ");
 
-    peoples.forEach(async (people) => {
+    for (const people of peoples) {
       try {
         const URL = `${DOMAIN}/api/dashboard/shared-drive/manage-members`;
         const res = await fetch(URL, {
@@ -57,7 +59,6 @@ const SingleDropDownActions = ({ row, table }) => {
           });
           setEmails("");
           setRole("");
-          location.reload();
         } else {
           toast({
             variant: "destructive",
@@ -65,13 +66,19 @@ const SingleDropDownActions = ({ row, table }) => {
             description: data.error,
           });
         }
+        //avoid google's rate limiter
+        await pauseForOneSecond();
       } catch (err) {
         console.error(err.message);
       }
-    });
+    }
+
+    setIsSubmitting(false);
+    location.reload();
   };
 
   const deletFile = async () => {
+    setIsSubmitting(true);
     try {
       const URL = `${DOMAIN}/api/dashboard/shared-drive`;
       const id = row.id;
@@ -97,6 +104,7 @@ const SingleDropDownActions = ({ row, table }) => {
           description: "Failed to delete drive.",
         });
       }
+      setIsSubmitting(false);
       setIsDeleteAlertDialogOpen(false);
       location.reload();
     } catch (err) {
@@ -138,11 +146,13 @@ const SingleDropDownActions = ({ row, table }) => {
         role={role}
         setRole={setRole}
         addMembers={addMembers}
+        isSubmitting={isSubmitting}
       />
       <ManageDelete
         isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
         setIsDeleteAlertDialogOpen={setIsDeleteAlertDialogOpen}
         deletFile={deletFile}
+        isSubmitting={isSubmitting}
       />
     </>
   );

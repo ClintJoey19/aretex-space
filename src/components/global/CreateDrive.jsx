@@ -19,6 +19,7 @@ import {
 import { RiAddLine } from "react-icons/ri";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import Spinner from "./Spinner";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { ToastAction } from "../ui/toast";
@@ -32,6 +33,7 @@ const CreateDrive = () => {
   const [driveName, setDriveName] = useState("");
   const [templates, setTemplates] = useState([]);
   const [template, setTemplate] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -44,6 +46,7 @@ const CreateDrive = () => {
   }, []);
 
   const createDrives = async (names) => {
+    setIsSubmitting(true);
     for (const name of names) {
       const newDrive = {
         driveName: name,
@@ -88,6 +91,7 @@ const CreateDrive = () => {
             description: data.error,
           });
         }
+        setIsSubmitting(false);
       } catch (err) {
         console.error(err.message);
       }
@@ -148,8 +152,9 @@ const CreateDrive = () => {
                 </Select>
               </div>
             </div>
-            <DialogFooter>
-              <Button>Create</Button>
+            <DialogFooter className="flex justify-end items-center gap-2">
+              {isSubmitting && <Spinner className="w-6 h-6" />}
+              <Button disabled={isSubmitting}>Create</Button>
             </DialogFooter>
           </form>
         </DialogHeader>

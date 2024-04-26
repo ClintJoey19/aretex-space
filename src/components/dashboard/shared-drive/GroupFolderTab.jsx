@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/global/Spinner";
 import { DOMAIN } from "@/lib/utils";
 
 const GroupFolderTab = ({ parentId, templates }) => {
@@ -24,23 +25,41 @@ const GroupFolderTab = ({ parentId, templates }) => {
   const [name, setName] = useState("");
   const [template, setTemplate] = useState("");
   const [folders, setFolders] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
   const addFolder = () => {
-    if (name && template) {
-      const newFolder = {
-        name,
-        template,
-      };
-
-      setFolders((prev) => [...prev, newFolder]);
-      setName("");
+    if (!name) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Name field is empty",
+      });
+      return;
     }
+
+    if (!template) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Template field be empty",
+      });
+      return;
+    }
+
+    const newFolder = {
+      name,
+      template,
+    };
+
+    setFolders((prev) => [...prev, newFolder]);
+    setName("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (folders.length === 0) {
       return;
@@ -79,8 +98,9 @@ const GroupFolderTab = ({ parentId, templates }) => {
         });
       }
     }
-
+    setIsSubmitting(false);
     setFolders([]);
+    location.reload();
   };
   return (
     <div className="flex flex-col gap-4">
@@ -102,7 +122,9 @@ const GroupFolderTab = ({ parentId, templates }) => {
           />
         </div>
         <DialogFooter>
-          <Button onClick={addFolder}>Add</Button>
+          <Button onClick={addFolder} disabled={isSubmitting}>
+            Add
+          </Button>
         </DialogFooter>
       </div>
       {folders.length !== 0 && <Separator />}
@@ -145,8 +167,11 @@ const GroupFolderTab = ({ parentId, templates }) => {
             </div>
           ))}
         </div>
-        <div className="flex justify-end">
-          <Button type="submit">Generate</Button>
+        <div className="flex justify-end items-center gap-2">
+          {isSubmitting && <Spinner className="w-6 h-6" />}
+          <Button type="submit" disabled={isSubmitting}>
+            Generate
+          </Button>
         </div>
       </form>
     </div>

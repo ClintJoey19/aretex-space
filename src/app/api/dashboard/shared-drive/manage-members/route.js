@@ -32,8 +32,6 @@ export const POST = async (req, res) => {
             supportsAllDrives: true
         })
         console.log(`${data.email} is added to ${data.driveId}`);
-        // way to avoid google's rate limiter
-        await pauseForOneSecond()
     
         return Response.json(res)
     } catch (err) {

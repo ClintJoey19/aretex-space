@@ -24,6 +24,7 @@ export function DropdownMenuTableActions({ table }) {
   const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] = useState(false);
   const [emails, setEmails] = useState("");
   const [role, setRole] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const session = useSession();
   const { toast } = useToast();
   let rowsSelected = table.getFilteredSelectedRowModel().rows;
@@ -32,7 +33,7 @@ export function DropdownMenuTableActions({ table }) {
     for (const row of rowsSelected) {
       let driveId = row.original.id;
 
-      peoples.forEach(async (people) => {
+      for (const people of peoples) {
         try {
           const URL = `${DOMAIN}/api/dashboard/shared-drive/manage-members`;
           const res = await fetch(URL, {
@@ -61,8 +62,10 @@ export function DropdownMenuTableActions({ table }) {
         } catch (err) {
           console.error(err.message);
         }
-      });
+      }
     }
+    setIsSubmitting(false);
+    location.reload();
   };
 
   const deletFiles = async () => {
@@ -100,16 +103,20 @@ export function DropdownMenuTableActions({ table }) {
 
   const handleAddMembers = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const peoples = emails.split(", ");
     await addMembers(peoples);
 
+    setIsSubmitting(false);
     setIsManageMembersDialogOpen(false);
     location.reload();
   };
 
   const handleDelete = async () => {
+    setIsSubmitting(true);
     await deletFiles();
+    setIsSubmitting(false);
     setIsDeleteAlertDialogOpen(false);
     location.reload();
   };
@@ -143,11 +150,13 @@ export function DropdownMenuTableActions({ table }) {
         role={role}
         setRole={setRole}
         addMembers={handleAddMembers}
+        isSubmitting={isSubmitting}
       />
       <ManageDelete
         isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
         setIsDeleteAlertDialogOpen={setIsDeleteAlertDialogOpen}
         deletFile={handleDelete}
+        isSubmitting={isSubmitting}
       />
     </>
   );

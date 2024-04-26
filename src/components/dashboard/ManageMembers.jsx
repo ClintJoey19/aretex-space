@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "../ui/textarea";
+import Spinner from "../global/Spinner";
 
 const ManageMembers = ({
   isManageMembersDialogOpen,
@@ -26,6 +27,7 @@ const ManageMembers = ({
   role,
   setRole,
   addMembers,
+  isSubmitting,
 }) => {
   return (
     <>
@@ -67,8 +69,11 @@ const ManageMembers = ({
                 </SelectContent>
               </Select>
             </div>
-            <DialogFooter>
-              <Button type="submit">Add Member</Button>
+            <DialogFooter className="flex justify-end items-center gap-2">
+              {isSubmitting && <Spinner className="w-6 h-6" />}
+              <Button type="submit" disabled={isSubmitting}>
+                Add Member
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>

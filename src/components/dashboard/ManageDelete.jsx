@@ -13,6 +13,7 @@ const ManageDelete = ({
   isDeleteAlertDialogOpen,
   setIsDeleteAlertDialogOpen,
   deletFile,
+  isSubmitting,
 }) => {
   return (
     <>
@@ -33,10 +34,13 @@ const ManageDelete = ({
           <AlertDialogFooter>
             <AlertDialogCancel
               onClick={() => setIsDeleteAlertDialogOpen(false)}
+              disabled={isSubmitting}
             >
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={deletFile}>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={deletFile} disabled={isSubmitting}>
+              Continue
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
